@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue_cool">#1e3050</color>
+    <color name="original_background">#FFFFFF</color>
+    <color name="smooth_gray">#C0C0C0</color>
+    <color name="smoother_gray">#EDEDED</color>
+    <color name="purple_light">#6c63ff</color>
+    <color name="dot_selected">#FF0000</color>
+    <color name="dot_unselected">#CCCCCC</color>
+    <color name="splash_screen_top">#c4c1ff</color>
+    <color name="purple_light_02">#9993fc</color>
+    <color name="light_green">#559d76</color>
+    <color name="aqua_light">#546e7a</color>
+    <color name="f5f5f5">#f5f5f5</color>
+    <color name="C6c6c6c">#6c6c6c</color>
+</resources>

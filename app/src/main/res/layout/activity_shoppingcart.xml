@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.app.marketpal.ShoppingCart"
+    android:backgroundTint="@color/white">
+
+
+    <LinearLayout android:background="@android:color/white"  android:elevation="4dp" android:outlineProvider="bounds" android:layout_width="match_parent" android:layout_height="52dp" android:orientation="horizontal">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/CartToHome"  android:src="@drawable/x_marks_the_spot" android:layout_marginLeft="16dp" android:layout_gravity="center" android:background="?selectableItemBackgroundBorderless"></ImageView>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:text="Καλάθι" android:textStyle="bold" android:textSize="14sp" android:layout_marginLeft="10dp" android:textColor="@color/black"></TextView>
+        <View android:layout_width="0dp" android:layout_height="match_parent"  android:layout_weight="1"></View>
+        <ImageView android:background="?selectableItemBackgroundBorderless" android:id="@+id/clean_cart" android:layout_width="28dp" android:layout_height="30dp" android:src="@drawable/clean_cart" android:layout_gravity="center" android:layout_marginRight="25dp"></ImageView>
+        <ImageView android:background="?selectableItemBackgroundBorderless" android:id="@+id/go_to_profile" android:layout_width="24dp" android:layout_height="30dp" android:src="@drawable/favorites" android:layout_gravity="center" android:layout_marginRight="25dp"></ImageView>
+    </LinearLayout>
+
+    <!-- s -->
+    <ScrollView android:id="@+id/cart_scroller" android:overScrollMode="never" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="false" android:scrollbars="none" android:nestedScrollingEnabled="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+            <!-- Google AD -->
+            <LinearLayout android:id="@+id/ad" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:paddingTop="16dp">
+                <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto" android:id="@+id/cart_ads" android:layout_width="wrap_content" android:layout_height="wrap_content"  ads:adSize="BANNER" ads:adUnitId="ca-app-pub-2372569945879745/8377415675"/>
+                <View android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+            </LinearLayout>
+
+            <!-- Υπηρεσίες settings -->
+            <LinearLayout android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginBottom="5dp">
+                <TextView android:textSize="14sp"  android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="3dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Υπηρεσίες"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="3dp">
+
+                    <LinearLayout android:id="@+id/nav_to_optimal_cart" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:orientation="vertical" android:gravity="center_horizontal">
+                        <ImageView  android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/beltistes_protaseis_icon"></ImageView>
+                        <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Προτάσεις"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/scroll_to_prices" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:orientation="vertical" android:gravity="center_horizontal">
+                        <ImageView  android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/coin_box"></ImageView>
+                        <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Τιμές"></TextView>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            <TextView android:textSize="14sp" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:textColor="#000000" android:id="@+id/to_cart" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentStart="true" android:text="Καλάθι"  android:textStyle="bold" />
+            <LinearLayout android:id="@+id/empty_shopping_cart" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+                <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+                <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+            </LinearLayout>
+    
+            <LinearLayout
+                android:id="@+id/shopping_cart_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+
+        <TextView android:id="@+id/prices_and_products_textview" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:textColor="#000000" android:textSize="14sp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Τιμές &amp; Προϊόντα" android:textStyle="bold" android:layout_marginLeft="10dp"></TextView>
+
+
+        <LinearLayout android:id="@+id/MYMARKET_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+            <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/MYMARKET_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+            <androidx.recyclerview.widget.RecyclerView  android:id="@+id/mymarket_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/SKLAVENITIS_DETAILS_CONTAINER"  android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+            <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/SKLAVENTIS_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+            <androidx.recyclerview.widget.RecyclerView  android:id="@+id/sklaventis_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/AB_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+            <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/AB_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+            <androidx.recyclerview.widget.RecyclerView  android:id="@+id/ab_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/GALAXIAS_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+            <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/GALAXIAS_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+            <androidx.recyclerview.widget.RecyclerView  android:id="@+id/galaxias_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/MASOUTHS_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+            <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp"  android:id="@+id/MASOUTHS_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+            <androidx.recyclerview.widget.RecyclerView  android:id="@+id/masouths_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+        </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

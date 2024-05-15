@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+
+    <item android:id="@+id/nav_to_rec" android:icon="@drawable/recommend" android:title="Προτεινόμενα" />
+    <item android:id="@+id/nav_to_grocery" android:icon="@drawable/grocery" android:title="Παντοπωλείο" />
+
+    <item android:id="@+id/dairy" android:enabled="false"/>
+    <item android:id="@+id/nav_to_galata_rafiou" android:icon="@drawable/galata_rafiou" android:title="Γάλατα Ραφιού" />
+    <item android:id="@+id/nav_to_freska_galata" android:icon="@drawable/freska_galata" android:title="Φρέσκα Γάλατα" />
+    <item android:id="@+id/nav_to_turia"  android:icon="@drawable/turi" android:title="Τυριά" />
+    <item android:id="@+id/nav_to_giaourtia" android:icon="@drawable/yogurt" android:title="Γιαούρτια &amp; Επιδόρπια" />
+    <item android:id="@+id/nav_to_kremes_galaktos" android:icon="@drawable/butter" android:title="Κρέμες Γάλακτος &amp; Βούτυρα" />
+    <item android:id="@+id/nav_to_pagwta" android:icon="@drawable/ice_cream" android:title="Παγωτά &amp; Είδη Ψυγείου" />
+
+
+    <item android:id="@+id/juices" android:enabled="false"/>
+    <item android:id="@+id/nav_to_mpures" android:icon="@drawable/beer" android:title="Μπύρες,Ποτά,Νερά" />
+    <item android:id="@+id/nav_to_xumous" android:icon="@drawable/juice" android:title="Χυμοί &amp; Αναψυκτικά" />
+    <item android:id="@+id/nav_to_snacks" android:icon="@drawable/snacks" android:title="Σνακς" />
+    <item android:id="@+id/nav_to_cafe" android:icon="@drawable/cafe" android:title="Καφές &amp; Ροφήματα" />
+
+
+    <item android:id="@+id/foods" android:enabled="false"/>
+    <item android:id="@+id/nav_to_veges_fruits" android:icon="@drawable/fruits" android:title="Φρούτα &amp; Λαχανικά" />
+    <item android:id="@+id/nav_to_meat" android:icon="@drawable/meat" android:title="Αλλαντικά &amp; Κρέατα" />
+    <item android:id="@+id/nav_to_fishes" android:icon="@drawable/fish" android:title="Ψάρια &amp; Θαλασσινά" />
+    <item android:id="@+id/nav_to_bread" android:icon="@drawable/bread" android:title="Ψωμί &amp; Δημητριακά" />
+    <item android:id="@+id/nav_to_pasta" android:icon="@drawable/pasta_icon" android:title="Ζυμαρικά &amp; Όσπρια" />
+    <item android:id="@+id/nav_to_dough" android:icon="@drawable/cookies" android:title="Προϊόντα Ζύμης" />
+
+
+
+
+    <item android:id="@+id/personal_care" android:enabled="false"/>
+    <item android:id="@+id/nav_to_women" android:icon="@drawable/dress" android:title="Γυναικεία Περιποίηση" />
+    <item android:id="@+id/nav_to_men" android:icon="@drawable/moustache" android:title="Αντρική Περιποίηση" />
+    <item android:id="@+id/nav_to_self_care" android:icon="@drawable/self_care" android:title="Καθαριότητα &amp; Υγιεινή" />
+    <item android:id="@+id/nav_to_hair_care" android:icon="@drawable/hair" android:title="Περιποίηση Μαλλιών" />
+    <item android:id="@+id/nav_to_mouth_care" android:icon="@drawable/brush" android:title="Στοματική Υγιεινή" />
+    <item android:id="@+id/nav_to_dressing_care" android:icon="@drawable/socks" android:title="Ένδυση &amp; Υπόδηση" />
+    <item android:id="@+id/nav_to_general_care" android:icon="@drawable/cream" android:title="Προϊόντα Περιποίησης" />
+
+    <item android:id="@+id/house_care" android:enabled="false"/>
+    <item android:id="@+id/nav_to_kitchen_bathe" android:icon="@drawable/broom" android:title="Κουζίνα &amp; Μπάνιο" />
+    <item android:id="@+id/nav_to_house_clean" android:icon="@drawable/house_clean" android:title="Καθαριότητα Σπιτιού" />
+    <item android:id="@+id/nav_to_clothes" android:icon="@drawable/laundry" android:title="Πλύσιμο Ρούχων" />
+    <item android:id="@+id/nav_to_equipment" android:icon="@drawable/house" android:title="Εξοπλισμός Σπιτιού" />
+
+    <item android:id="@+id/kids" android:enabled="false"/>
+    <item android:id="@+id/nav_to_baby_care" android:icon="@drawable/baby" android:title="Περιποίηση Βρέφους" />
+    <item android:id="@+id/nav_to_baby_food" android:icon="@drawable/baby_milk" android:title="Βρεφικές Τροφές" />
+    <item android:id="@+id/nav_to_diapers" android:icon="@drawable/diaper" android:title="Πάνες &amp; Μωρομάντηλα" />
+    <item android:id="@+id/nav_to_baby_clean" android:icon="@drawable/baby_bath" android:title="Βρεφικά Απορρυπαντικά" />
+
+    <item android:id="@+id/pets" android:enabled="false"/>
+    <item android:id="@+id/nav_to_dog" android:icon="@drawable/dog" android:title="Σκύλος" />
+    <item android:id="@+id/nav_to_cat" android:icon="@drawable/cat" android:title="Γάτα" />
+    <item android:id="@+id/nav_to_accessories" android:icon="@drawable/pet" android:title="Αξεσουάρ &amp; Υγιεινή Ζώων" />
+
+
+
+
+</menu>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/splashscreen"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".SplashActivity"
+    android:gravity="left|center_vertical">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="center"
+        android:src="@drawable/marketpal_text">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/splash_error_text"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        android:gravity="center"
+        android:text="Πρόβλημα με την σύνδεση"
+        android:visibility="gone"></TextView>
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_reconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:layout_margin="15dp"
+        android:text="Επανασύνδεση"></Button>
+
+
+</LinearLayout>

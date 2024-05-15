@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/application_menu"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Profile"
+    android:backgroundTint="@color/white">
+
+ <LinearLayout android:layout_height="match_parent" android:background="@color/white" android:orientation="vertical" android:layout_width="match_parent" android:backgroundTint="@color/white">
+
+    <!-- Profile Scroller -->
+    <ScrollView  android:overScrollMode="never" android:visibility="visible" android:id="@+id/activity_profile_scroller" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="false" android:scrollbars="none" android:nestedScrollingEnabled="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+            <!-- Header -->
+            <LinearLayout android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="58dp" android:orientation="horizontal" android:layout_gravity="center" android:gravity="left" android:layout_marginLeft="10dp" android:layout_marginRight="16dp">
+                <TextView   android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Γεια σας," android:textStyle="bold" android:textSize="18dp" android:layout_gravity="center" android:gravity="center" android:textColor="@color/black"> </TextView>
+                <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"></View>
+                <FrameLayout android:id="@+id/cart_container_profile" android:layout_width="wrap_content"  android:layout_height="match_parent">
+                    <ImageView android:id="@+id/shopping_profile" android:background="?selectableItemBackgroundBorderless" android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/shopping_cart" android:layout_gravity="center" android:adjustViewBounds="true"/>
+                    <TextView android:id="@+id/product_amount_profile" android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="top|end" android:layout_marginTop="3.5dp" android:background="@drawable/shopping_cart_amount_draw"  android:textColor="#000000" android:textSize="10sp" android:gravity="center" android:maxLines="1" android:singleLine="true"  android:visibility="visible"    />
+                </FrameLayout>
+           </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            <!-- Υπηρεσίες settings -->
+            <LinearLayout android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginBottom="5dp">
+                <TextView  android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="3dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Υπηρεσίες"></TextView>
+
+                <HorizontalScrollView android:scrollbars="none" android:overScrollMode="never" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"  android:layout_marginBottom="3dp">
+
+
+                <LinearLayout android:id="@+id/view_recently_product" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/view_recently_products"></ImageView>
+                <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Πρόσφατα"></TextView>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/view_recommended_product" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="14dp" android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView  android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/beltistes_protaseis_icon"></ImageView>
+                <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Προτεινόμενα"></TextView>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/view_cashack_product" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="14dp" android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView  android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/cashback_profile"></ImageView>
+                <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cashback"></TextView>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/view_one_plus_one_product" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="14dp" android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView  android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/profile_one_plus_one"></ImageView>
+                <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+1 Δώρο"></TextView>
+                </LinearLayout>
+
+
+                <LinearLayout android:id="@+id/supermarkets_settings_viewer" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="14dp" android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView  android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/supermarket_settings"></ImageView>
+                <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Supermarket"></TextView>
+                </LinearLayout>
+
+
+                </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            <LinearLayout android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginBottom="5dp">
+                <TextView  android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="3dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Φυλλάδια Προσφορών"></TextView>
+
+                <HorizontalScrollView android:scrollbars="none"  android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"  android:layout_marginBottom="3dp">
+
+
+                        <LinearLayout android:id="@+id/brochure_galaxias" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:orientation="vertical" android:gravity="center_horizontal">
+                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/galaxias"></ImageView>
+                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Γαλαξίας"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout android:id="@+id/brochure_krhthkos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="22dp" android:orientation="vertical" android:gravity="center_horizontal">
+                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/krhtikos" ></ImageView>
+                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Κρητικός"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout android:id="@+id/brochure_lidl" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="22dp" android:gravity="center_horizontal" android:orientation="vertical">
+                            <ImageView android:layout_width="52dp" android:layout_height="52dp" android:layout_marginTop="10dp" android:background="?selectableItemBackgroundBorderless" android:src="@drawable/lidl"></ImageView>
+                            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"></View>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Lidl" android:textColor="@color/black" android:textSize="11dp"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout android:id="@+id/brochure_marketin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="22dp" android:orientation="vertical" android:gravity="center_horizontal">
+                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/market_in"></ImageView>
+                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Market In"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout android:id="@+id/brochure_masouths" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="22dp" android:orientation="vertical" android:gravity="center_horizontal">
+                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/masouths"></ImageView>
+                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Μασούτης"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout android:id="@+id/brochure_synka" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="22dp" android:layout_marginRight="16dp" android:gravity="center_horizontal" android:orientation="vertical">
+                            <ImageView android:layout_width="52dp" android:layout_height="52dp" android:layout_marginTop="10dp" android:background="?selectableItemBackgroundBorderless" android:src="@drawable/synka"></ImageView>
+                            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"></View>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Σύνκα" android:textColor="@color/black" android:textSize="11dp"></TextView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+
+            <!-- Favorites -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginBottom="10dp" android:layout_marginTop="10dp">
+                <TextView android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Αγαπημένα"></TextView>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/profile_favorites_recycler"  android:layout_width="match_parent"  android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+                    <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+                    <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+                </LinearLayout>
+                <LinearLayout android:tag="loading" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:padding="10dp">
+                    <ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:indeterminate="true" android:indeterminateTintMode="src_atop" android:indeterminateTint="@color/black" android:padding="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            <!-- recently Viewed -->
+            <LinearLayout android:id="@+id/RECENTLY_VIEWED_LAYOUT" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginTop="10dp">
+                <TextView android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Πρόσφατα Προβεβλημένα"></TextView>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/profile_recviewed_recycler"  android:layout_width="match_parent"  android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+                    <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+                    <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+                </LinearLayout>
+                <LinearLayout android:tag="loading" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:padding="10dp">
+                    <ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:indeterminate="true" android:indeterminateTintMode="src_atop" android:indeterminateTint="@color/black" android:padding="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            <!-- recommended -->
+            <LinearLayout android:id="@+id/RECOMMENDED_LAYOUT" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginTop="10dp">
+                <TextView android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Προτεινόμενα"></TextView>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/profile_recommended_recycler"  android:layout_width="match_parent"  android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+                    <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+                    <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+                </LinearLayout>
+                <LinearLayout android:tag="loading" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:padding="10dp">
+                    <ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:indeterminate="true" android:indeterminateTintMode="src_atop" android:indeterminateTint="@color/black" android:padding="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+
+            <!-- cashback-->
+            <LinearLayout android:id="@+id/CASHBACK_LAYOUT" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginTop="10dp">
+                <TextView android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Cashback Προϊόντα"></TextView>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/cashback"  android:layout_width="match_parent"  android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+                    <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+                    <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+                </LinearLayout>
+                <LinearLayout android:tag="loading" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:padding="10dp">
+                    <ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:indeterminate="true" android:indeterminateTintMode="src_atop" android:indeterminateTint="@color/black" android:padding="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+
+            <!-- 1+1 -->
+            <LinearLayout android:id="@+id/PLUSGIFT_LAYOUT" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginTop="10dp">
+                <TextView android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Προσφορές 1 + 1 &amp; 50%"></TextView>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/offer_1_1_50"  android:layout_width="match_parent"  android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+                    <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+                    <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+                </LinearLayout>
+                <LinearLayout android:tag="loading" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:padding="10dp">
+                    <ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:indeterminate="true" android:indeterminateTintMode="src_atop" android:indeterminateTint="@color/black" android:padding="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            </LinearLayout>
+    </ScrollView>
+
+
+
+    <!-- Navigator -->
+    <LinearLayout android:id="@+id/NavigatorMain" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="bottom" android:orientation="vertical">
+
+        <!-- Δεν έχω ιδέα γιατι -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="53dp" android:orientation="horizontal" android:layout_gravity="center" android:gravity="center" android:background="@drawable/shadow_border_top">
+
+            <!-- Αρχική -->
+            <LinearLayout android:background="?selectableItemBackgroundBorderless" android:id="@+id/homenav" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:layout_gravity="center">
+                <ImageView android:id="@+id/homenav_icon" android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/home" />
+                <TextView android:id="@+id/homenav_txt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Αρχική" android:textColor="@color/smooth_gray" android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Αναζήτηση Κουμπι -->
+            <LinearLayout android:background="?selectableItemBackgroundBorderless" android:id="@+id/focussearchbar" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:layout_gravity="center">
+                <ImageView android:id="@+id/search_icon" android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/search" />
+                <TextView android:id="@+id/search_txt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Αναζήτηση" android:textColor="@color/smooth_gray" android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Προσφορές -->
+            <LinearLayout android:background="?selectableItemBackgroundBorderless" android:id="@+id/today_offers" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:layout_gravity="center">
+                <ImageView android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/today_offers" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Προσφορες" android:textColor="@color/smooth_gray" android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- CART -->
+            <LinearLayout android:id="@+id/cart_container_nav" android:background="?selectableItemBackgroundBorderless" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:layout_gravity="center">
+                <FrameLayout  android:layout_width="wrap_content"  android:layout_height="wrap_content">
+                    <ImageView android:id="@+id/shopping_cart_nav" android:background="?selectableItemBackgroundBorderless" android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/shopping_cart" android:layout_gravity="center" android:adjustViewBounds="true" />
+                    <TextView android:id="@+id/product_amount_nav" android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="top|end" android:background="@drawable/shopping_cart_amount_draw"  android:textColor="#000000" android:textSize="10sp" android:gravity="center" android:maxLines="1" android:singleLine="true"  android:visibility="visible"    />
+                </FrameLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Καλάθι" android:textColor="@color/smooth_gray" android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Λογαριασμός -->
+            <LinearLayout android:id="@+id/account_nav" android:background="?selectableItemBackgroundBorderless" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:layout_gravity="center">
+                <ImageView android:id="@+id/account_nav_icon" android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/account_selected" />
+                <TextView android:id="@+id/account_txt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Εγώ" android:textColor="@color/black" android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+    <com.google.android.material.navigation.NavigationView
+    android:id="@+id/NavigationViewLeft"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
+    android:textAlignment="center"
+    android:fitsSystemWindows="true"
+
+    app:itemTextColor="@android:color/black"
+    app:headerLayout="@layout/navigation_menu_header"
+    app:menu="@menu/supermarket_settings" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

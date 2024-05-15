@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MARKETPAL</string>
+    <string name="admob_app_id">ca-app-pub-2372569945879745~3044937210</string>
+    <string name="ad_unit_id_banner_main">ca-app-pub-2372569945879745/2470222149</string>
+    <string name="ad_unit_id_banner_info">ca-app-pub-2372569945879745/1076786402</string>
+    <string name="ad_unit_id_banner_product">ca-app-pub-2372569945879745/9347443493</string>
+    <string name="ad_unit_id_banner_offers">ca-app-pub-2372569945879745/1284635547</string>
+
+</resources>

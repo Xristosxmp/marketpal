@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Product_Activity"
+    android:backgroundTint="@color/white">
+
+    <!-- Go Back -->
+    <LinearLayout android:id="@+id/TopNAV"  android:layout_width="match_parent" android:layout_height="58dp" android:layout_gravity="center" android:orientation="horizontal" android:paddingLeft="20dp" android:paddingRight="25dp">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="?selectableItemBackgroundBorderless" android:id="@+id/backButton"  android:src="@drawable/x_marks_the_spot" android:layout_gravity="center_vertical"/>
+        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"></View>
+        <ImageView android:id="@+id/favorites_btn" android:src="@drawable/favorites" android:layout_width="24dp" android:layout_height="30dp" android:layout_gravity="center" android:layout_marginRight="13dp"></ImageView>
+        <FrameLayout android:id="@+id/cart_container" android:layout_width="wrap_content"  android:layout_height="match_parent">
+            <ImageView android:id="@+id/shopping_cart_from_product" android:background="?selectableItemBackgroundBorderless" android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/shopping_cart" android:layout_gravity="center" android:adjustViewBounds="true" />
+            <TextView android:id="@+id/product_amount" android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="top|end" android:layout_marginTop="3.5dp" android:background="@drawable/shopping_cart_amount_draw"  android:textColor="#000000" android:textSize="10sp" android:gravity="center" android:maxLines="1" android:singleLine="true"  android:visibility="visible"    />
+        </FrameLayout>
+    </LinearLayout>
+
+    <ScrollView android:id="@+id/product_scroller" android:overScrollMode="never" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="false" android:scrollbars="none" android:nestedScrollingEnabled="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:paddingBottom="16dp" android:paddingTop="16dp">
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto" android:id="@+id/adView_product" android:layout_width="wrap_content" android:layout_height="wrap_content"  ads:adSize="BANNER" ads:adUnitId="@string/ad_unit_id_banner_product"/>
+        </LinearLayout>
+
+        <!-- Εικόνα -->
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="200dp" app:cardCornerRadius="8dp" app:cardElevation="4dp" app:cardUseCompatPadding="true">
+            <ImageView android:id="@+id/Product_Image" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_margin="15dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Όνομα , Περιγραφή , Καλάθι -->
+        <androidx.appcompat.widget.AppCompatTextView android:textColor="@color/black"  android:id="@+id/Product_Name" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textStyle="bold" android:layout_marginTop="15dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" android:textSize="20dp"> </androidx.appcompat.widget.AppCompatTextView>
+        <TextView android:textColor="@color/black" android:id="@+id/product_desc" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="6" android:ellipsize="end" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"/>
+        <TextView android:id="@+id/show_more_desc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:text="Περισσότερα..." android:textColor="@color/purple_light" android:textStyle="bold"></TextView>
+        <Button android:id="@+id/add_to_cart" android:drawableLeft="@drawable/shopping_cart_white" android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="15dp" android:backgroundTint="@color/light_green" android:gravity="center" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" android:text="ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ"/>
+
+        <!-- Τιμές -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="16dp" android:textStyle="bold" android:textColor="@color/black" android:text="Τιμές" android:layout_marginLeft="15dp" android:layout_marginTop="15dp" android:paddingBottom="5dp"></TextView>
+        <HorizontalScrollView android:overScrollMode="never" android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none">
+            <LinearLayout android:id="@+id/product_all_prices" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_gravity="left" android:gravity="center"> </LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout android:id="@+id/coupon_container" android:layout_width="match_parent" android:layout_height="wrap_content"  android:orientation="vertical" android:layout_marginTop="15dp" android:paddingBottom="5dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="16dp" android:textStyle="bold" android:textColor="@color/black" android:text="Κουπόνια Cashback" android:layout_marginLeft="15dp"></TextView>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="left">
+        <TextView android:id="@+id/coupon_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12dp" android:textStyle="bold" android:textColor="#0067d0" android:layout_marginLeft="15dp" android:layout_marginTop="15dp" android:paddingBottom="5dp"></TextView>
+        <TextView android:layout_width="wrap_content" android:text="Χωρίς Προσφορά" android:layout_height="wrap_content" android:textSize="11dp" android:textStyle="bold" android:textColor="#0067d0" android:layout_marginLeft="15dp"></TextView>
+        </LinearLayout>
+            <LinearLayout android:layout_marginLeft="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="left">
+            <TextView android:id="@+id/coupon_value_discount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12dp" android:textStyle="bold" android:textColor="#0067d0"  android:layout_marginLeft="15dp" android:layout_marginTop="15dp" android:paddingBottom="5dp"></TextView>
+            <TextView android:layout_width="wrap_content" android:text="Με Προσφορά" android:layout_height="wrap_content" android:textSize="11dp" android:textStyle="bold" android:textColor="#0067d0" android:layout_marginLeft="15dp"></TextView>
+            </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" >
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="16dp" android:textStyle="bold" android:textColor="@color/black" android:text="Σχετικά Προϊόντα" android:layout_marginLeft="15dp" android:layout_marginTop="15dp" android:paddingBottom="5dp"></TextView>
+            <com.facebook.shimmer.ShimmerFrameLayout android:id="@+id/recommended_shimmer" android:layout_width="match_parent" android:layout_height="wrap_content" app:shimmer_repeat_mode="restart"  app:shimmer_shape="radial"><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"><include layout="@layout/shimmer"></include><include layout="@layout/shimmer"></include><include layout="@layout/shimmer"></include><include layout="@layout/shimmer"></include><include layout="@layout/shimmer"></include> </LinearLayout></com.facebook.shimmer.ShimmerFrameLayout>
+            <androidx.recyclerview.widget.RecyclerView android:id="@+id/product_recommended_recycler"  android:layout_width="match_parent"  android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

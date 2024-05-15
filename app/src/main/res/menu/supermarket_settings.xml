@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <item
+        android:id="@+id/SETTING_MYMARKET"
+        android:icon="@drawable/mymarket"
+        android:title="MYMARKET"
+        app:actionViewClass="android.widget.CheckBox"
+        />
+
+    <item
+        android:id="@+id/SETTING_Sklavenitis"
+        android:icon="@drawable/sklavenitis_logo"
+        android:title="ΣΚΛΑΒΕΝΙΤΗΣ"
+        app:actionViewClass="android.widget.CheckBox"
+        />
+
+    <item
+        android:id="@+id/SETTING_ABVasilopoulos"
+        android:icon="@drawable/ab"
+        android:title="ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ"
+        app:actionViewClass="android.widget.CheckBox"
+         />
+
+    <item
+        android:id="@+id/SETTING_Masoutis"
+        android:icon="@drawable/masouths"
+        android:title="ΜΑΣΟΥΤΗΣ"
+        app:actionViewClass="android.widget.CheckBox"
+        />
+
+    <item
+        android:id="@+id/SETTING_Galaxias"
+        android:icon="@drawable/galaxias"
+        android:title="ΓΑΛΑΞΙΑΣ"
+        app:actionViewClass="android.widget.CheckBox"
+         />
+
+</menu>

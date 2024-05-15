@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout android:background="@android:color/white" android:gravity="center" android:layout_gravity="center"  android:elevation="4dp" android:outlineProvider="bounds" android:layout_width="match_parent" android:layout_height="52dp" android:orientation="horizontal">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/cart_home" android:src="@drawable/x_marks_the_spot" android:layout_marginLeft="16dp" android:layout_gravity="center" android:background="?selectableItemBackgroundBorderless"></ImageView>
+        <TextView android:layout_width="wrap_content" android:layout_height="match_parent" android:textAlignment="center" android:layout_gravity="center" android:gravity="center" android:text="Προτάσεις" android:textStyle="bold" android:textSize="14sp" android:textColor="@android:color/black" android:layout_marginLeft="10dp"></TextView>
+        <View android:layout_width="0dp" android:layout_height="match_parent"  android:layout_weight="1"></View>
+        <ImageView android:background="?selectableItemBackgroundBorderless" android:id="@+id/go_to_profile" android:layout_width="24dp" android:layout_height="30dp" android:src="@drawable/favorites" android:layout_gravity="center" android:layout_marginRight="25dp"></ImageView>
+    </LinearLayout>
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Περιλαμβάνονται οι ποσότητες των προϊόντων σας." android:textStyle="bold" android:textSize="12dp" android:textColor="@android:color/black" android:layout_marginLeft="10dp"  android:layout_marginTop="16dp"></TextView>
+            <TextView android:id="@+id/total_cost_optimal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Συνολικό Κόστος" android:textStyle="bold" android:textSize="12dp" android:textColor="@android:color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="1dp"></TextView>
+
+            <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            <LinearLayout android:id="@+id/MYMARKET_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+                <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/MYMARKET_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+                <androidx.recyclerview.widget.RecyclerView  android:id="@+id/mymarket_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+                <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/SKLAVENITIS_DETAILS_CONTAINER"  android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+                <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/SKLAVENTIS_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+                <androidx.recyclerview.widget.RecyclerView  android:id="@+id/sklaventis_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+                <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/AB_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+                <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/AB_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+                <androidx.recyclerview.widget.RecyclerView  android:id="@+id/ab_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+                <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/GALAXIAS_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+                <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:id="@+id/GALAXIAS_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+                <androidx.recyclerview.widget.RecyclerView  android:id="@+id/galaxias_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+                <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/MASOUTHS_DETAILS_CONTAINER" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:layout_gravity="left" android:gravity="left">
+                <TextView android:textColor="@color/black" android:layout_marginLeft="10dp" android:layout_marginBottom="10dp" android:layout_marginTop="10dp"  android:id="@+id/MASOUTHS_DETAILS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="16sp" android:autoSizeStepGranularity="2sp"/>
+                <androidx.recyclerview.widget.RecyclerView  android:id="@+id/masouths_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+                <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+</LinearLayout>

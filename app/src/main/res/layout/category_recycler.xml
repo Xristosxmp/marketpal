@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <TextView android:id="@+id/category_recycler_title" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:layout_gravity="center"  android:textSize="16dp" android:textStyle="bold"></TextView>
+    <TextView android:id="@+id/category_recycler_desc" android:layout_marginRight="10dp" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:layout_marginLeft="10dp" android:textStyle="bold"> </TextView>
+    <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+    <TextView android:id="@+id/category_recycler_brand" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:layout_marginTop="10dp" android:layout_marginLeft="10dp" android:textStyle="bold"></TextView>
+
+    <com.facebook.shimmer.ShimmerFrameLayout android:id="@+id/category_recycler_shimmer" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+            <include layout="@layout/shimmer"></include>
+            <include layout="@layout/shimmer"></include>
+            <include layout="@layout/shimmer"></include>
+            <include layout="@layout/shimmer"></include>
+            <include layout="@layout/shimmer"></include>
+    </LinearLayout></com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <LinearLayout android:id="@+id/category_recycler_no_products" android:layout_width="match_parent" android:layout_height="120dp" android:orientation="vertical" android:layout_gravity="center" android:gravity="center" android:visibility="gone">
+        <ImageView android:layout_width="35dp" android:layout_height="35dp" android:src="@drawable/empty_favorites_icon"></ImageView>
+        <TextView android:textColor="#000000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:text="Δεν Βρέθηκαν Προιόντα."></TextView>
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_recycler_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+
+    <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
+
+
+</LinearLayout>
