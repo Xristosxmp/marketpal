@@ -1,22 +1,19 @@
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,10 +26,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.marketpal.Adapters.Adaptery;
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.RecentlyViewerDatabase;
+import com.app.marketpal.enumActivities.ActivityType;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -47,7 +48,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,7 +56,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -521,7 +520,7 @@ public class ProductView extends AppCompatActivity {
                         return Double.compare(price1, price2);
                     }
                 });
-                Adaptery adp = new Adaptery(getBaseContext(), product_list);
+                Adaptery adp = new Adaptery(getBaseContext(), product_list, ActivityType.MAIN_ACTIVITY);
                 if(ShimmerContainer!=null)  RecommentedRecycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 RecommentedRecycler.setAdapter(adp);
                 adp.setOnClickListener(new Adaptery.OnClickListener() {

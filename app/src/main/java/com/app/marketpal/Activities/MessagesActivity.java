@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
@@ -20,6 +20,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import com.app.marketpal.R;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

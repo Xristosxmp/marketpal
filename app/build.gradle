@@ -49,4 +49,5 @@ dependencies {
     implementation 'com.android.billingclient:billing:7.0.0'
     implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 }

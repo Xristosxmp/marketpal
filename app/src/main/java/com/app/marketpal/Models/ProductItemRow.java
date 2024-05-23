@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Models;
 
 public class ProductItemRow {
     private String productName;

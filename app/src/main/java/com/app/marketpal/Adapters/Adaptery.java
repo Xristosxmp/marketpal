@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.enumActivities.ActivityType;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,12 +26,13 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     private Context mContext;
     private List<ProductClass> mData;
     private Adaptery.OnClickListener onClickListener;
+    private ActivityType activityType;
 
 
-    public Adaptery(Context mContext , List<ProductClass> mData){
+    public Adaptery(Context mContext , List<ProductClass> mData, ActivityType activityType){
         this.mContext = mContext;
         this.mData = mData;
-
+        this.activityType = activityType;
     }
 
 
@@ -39,8 +43,8 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        v = inflater.inflate(R.layout.product_item , parent , false);
-
+        if(activityType == ActivityType.MAIN_ACTIVITY)  v = inflater.inflate(R.layout.product_item , parent , false);
+        else v = inflater.inflate(R.layout.product_item_search , parent , false);
         return new MyViewHolder(v);
     }
 

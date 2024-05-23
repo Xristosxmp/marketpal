@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Models;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +16,8 @@ public class CategoryClass {
 
     public int type;
 
-    CategoryClass(){this.type = 0;};
-    CategoryClass(int type){
+    public CategoryClass(){this.type = 0;};
+    public CategoryClass(int type){
         this.type = type;
     };
 

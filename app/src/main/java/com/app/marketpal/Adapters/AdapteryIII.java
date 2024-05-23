@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Adapters;
 
 /*
 
@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

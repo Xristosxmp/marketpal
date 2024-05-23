@@ -1,10 +1,9 @@
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -23,14 +22,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,10 +35,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.marketpal.Adapters.Adaptery;
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.enumActivities.ActivityType;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -178,11 +178,11 @@ public class ShoppingCart extends AppCompatActivity {
         MASOUTHS_LIST = new ArrayList<>();
 
 
-        MY_MARKET_ADAPTERY = new Adaptery(this , MY_MARKET_LIST);
-        SKLAVENITIS_ADAPTERY = new Adaptery(this , SKLAVENITIS_LIST);
-        AB_ADAPTERY = new Adaptery(this , AB_LIST);
-        GALAXIAS_ADAPTERY = new Adaptery(this , GALAXIAS_LIST);
-        MASOUTHS_ADAPTERY = new Adaptery(this , MASOUTHS_LIST);
+        MY_MARKET_ADAPTERY = new Adaptery(this , MY_MARKET_LIST, ActivityType.MAIN_ACTIVITY);
+        SKLAVENITIS_ADAPTERY = new Adaptery(this , SKLAVENITIS_LIST, ActivityType.MAIN_ACTIVITY);
+        AB_ADAPTERY = new Adaptery(this , AB_LIST, ActivityType.MAIN_ACTIVITY);
+        GALAXIAS_ADAPTERY = new Adaptery(this , GALAXIAS_LIST, ActivityType.MAIN_ACTIVITY);
+        MASOUTHS_ADAPTERY = new Adaptery(this , MASOUTHS_LIST, ActivityType.MAIN_ACTIVITY);
 
 
         MY_MARKET_RECYCLER = findViewById(R.id.mymarket_recycler);

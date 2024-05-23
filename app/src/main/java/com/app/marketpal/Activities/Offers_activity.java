@@ -1,19 +1,15 @@
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,11 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.marketpal.Adapters.Adaptery;
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.enumActivities.ActivityType;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -104,11 +103,11 @@ public class Offers_activity extends AppCompatActivity {
         API_DATA_SHIMMER = new ShimmerFrameLayout[]{findViewById(R.id.offers_1_shimmer), findViewById(R.id.offers_2_shimmer), findViewById(R.id.offers_3_shimmer), findViewById(R.id.offers_4_shimmer), findViewById(R.id.offers_5_shimmer)};
         API_DATA_RV = new RecyclerView[]{findViewById(R.id.offers_recycler_1),findViewById(R.id.offers_recycler_2),findViewById(R.id.offers_recycler_3),findViewById(R.id.offers_recycler_4),findViewById(R.id.offers_recycler_5)};
 
-        adp = new Adaptery(getBaseContext(), list_mymarket);
-        adp2 = new Adaptery(getBaseContext(), list_sklavenitis);
-        adp3 = new Adaptery(getBaseContext(), list_ab);
-        adp4 = new Adaptery(getBaseContext(), list_masouths);
-        adp5 = new Adaptery(getBaseContext(), list_galaxias);
+        adp = new Adaptery(getBaseContext(), list_mymarket, ActivityType.MAIN_ACTIVITY);
+        adp2 = new Adaptery(getBaseContext(), list_sklavenitis, ActivityType.MAIN_ACTIVITY);
+        adp3 = new Adaptery(getBaseContext(), list_ab, ActivityType.MAIN_ACTIVITY);
+        adp4 = new Adaptery(getBaseContext(), list_masouths, ActivityType.MAIN_ACTIVITY);
+        adp5 = new Adaptery(getBaseContext(), list_galaxias, ActivityType.MAIN_ACTIVITY);
 
         API_DATA_RV[0].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[0].setAdapter(adp);

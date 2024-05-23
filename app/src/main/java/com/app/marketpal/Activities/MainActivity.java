@@ -12,17 +12,13 @@
  *
  * **/
 
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,26 +28,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.app.marketpal.Adapters.Adaptery;
+import com.app.marketpal.Adapters.AdapteryII;
+import com.app.marketpal.Models.CategoryClass;
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.enumActivities.ActivityType;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -61,7 +58,6 @@ import java.io.File;
 import java.net.InetAddress;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1232,7 +1228,7 @@ public class MainActivity extends AppCompatActivity {
                         return Double.compare(price1, price2);
                     }
                 });
-                adp = new Adaptery(getBaseContext(), PRODUCTS);
+                adp = new Adaptery(getBaseContext(), PRODUCTS, ActivityType.MAIN_ACTIVITY);
                 adp.setOnClickListener(new Adaptery.OnClickListener() {
                     @Override
                     public void onClick(int position, ProductClass model) {
@@ -1256,13 +1252,11 @@ public class MainActivity extends AppCompatActivity {
 
 
             }catch (Exception e){
-
                 c.setStatus(true);
                 NotifyAdapter(c);
                 sss(e.toString());
             }
 
-            //adapter.notifyItemChanged(ITEM_POS++);
             NotifyAdapter(c);
 
 
@@ -1271,29 +1265,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void NotifyAdapter(CategoryClass c){
         if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(1);
-
-
-        if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemRangeChanged(1,7);
-        if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyItemRangeChanged(1,7);
-        if (c.getCategory_brand().equals("Προσωπική φροντίδα")) adapter.notifyItemRangeChanged(1,7);
-        if (c.getCategory_brand().equals("Οικιακή φροντίδα")) adapter.notifyItemRangeChanged(1,7);
-        if (c.getCategory_brand().equals("Παιδικά & Βρεφικά")) adapter.notifyItemRangeChanged(1,7);
-        if (c.getCategory_brand().equals("Διάφορα")) adapter.notifyItemRangeChanged(1,7);
+        if (c.getCategory_brand().equals("Τρόφιμα")) adapter.notifyItemChanged(1);
+        if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(2);
+        if (c.getCategory_brand().equals("Χυμοί, Σνακς & Κάβα")) adapter.notifyItemChanged(3);
+        if (c.getCategory_brand().equals("Προσωπική φροντίδα")) adapter.notifyItemChanged(4);
+        if (c.getCategory_brand().equals("Οικιακή φροντίδα")) adapter.notifyItemChanged(5);
+        if (c.getCategory_brand().equals("Παιδικά & Βρεφικά")) adapter.notifyItemChanged(6);
+        if (c.getCategory_brand().equals("Διάφορα")) adapter.notifyItemChanged(7);
     }
     private void sss(String e){
         new AlertDialog.Builder(this)
                 .setTitle("Error")
                 .setMessage("Πρόβλημα Async. Report Bug")
-
-                // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Continue with delete operation
+
                     }
                 })
-
-                // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();

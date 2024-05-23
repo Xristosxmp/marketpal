@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Models;
 
 public class ProductClass {
 
@@ -30,7 +30,7 @@ public class ProductClass {
         this.value_discount = value_discount;
     }
 
-    ProductClass(){}
+    public ProductClass(){}
 
     public String getMarket() {
         return market;

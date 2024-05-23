@@ -1,4 +1,4 @@
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
 
 import android.annotation.SuppressLint;
@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,22 +13,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,12 +32,16 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
+import com.app.marketpal.Adapters.Adaptery;
+import com.app.marketpal.Adapters.AdapteryIII;
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.RecentlyViewerDatabase;
+import com.app.marketpal.enumActivities.ActivityType;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
@@ -60,18 +55,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -796,7 +786,7 @@ public class Profile extends AppCompatActivity {
                     }
                 });
 
-                Adaptery adp = new Adaptery(getBaseContext(), FavoritesList);
+                Adaptery adp = new Adaptery(getBaseContext(), FavoritesList, ActivityType.MAIN_ACTIVITY);
                 rv_01.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 rv_01.setAdapter(adp);
                 adp.setOnClickListener(new Adaptery.OnClickListener() {
@@ -1129,7 +1119,7 @@ public class Profile extends AppCompatActivity {
                         return Double.compare(price1, price2);
                     }
                 });
-                Adaptery adp = new Adaptery(getBaseContext(), product_list);
+                Adaptery adp = new Adaptery(getBaseContext(), product_list, ActivityType.MAIN_ACTIVITY);
                 RecommentedRecycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 RecommentedRecycler.setAdapter(adp);
                 adp.setOnClickListener(new Adaptery.OnClickListener() {

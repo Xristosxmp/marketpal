@@ -1,28 +1,19 @@
-package com.app.marketpal;
+package com.app.marketpal.Activities;
 
-import android.animation.Animator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -34,12 +25,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.app.marketpal.Adapters.Adaptery;
+import com.app.marketpal.Models.ProductClass;
+import com.app.marketpal.R;
+import com.app.marketpal.enumActivities.ActivityType;
 import com.romainpiel.shimmer.Shimmer;
 
 import org.json.JSONArray;
@@ -99,13 +92,13 @@ public class SearchActivity extends AppCompatActivity {
 
         supermarkets = getBaseContext().getSharedPreferences("supermarkets", Context.MODE_PRIVATE);
         search_list = new ArrayList<>();
-        adp = new Adaptery(this , search_list);
+        adp = new Adaptery(this , search_list, ActivityType.SEARCH_ACTIVITY);
         rv_search = findViewById(R.id.search_recycler);
         rv_search.setItemAnimator(null);
-        rv_search.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rv_search.setLayoutManager(new GridLayoutManager(getBaseContext(), 3));
-        rv_search.addItemDecoration(new GridSpacingItemDecoration(3 , 50 , false));
+        rv_search.setLayoutManager(new GridLayoutManager(this,3));
         rv_search.setAdapter(adp);
+        rv_search.setHasFixedSize(true);
+        rv_search.setItemViewCacheSize(20);
 
 
         search = findViewById(R.id.search);
