@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -63,12 +64,19 @@ public class SplashScreen extends AppCompatActivity {
     private SharedPreferences date;
     private SharedPreferences shopping_cart;
 
+    public static boolean isNetworkConnected(Context c) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
 
         flanch = getBaseContext().getSharedPreferences("flanch", Context.MODE_PRIVATE);
         date = getBaseContext().getSharedPreferences("date", Context.MODE_PRIVATE);
@@ -98,8 +106,7 @@ public class SplashScreen extends AppCompatActivity {
         }
 
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean cc = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        boolean cc = isNetworkConnected(this);
 
         if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setNavigationBarColor(Color.parseColor("#FFFFFF"));

@@ -14,14 +14,20 @@
 
 package com.app.marketpal;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         HttpCacheDir = new File(this.getCacheDir() , "http-cache");
         Cache = new Cache(HttpCacheDir , CacheSize);
@@ -123,27 +129,19 @@ public class MainActivity extends AppCompatActivity {
         category_list = new ArrayList<>();
         category_list.add(new CategoryClass(CategoryClass.HEADER_TYPE));
         adapter = new AdapteryII(this , category_list);
+        adapter.setHasStableIds(true);
+
         parent_recycler_view = findViewById(R.id.main_recycler);
         parent_recycler_view.setItemAnimator(null);
         parent_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         parent_recycler_view.setAdapter(adapter);
+        parent_recycler_view.setHasFixedSize(true);
+        parent_recycler_view.setItemViewCacheSize(20);
 
 
 
         // Settings 1.0 ~ Markets Included
         Settings();
-
-        // Bottom Nav Color
-        if (Build.VERSION.SDK_INT > 26) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        }
-        if(Build.VERSION.SDK_INT > 21){
-            getWindow().setNavigationBarColor(Color.BLACK);
-            getWindow().setStatusBarColor(Color.WHITE);
-        }
 
 
         HomeNavigation();
@@ -629,6 +627,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
 
+
     private class CollectData extends AsyncTask<String,String,JSONObject>{
 
         private List<ProductClass> PRODUCTS;
@@ -831,7 +830,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_veges_fruits).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -843,7 +842,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_fishes).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -855,7 +854,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_bread).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -867,7 +866,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_pasta).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -879,7 +878,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_meat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -891,7 +890,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_dough).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -903,7 +902,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_women).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -915,7 +914,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_men).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -927,7 +926,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_self_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -939,7 +938,7 @@ public class MainActivity extends AppCompatActivity {
                     d.getMenu().findItem(R.id.nav_to_hair_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
+                            drawer.closeDrawer(Gravity.LEFT);
                             ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
                             return false;
                         }
@@ -1048,6 +1047,7 @@ public class MainActivity extends AppCompatActivity {
                 else if(TITLE.equals("Βρεφικές Τροφές")){
                     findViewById(R.id.to_baby_food).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
                     d.getMenu().findItem(R.id.nav_to_baby_food).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @SuppressLint("RtlHardcoded")
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             drawer.closeDrawer((int) Gravity.LEFT);
@@ -1060,6 +1060,7 @@ public class MainActivity extends AppCompatActivity {
                 else if(TITLE.equals("Πάνες & Μωρομάντηλα")){
                     findViewById(R.id.to_diapers).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
                     d.getMenu().findItem(R.id.nav_to_diapers).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @SuppressLint("RtlHardcoded")
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             drawer.closeDrawer((int) Gravity.LEFT);
@@ -1072,6 +1073,7 @@ public class MainActivity extends AppCompatActivity {
                 else if(TITLE.equals("Βρεφικά Απορρυπαντικά")){
                     findViewById(R.id.to_baby_clean).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
                     d.getMenu().findItem(R.id.nav_to_baby_clean).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @SuppressLint("RtlHardcoded")
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             drawer.closeDrawer((int) Gravity.LEFT);
@@ -1254,42 +1256,29 @@ public class MainActivity extends AppCompatActivity {
 
 
             }catch (Exception e){
+
                 c.setStatus(true);
+                NotifyAdapter(c);
                 sss(e.toString());
             }
 
-
-            if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(1);
-            if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(2);
-            if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(3);
-            if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(4);
-            if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(5);
-
-            if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(1);
-            if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(2);
-            if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(3);
-            if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(4);
-            if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(5);
-
-            if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyItemChanged(2);
-            if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyItemChanged(3);
-            if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyItemChanged(4);
-            if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyItemChanged(5);
-
-            if (c.getCategory_brand().equals("Χυμός/πελτές τομάτας")) adapter.notifyItemChanged(1);
-            if (c.getCategory_brand().equals("Χυμός/πελτές τομάτας")) adapter.notifyItemChanged(2);
-            if (c.getCategory_brand().equals("Χυμός/πελτές τομάτας")) adapter.notifyItemChanged(3);
-            if (c.getCategory_brand().equals("Χυμός/πελτές τομάτας")) adapter.notifyItemChanged(4);
-            if (c.getCategory_brand().equals("Χυμός/πελτές τομάτας")) adapter.notifyItemChanged(5);
-
-            if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyDataSetChanged();
-            if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyDataSetChanged();
-            if (c.getCategory_title().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyDataSetChanged();
-            if (c.getCategory_title().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyDataSetChanged();
-            if (c.getCategory_title().equals("Χυμός/πελτές τομάτας")) adapter.notifyDataSetChanged();
+            //adapter.notifyItemChanged(ITEM_POS++);
+            NotifyAdapter(c);
 
 
         }
+    }
+
+    private void NotifyAdapter(CategoryClass c){
+        if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(1);
+
+
+        if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemRangeChanged(1,7);
+        if (c.getCategory_brand().equals("Χυμοί, Σνάκς & Κάβα")) adapter.notifyItemRangeChanged(1,7);
+        if (c.getCategory_brand().equals("Προσωπική φροντίδα")) adapter.notifyItemRangeChanged(1,7);
+        if (c.getCategory_brand().equals("Οικιακή φροντίδα")) adapter.notifyItemRangeChanged(1,7);
+        if (c.getCategory_brand().equals("Παιδικά & Βρεφικά")) adapter.notifyItemRangeChanged(1,7);
+        if (c.getCategory_brand().equals("Διάφορα")) adapter.notifyItemRangeChanged(1,7);
     }
     private void sss(String e){
         new AlertDialog.Builder(this)

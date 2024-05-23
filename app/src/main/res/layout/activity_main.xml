@@ -38,7 +38,7 @@
 
                 <!-- Search Icon -->
                 <ImageView
-                    android:id="@+id/search_icon"
+                    android:id="@+id/search_icon_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_black_search_24"
@@ -247,7 +247,7 @@
 
             <!-- Αναζήτηση Κουμπι -->
             <LinearLayout android:background="?selectableItemBackgroundBorderless" android:id="@+id/focussearchbar" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:layout_gravity="center">
-                <ImageView android:id="@+id/search_icon" android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/search" />
+                <ImageView android:id="@+id/search_icon_02" android:layout_width="wrap_content" android:layout_height="30dp" android:src="@drawable/search" />
                 <TextView android:id="@+id/search_txt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Αναζήτηση" android:textColor="@color/smooth_gray" android:textSize="12sp" />
             </LinearLayout>
 

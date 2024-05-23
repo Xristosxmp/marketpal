@@ -55,6 +55,11 @@ public class AdapteryII extends RecyclerView.Adapter{
         return null;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     private boolean adXl = true;
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
@@ -69,6 +74,7 @@ public class AdapteryII extends RecyclerView.Adapter{
                     ((DefaultTypeView) holder).category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                     ((DefaultTypeView) holder).category_holder.setAdapter(mData.get(position).getCategory_holder());
                     ((DefaultTypeView) holder).category_holder.setItemAnimator(null);
+                    ((DefaultTypeView) holder).category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
 
 
                     if(mData.get(position).getStatus()){
@@ -109,7 +115,7 @@ public class AdapteryII extends RecyclerView.Adapter{
                     ((NoTitleTypeView) holder).category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                     ((NoTitleTypeView) holder).category_holder.setAdapter(mData.get(position).getCategory_holder());
                     ((NoTitleTypeView) holder).category_holder.setItemAnimator(null);
-
+                    ((NoTitleTypeView) holder).category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
                     if(mData.get(position).getStatus()){
                         ((NoTitleTypeView) holder).sm.stopShimmer();((NoTitleTypeView) holder).sm.setVisibility(View.GONE);
                         if(mData.get(position).getCategory_holder() == null){((NoTitleTypeView) holder).no_products.setVisibility(View.VISIBLE);}

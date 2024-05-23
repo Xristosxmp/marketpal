@@ -56,9 +56,9 @@
             android:src="@drawable/hot_products"></ImageView>
 
         <HorizontalScrollView  android:visibility="visible" android:background="@color/white" android:overScrollMode="never" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp" android:scrollbars="none">
-            <LinearLayout android:id="@+id/terms_freq_container" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center">
+            <LinearLayout android:id="@+id/terms_freq_container" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center">
             </LinearLayout>
-        </HorizontalScrollView>>
+        </HorizontalScrollView>
 
         <View
             android:layout_marginRight="10dp"
