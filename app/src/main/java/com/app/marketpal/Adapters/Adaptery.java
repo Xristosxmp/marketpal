@@ -58,13 +58,15 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         holder.txt_02.setText(mData.get(position).getPrice().replace("." , ","));
 
         Glide.with(mContext).load(product)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .skipMemoryCache(false)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .placeholder(R.drawable.product_placeholder)
                 .dontAnimate()
                 .error(R.drawable.product_not_found)
                 .priority(Priority.HIGH)
-                .placeholder(R.drawable.product_placeholder)
                 .into(holder.img_02);
+
 
         switch (mData.get(position).getMarket()) {
             case "MYMARKET": holder.img_01.setImageResource(R.drawable.mymarket);  break;

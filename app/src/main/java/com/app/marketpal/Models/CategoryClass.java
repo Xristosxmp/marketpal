@@ -20,7 +20,6 @@ public class CategoryClass {
         this.type = type;
     };
 
-
     public String getCategory_title() {
         return category_title;
     }

@@ -86,6 +86,8 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         holder.category_holder.setAdapter(object.getCategory_holder());
         holder.category_holder.setItemAnimator(null);
+        holder.category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
+
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 
@@ -121,6 +123,7 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         holder.category_holder.setAdapter(object.getCategory_holder());
         holder.category_holder.setItemAnimator(null);
+        holder.category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 

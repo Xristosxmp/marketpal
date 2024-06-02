@@ -449,9 +449,9 @@ public class SearchActivity extends AppCompatActivity {
                         intent.putExtra("brand_id" , search_list.get(position).getBrand_id());
                         intent.putExtra("coupon_value" , search_list.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , search_list.get(position).getValue_discount());
-
-
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
+
                     }
                 });
                 adp.notifyDataSetChanged();
@@ -469,10 +469,5 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(0,0);
 
-    }
 }

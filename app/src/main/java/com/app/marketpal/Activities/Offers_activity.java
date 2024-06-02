@@ -111,31 +111,23 @@ public class Offers_activity extends AppCompatActivity {
 
         API_DATA_RV[0].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[0].setAdapter(adp);
-        API_DATA_RV[0].setHasFixedSize(true);
-        API_DATA_RV[0].setItemViewCacheSize(20);
 
         API_DATA_RV[1].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[1].setAdapter(adp2);
-        API_DATA_RV[1].setHasFixedSize(true);
-        API_DATA_RV[1].setItemViewCacheSize(20);
 
         API_DATA_RV[2].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[2].setAdapter(adp3);
-        API_DATA_RV[2].setHasFixedSize(true);
-        API_DATA_RV[2].setItemViewCacheSize(20);
 
         API_DATA_RV[3].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[3].setAdapter(adp4);
-        API_DATA_RV[3].setHasFixedSize(true);
-        API_DATA_RV[3].setItemViewCacheSize(20);
 
         API_DATA_RV[4].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[4].setAdapter(adp5);
-        API_DATA_RV[4].setHasFixedSize(true);
-        API_DATA_RV[4].setItemViewCacheSize(20);
 
         new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&type=TYPE_RECOMMENDED&page=1&per_page=90&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+
+        ScrollToCat();
         InitAdsMain();
         NavigateCart();
 
@@ -190,9 +182,8 @@ public class Offers_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SearchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(SearchIntent);
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -200,9 +191,8 @@ public class Offers_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SearchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(SearchIntent);
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -507,6 +497,11 @@ public class Offers_activity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,0);
+    }
 
     @Override
     protected void onResume() {
@@ -546,6 +541,39 @@ public class Offers_activity extends AppCompatActivity {
     }
 
 
+    private void ScrollToCat(){
+        ScrollView scrl = findViewById(R.id.offers_scroller);
+        findViewById(R.id.mymarket_scroll_to).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrl.smoothScrollTo(0 , (int )findViewById(R.id.MYMARKET_CAT_OFFERS).getTop());
+            }
+        });
+        findViewById(R.id.sklaveniths_scroll_to).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrl.smoothScrollTo(0 , (int) findViewById(R.id.SKLAVENITHS_CAT_OFFERS).getTop());
+            }
+        });
+        findViewById(R.id.ab_scroll_to).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrl.smoothScrollTo(0 , (int) findViewById(R.id.AB_CAT_OFFERS).getTop());
+            }
+        });
+        findViewById(R.id.masouths_scroll_to).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrl.smoothScrollTo(0 , (int) findViewById(R.id.MASOUTHS_CAT_OFFERS).getTop());
+            }
+        });
+        findViewById(R.id.galaxias_scroll_to).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrl.smoothScrollTo(0 , (int) findViewById(R.id.GALAXIAS_CAT_OFFERS).getTop());
+            }
+        });
+    }
 
 
     private void NavigateCart(){
@@ -554,9 +582,9 @@ public class Offers_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CartIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(CartIntent);
+                overridePendingTransition(0, 0);
+
             }
         });
     }
@@ -846,6 +874,8 @@ public class Offers_activity extends AppCompatActivity {
         intent.putExtra("coupon_value_discount" , list.get(position).getValue_discount());
 
         startActivity(intent);
+        overridePendingTransition(0, 0);
+
     }
 
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}

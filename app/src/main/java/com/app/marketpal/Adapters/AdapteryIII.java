@@ -61,13 +61,9 @@ public class AdapteryIII extends RecyclerView.Adapter<AdapteryIII.MyViewHolder>{
                 .priority(Priority.HIGH)
                 .into(holder.img);
 
-        ProductClass product_ = mData.get(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickListener != null) {
-                    onClickListener.onClick(position, product_);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (onClickListener != null) {
+                onClickListener.onClick(position, mData.get(position));
             }
         });
     }

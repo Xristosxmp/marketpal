@@ -167,6 +167,9 @@ public class ShoppingCart extends AppCompatActivity {
         AdBottom();
         GoHome();
     }
+
+
+
     private void ConfigureVariables(){
         MY_MARKET_LIST = new ArrayList<>();
         SKLAVENITIS_LIST = new ArrayList<>();
@@ -217,6 +220,8 @@ public class ShoppingCart extends AppCompatActivity {
         GALAXIAS_SUM = 0;
         MASOUTHS_SUM = 0;
     }
+
+
     void AdBottom(){
         LinearLayout linearLayout = new LinearLayout(getBaseContext());
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
@@ -227,6 +232,7 @@ public class ShoppingCart extends AppCompatActivity {
         LinearLayout ln = findViewById(R.id.shopping_cart_container);
         ln.addView(linearLayout);
     }
+
     private void Navigation(){
         LinearLayout ln = findViewById(R.id.shopping_cart_container);
         findViewById(R.id.clean_cart).setOnClickListener(new View.OnClickListener() {
@@ -276,6 +282,8 @@ public class ShoppingCart extends AppCompatActivity {
         });
 
     }
+
+
     void CreateProductsInsideMarkets(String supplier, LinearLayout ln){
         for (Map.Entry<String, Map<String, Double>> entry : products.entrySet()) {
             String product = entry.getKey();
@@ -289,6 +297,7 @@ public class ShoppingCart extends AppCompatActivity {
         }
 
     }
+
     LinearLayout CreateFullProduct(String p_name , String supplier){
         LinearLayout ln = new LinearLayout(getBaseContext());
         ln = new LinearLayout(getBaseContext());
@@ -373,6 +382,7 @@ public class ShoppingCart extends AppCompatActivity {
 
         return ln;
     }
+
     void CreateImportantComp(String supplier){
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -399,10 +409,7 @@ public class ShoppingCart extends AppCompatActivity {
         SpannableString supplier_02_t = new SpannableString(supplier_02_t_data);
         supplier_02_t.setSpan(new ForegroundColorSpan(Color.parseColor("#7f7f7f")), 0, supplier_02_t_data.length(), 0);
         supplier_02_t.setSpan(new AbsoluteSizeSpan(13, true), 0, supplier_02_t_data.length(), 0);
-
-
         TextView MARKET = new TextView(getBaseContext());
-
         MARKET.setLayoutParams(layoutParams);
         //MARKET.setTextColor(Color.parseColor("#4B4B4B"));
         MARKET.setGravity(Gravity.CENTER | Gravity.CENTER_VERTICAL);
@@ -411,14 +418,9 @@ public class ShoppingCart extends AppCompatActivity {
         //MARKET.setText(supplier + " • ");
         MARKET.setTextSize(20);
         MARKET.setTypeface(null, Typeface.BOLD);
-
-
         ln_market.addView(MARKET_LOGO);
         ln_market.addView(MARKET);
-
         ln_parent.addView(ln_market);
-
-
         for (Map.Entry<String, Double> entry : supplierCosts.entrySet()) {
             String supplier_02 = entry.getKey();
             double cost = entry.getValue();
@@ -444,7 +446,6 @@ public class ShoppingCart extends AppCompatActivity {
                 MARKET.setText(builder, TextView.BufferType.SPANNABLE);;
             }
         }
-
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(getBaseContext());
         horizontalScrollView.setId(View.generateViewId());
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(200));
@@ -476,6 +477,7 @@ public class ShoppingCart extends AppCompatActivity {
 
 
     }
+
     void GoHome(){
         findViewById(R.id.CartToHome).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -483,6 +485,7 @@ public class ShoppingCart extends AppCompatActivity {
                 HomeIntent = new Intent(getBaseContext() , MainActivity.class);
                 startActivity(HomeIntent);
                 overridePendingTransition(0,0);
+
                 finish();
             }
         });
@@ -1089,12 +1092,9 @@ public class ShoppingCart extends AppCompatActivity {
 
 
     }
-
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0,0);
-
-
     }
 }

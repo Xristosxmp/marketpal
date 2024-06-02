@@ -62,13 +62,6 @@ public class optimal_cart extends AppCompatActivity {
     private TextView total_cost_optimal;
 
     @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(0,0);
-
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         Config();
@@ -271,9 +264,9 @@ public class optimal_cart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Cart = new Intent(getBaseContext() , ShoppingCart.class);
-                Cart.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                Cart.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Cart);
+                overridePendingTransition(0, 0);
+
                 finish();
             }
         });
@@ -281,9 +274,9 @@ public class optimal_cart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Profile = new Intent(getBaseContext() , com.app.marketpal.Activities.Profile.class);
-                Profile.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                Profile.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Profile);
+                overridePendingTransition(0, 0);
+
                 finish();
             }
         });

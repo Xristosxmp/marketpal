@@ -383,15 +383,11 @@ public class Profile extends AppCompatActivity {
                 if(supermarkets_size != supermarkets.getAll().size()){
                     HomeIntent = new Intent(getBaseContext() , MainActivity.class);
                     startActivity(HomeIntent);
-                    overridePendingTransition(0,0);
-
-
+                    overridePendingTransition(0, 0);
                 }else{
                     HomeIntent = new Intent(getBaseContext() , MainActivity.class);
                     startActivity(HomeIntent);
-                    overridePendingTransition(0,0);
-
-
+                    overridePendingTransition(0, 0);
                 }
 
 
@@ -406,9 +402,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 OffersIntent = new Intent(getBaseContext() , Offers_activity.class);
                 startActivity(OffersIntent);
-                overridePendingTransition(0,0);
-
-
+                overridePendingTransition(0, 0);
             }
         });
     }
@@ -418,9 +412,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
-                overridePendingTransition(0,0);
-
-
+                overridePendingTransition(0, 0);
             }
         });
         findViewById(R.id.cart_container_profile).setOnClickListener(new View.OnClickListener() {
@@ -428,8 +420,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
-                overridePendingTransition(0,0);
-
+                overridePendingTransition(0, 0);
             }
         });
     }
@@ -440,9 +431,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
-                overridePendingTransition(0,0);
-
-
+                overridePendingTransition(0, 0);
             }
         });
     }
@@ -804,7 +793,7 @@ public class Profile extends AppCompatActivity {
                         intent.putExtra("coupon_value" , FavoritesList.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , FavoritesList.get(position).getValue_discount());
                         startActivity(intent);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
                     }
                 });
@@ -969,7 +958,7 @@ public class Profile extends AppCompatActivity {
                         intent.putExtra("coupon_value" , RecentlyViewedList.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , RecentlyViewedList.get(position).getValue_discount());
                         startActivity(intent);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
                     }
                 });
@@ -1141,8 +1130,7 @@ public class Profile extends AppCompatActivity {
                         intent.putExtra("coupon_value" , product_list.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , product_list.get(position).getValue_discount());
                         startActivity(intent);
-                        overridePendingTransition(0,0);
-
+                        overridePendingTransition(0, 0);
 
                     }
                 });
