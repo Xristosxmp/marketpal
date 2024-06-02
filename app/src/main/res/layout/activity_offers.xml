@@ -92,31 +92,6 @@
                 <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto" android:id="@+id/adViewOffers" android:layout_width="wrap_content" android:layout_height="wrap_content"  ads:adSize="BANNER" ads:adUnitId="@string/ad_unit_id_banner_offers"/>
             </LinearLayout>
 
-            <HorizontalScrollView android:paddingTop="0dp" android:layout_width="match_parent" android:layout_height="100dp" android:fadeScrollbars="false" android:scrollbars="none" android:scrollbarSize="4dp" android:scrollbarThumbHorizontal="@drawable/round_scrollbar_horizontal" android:scrollbarTrackHorizontal="@color/smoother_gray">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center">
-                    <LinearLayout android:id="@+id/mymarket_scroll_to" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="15dp">
-                        <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/mymarket">  </ImageView>
-                        <TextView android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MYMARKET" android:textColor="#9a9a9a" android:textSize="11dp"> </TextView>
-                    </LinearLayout>
-                    <LinearLayout android:id="@+id/sklaveniths_scroll_to" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="15dp">
-                        <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/sklavenitis_logo">  </ImageView>
-                        <TextView android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΣΚΛΑΒΕΝΙΤΗΣ" android:textColor="#9a9a9a" android:textSize="11dp"> </TextView>
-                    </LinearLayout>
-                    <LinearLayout android:id="@+id/ab_scroll_to" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="15dp">
-                        <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/ab">  </ImageView>
-                        <TextView android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ" android:textColor="#9a9a9a" android:textSize="11dp"> </TextView>
-                    </LinearLayout>
-                    <LinearLayout android:id="@+id/masouths_scroll_to"  android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="15dp">
-                        <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/masouths">  </ImageView>
-                        <TextView android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΜΑΣΟΥΤΗΣ" android:textColor="#9a9a9a" android:textSize="11dp"> </TextView>
-                    </LinearLayout>
-                    <LinearLayout android:id="@+id/galaxias_scroll_to" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:paddingLeft="15dp" android:paddingRight="15dp">
-                        <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/galaxias">  </ImageView>
-                        <TextView android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΓΑΛΑΞΙΑΣ" android:textColor="#9a9a9a" android:textSize="11dp"> </TextView>
-                    </LinearLayout>
-                </LinearLayout>
-            </HorizontalScrollView>
-
 
 
 

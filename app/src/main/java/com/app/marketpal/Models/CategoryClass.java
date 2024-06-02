@@ -8,7 +8,6 @@ public class CategoryClass {
     String category_desc;
     String category_brand;
     RecyclerView.Adapter category_holder;
-    boolean status;
 
     public static final int DEFAULT_TYPE  =  0;
     public static final int HEADER_TYPE   =  1;
@@ -21,9 +20,6 @@ public class CategoryClass {
         this.type = type;
     };
 
-
-    public boolean getStatus() {return status;    }
-    public void setStatus(boolean innerRecyclerViewReady) {this.status = innerRecyclerViewReady;}
 
     public String getCategory_title() {
         return category_title;
@@ -63,8 +59,6 @@ public class CategoryClass {
         this.category_desc = category_desc;
         this.category_brand = category_brand;
         this.category_holder = category_holder;
-        this.status = status;
-
     };
 
 

@@ -382,15 +382,16 @@ public class Profile extends AppCompatActivity {
 
                 if(supermarkets_size != supermarkets.getAll().size()){
                     HomeIntent = new Intent(getBaseContext() , MainActivity.class);
-                    HomeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(HomeIntent);
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(0,0);
+
+
                 }else{
                     HomeIntent = new Intent(getBaseContext() , MainActivity.class);
-                    HomeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    HomeIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(HomeIntent);
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(0,0);
+
+
                 }
 
 
@@ -404,10 +405,10 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 OffersIntent = new Intent(getBaseContext() , Offers_activity.class);
-                OffersIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                OffersIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(OffersIntent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(0,0);
+
+
             }
         });
     }
@@ -416,20 +417,19 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(CartIntent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(0,0);
+
+
             }
         });
         findViewById(R.id.cart_container_profile).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(CartIntent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(0,0);
+
             }
         });
     }
@@ -439,10 +439,10 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(SearchIntent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(0,0);
+
+
             }
         });
     }
@@ -804,6 +804,8 @@ public class Profile extends AppCompatActivity {
                         intent.putExtra("coupon_value" , FavoritesList.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , FavoritesList.get(position).getValue_discount());
                         startActivity(intent);
+                        overridePendingTransition(0,0);
+
                     }
                 });
 
@@ -967,6 +969,8 @@ public class Profile extends AppCompatActivity {
                         intent.putExtra("coupon_value" , RecentlyViewedList.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , RecentlyViewedList.get(position).getValue_discount());
                         startActivity(intent);
+                        overridePendingTransition(0,0);
+
                     }
                 });
 
@@ -1136,9 +1140,10 @@ public class Profile extends AppCompatActivity {
                         intent.putExtra("brand_id" , product_list.get(position).getBrand_id());
                         intent.putExtra("coupon_value" , product_list.get(position).getCoupon_value());
                         intent.putExtra("coupon_value_discount" , product_list.get(position).getValue_discount());
-
-
                         startActivity(intent);
+                        overridePendingTransition(0,0);
+
+
                     }
                 });
 

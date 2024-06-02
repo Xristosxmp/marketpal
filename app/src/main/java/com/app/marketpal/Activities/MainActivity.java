@@ -32,6 +32,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -52,6 +53,7 @@ import com.app.marketpal.enumActivities.ActivityType;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         int corePoolSize = Runtime.getRuntime().availableProcessors(); // Adjust as needed
         int maximumPoolSize = corePoolSize * 2; // Adjust as needed
-        long keepAliveTime = 0L; // Time for non-core threads to be kept alive
+        long keepAliveTime = 15L; // Time for non-core threads to be kept alive
         TimeUnit timeUnit = TimeUnit.MILLISECONDS;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(128 * 2); // Adjust the capacity
 
@@ -169,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 timeUnit,
                 workQueue
         );
+        pool.allowCoreThreadTimeOut(true);
 
         new CollectData("https://v8api.pockee.com/api/v8/public/products?type=HOME_BASKET&category_id=158&page=1&per_page=30&in_stock=true" , "Καλάθι του Νοικοκυριού" ,
                 "Ανακαλύψτε το καλάθι του νοικοκοιριού σε προϊόντα της εβδομάδας. Τρόφιμα, Γαλακτοκομικά, Τυριά και Χυμούς, Σνακς, Κάβα, Προσωπική Φροντίδα, Οικιακή Φροντίδα, Παιδικά, Βρεφικά & Διάφορα" , "Τρόφιμα" , new ArrayList<>()).executeOnExecutor(pool);
@@ -483,8 +486,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), ShoppingCart.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(0,0);
+
+
             }
         });
 
@@ -493,8 +498,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), ShoppingCart.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(0,0);
+
             }
         });
     }
@@ -518,9 +524,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MessagesIntent = new Intent(getBaseContext() , MessagesActivity.class);
-                MessagesIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(MessagesIntent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(0,0);
+
             }
         });
     }
@@ -530,9 +536,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProfileIntent = new Intent(getBaseContext() , Profile.class);
-                ProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                ProfileIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(ProfileIntent);
+                overridePendingTransition(0,0);
 
             }
         });
@@ -542,9 +547,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SearchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(SearchIntent);
+                overridePendingTransition(0,0);
+
 
             }
         });
@@ -552,9 +557,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SearchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(SearchIntent);
+                overridePendingTransition(0,0);
+
+
 
             }
         });
@@ -562,9 +568,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
-                SearchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SearchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(SearchIntent);
+                overridePendingTransition(0,0);
 
             }
         });
@@ -582,9 +587,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 OffersIntent = new Intent(getBaseContext() , Offers_activity.class);
-                OffersIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                OffersIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(OffersIntent);
+                overridePendingTransition(0,0);
+
+
             }
         });
     }
@@ -593,18 +599,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CartIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(CartIntent);
+                overridePendingTransition(0,0);
+
             }
         });
         findViewById(R.id.cart_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CartIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(CartIntent);
+                overridePendingTransition(0,0);
+
+
             }
         });
     }
@@ -671,7 +678,6 @@ public class MainActivity extends AppCompatActivity {
             c = new CategoryClass();
             c.setCategory_title(TITLE);
             c.setCategory_desc(DESC);
-            c.setStatus(false);
             c.setCategory_brand(BRAND);
 
             if(!c.getCategory_title().equals("NULL")){
@@ -1096,7 +1102,6 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 c = new CategoryClass(CategoryClass.NO_TITLE_TYPE);
                 c.setCategory_title(CategorySelector);
-                c.setStatus(false);
                 c.setCategory_brand(BRAND);
                 category_list.add(c);
                 if(BRAND.equals("Γάτα")){
@@ -1125,153 +1130,190 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected JSONObject doInBackground(String... strings) {
-            JSONObject JSON_OBJECT = new JSONObject();
-            try {
-                JSON_OBJECT = new JSONObject();
-                OkHttpClient client = new OkHttpClient().newBuilder()
-                        .connectTimeout(15, TimeUnit.SECONDS)
-                        .cache(Cache)
-                        .readTimeout(15, TimeUnit.SECONDS)
-                        .build();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(15, TimeUnit.SECONDS)
+                    .build();
 
+            Request request = new Request.Builder()
+                    .url(API)
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Accept", "application/json")
+                    .build();
 
-                Request request = new Request.Builder()
-                        .url(API)
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Accept", "application/json")
-                        .build();
-
-                Response response = client.newCall(request).execute();
-
+            try (Response response = client.newCall(request).execute()) {
                 ResponseBody responseBody = response.body();
-                String json = responseBody != null ? responseBody.string() : "";
-                return new JSONObject(json);
-            } catch (Exception e) {JSON_OBJECT = null;}
+                if (responseBody != null) {
+                    String json = responseBody.string();
+                    return new JSONObject(json);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
         @Override
-        protected void onPostExecute(JSONObject JSON_OBJECT) {
-            super.onPostExecute(JSON_OBJECT);
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+
+            if (jsonObject == null) return;
+
 
             try {
-                if(JSON_OBJECT == null){c.setStatus(true); return;}
-                JSONArray data = JSON_OBJECT.getJSONArray("data");
-                if(data.length() == 0){c.setStatus(true); return;}
+                JSONArray data = jsonObject.getJSONArray("data");
+                if (data.length() == 0) return;
                 c.setCategory_brand(BRAND);
-                for(int i=0; i<data.length(); i++){
+                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                for (int i = 0; i < data.length(); i++) {
                     JSONObject product = data.getJSONObject(i);
-                    String product_id = product.getString("id");
-                    String product_name = product.getString("name");
-                    String product_desc = product.getString("description");
-                    String product_brand = product.getString("brand_id");
-                    String product_img = null;
-                    String coupon_value = "null";
-                    String coupon_value_discount = "null";
-                    double FINAL_PRICE = 55555;
-                    String FINAL_NAME = "";
-                    JSONArray ASSORTMENTS =  product.getJSONArray("assortments");
-                    String ASSORTEMTNS_DATA[][] = new String[ASSORTMENTS.length()][2];
-
-
-                    if(product.has("coupons"))
-                        if(product.getJSONArray("coupons").length() > 0){
-                            JSONArray J = product.getJSONArray("coupons");
-                            JSONObject P = J.getJSONObject(0);
-                            double v1 = P.getDouble("value");
-                            double v2 = P.getDouble("value_discount");
-                            if (v1 > 0) coupon_value = new DecimalFormat("#0.00").format(v1);
-                            if (v2 > 0) coupon_value_discount = new DecimalFormat("#0.00").format(v2);
-                        }
-
-
-                    if(!product.isNull("image_versions"))
-                        product_img = product.getJSONObject("image_versions").getString("original");
-                    else product_img = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-
-
-                    for(int j=0; j<ASSORTMENTS.length(); j++){
-                        JSONObject item = ASSORTMENTS.getJSONObject(j);
-                        JSONObject retailer = item.getJSONObject("retailer");
-                        JSONObject productPivot = item.getJSONObject("product_pivot");
-                        String name = retailer.getString("name");
-                        if(!supermarkets.contains(name)) continue;
-
-                        double finalPrice;
-                        if (productPivot.isNull("final_price")) {finalPrice = productPivot.getDouble("start_price");}
-                        else {finalPrice = productPivot.getDouble("final_price");}
-                        if (finalPrice < FINAL_PRICE) {FINAL_NAME = name; FINAL_PRICE = finalPrice;}
-                        ASSORTEMTNS_DATA[j][0] = name;
-                        ASSORTEMTNS_DATA[j][1] = String.valueOf(finalPrice);
+                    ProductClass model = parseProduct(product, decimalFormat);
+                    if (model != null) {
+                        PRODUCTS.add(model);
                     }
-                    if(FINAL_PRICE == 55555) continue;
-
-                    ProductClass model = new ProductClass();
-                    model.setName(product_name);
-                    model.setUrl(product_img);
-                    model.setMarket(FINAL_NAME.trim());
-                    model.setID(product_id);
-                    model.setASSORTEMTNS_DATA(ASSORTEMTNS_DATA);
-                    model.setDesc(product_desc);
-                    model.setOrigianlName(product_name);
-                    model.setPrice(String.valueOf(FINAL_PRICE) + " €");
-                    model.setBrand_id(product_brand);
-                    model.setValue_discount(coupon_value_discount);
-                    model.setCoupon_value(coupon_value);
-                    PRODUCTS.add(model);
                 }
-                Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
-                adp = new Adaptery(getBaseContext(), PRODUCTS, ActivityType.MAIN_ACTIVITY);
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        Intent intent = new Intent(MainActivity.this, ProductView.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        intent.putExtra("original_name" , PRODUCTS.get(position).getOrigianlName());
-                        intent.putExtra("id" , PRODUCTS.get(position).getID());
-                        intent.putExtra("name" , PRODUCTS.get(position).getName());
-                        intent.putExtra("img" , PRODUCTS.get(position).getUrl());
-                        intent.putExtra("assortments" , PRODUCTS.get(position).getASSORTEMTNS_DATA());
-                        intent.putExtra("desc" , PRODUCTS.get(position).getDesc());
-                        intent.putExtra("brand_id" , PRODUCTS.get(position).getBrand_id());
-                        intent.putExtra("coupon_value" , PRODUCTS.get(position).getCoupon_value());
-                        intent.putExtra("coupon_value_discount" , PRODUCTS.get(position).getValue_discount());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Collections.sort(PRODUCTS, Comparator.comparingDouble(product ->
+                            Double.parseDouble(product.getPrice().replace(" €", ""))));
 
-                        startActivity(intent);
-                    }
-                });
-                c.setCategory_holder(adp);
-                c.setStatus(true);
-
-
-            }catch (Exception e){
-                c.setStatus(true);
+                }else{
+                    Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
+                        @Override
+                        public int compare(ProductClass product1, ProductClass product2) {
+                            double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                            double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                            return Double.compare(price1, price2);
+                        }
+                    });
+                }
+                setupAdapter();
+            } catch (Exception e) {
                 NotifyAdapter(c);
                 sss(e.toString());
             }
 
             NotifyAdapter(c);
+        }
+
+        private ProductClass parseProduct(JSONObject product, DecimalFormat decimalFormat) throws JSONException {
+            String product_id = product.getString("id");
+            String product_name = product.getString("name");
+            String product_desc = product.getString("description");
+            String product_brand = product.getString("brand_id");
+            String product_img = getProductImage(product);
+            String[] couponValues = getCouponValues(product, decimalFormat);
+
+            JSONArray assortments = product.getJSONArray("assortments");
+            String[][] assortmentsData = new String[assortments.length()][2];
+            double finalPrice = Double.MAX_VALUE;
+            String finalName = "";
+
+            for (int j = 0; j < assortments.length(); j++) {
+                JSONObject item = assortments.getJSONObject(j);
+                String name = item.getJSONObject("retailer").getString("name");
+
+                if (!supermarkets.contains(name)) continue;
+
+                double price = getFinalPrice(item);
+                if (price < finalPrice) {
+                    finalName = name;
+                    finalPrice = price;
+                }
+
+                assortmentsData[j][0] = name;
+                assortmentsData[j][1] = String.valueOf(price);
+            }
+
+            if (finalPrice == Double.MAX_VALUE) return null;
+
+            return buildProductModel(product_id, product_name, product_desc, product_brand, product_img,
+                    finalName, finalPrice, assortmentsData, couponValues);
+        }
+
+        private String getProductImage(JSONObject product) throws JSONException {
+            if (!product.isNull("image_versions")) {
+                return product.getJSONObject("image_versions").getString("original");
+            }
+            return "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
+        }
+
+        private String[] getCouponValues(JSONObject product, DecimalFormat decimalFormat) throws JSONException {
+            String couponValue = "null";
+            String couponValueDiscount = "null";
+
+            if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
+                JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
+                double value = coupon.getDouble("value");
+                double valueDiscount = coupon.getDouble("value_discount");
+
+                if (value > 0) couponValue = decimalFormat.format(value);
+                if (valueDiscount > 0) couponValueDiscount = decimalFormat.format(valueDiscount);
+            }
+
+            return new String[]{couponValue, couponValueDiscount};
+        }
+
+        private double getFinalPrice(JSONObject item) throws JSONException, JSONException {
+            JSONObject productPivot = item.getJSONObject("product_pivot");
+            return productPivot.isNull("final_price") ?
+                    productPivot.getDouble("start_price") :
+                    productPivot.getDouble("final_price");
+        }
+
+        private ProductClass buildProductModel(String id, String name, String desc, String brand, String img,
+                                               String market, double price, String[][] assortmentsData, String[] coupons) {
+            ProductClass model = new ProductClass();
+            model.setName(name);
+            model.setUrl(img);
+            model.setMarket(market.trim());
+            model.setID(id);
+            model.setASSORTEMTNS_DATA(assortmentsData);
+            model.setDesc(desc);
+            model.setOrigianlName(name);
+            model.setPrice(String.format("%s €", price));
+            model.setBrand_id(brand);
+            model.setValue_discount(coupons[1]);
+            model.setCoupon_value(coupons[0]);
+            return model;
+        }
+
+        private void setupAdapter() {
+            adp = new Adaptery(getBaseContext(), PRODUCTS, ActivityType.MAIN_ACTIVITY);
+            adp.setOnClickListener((position, model) -> {
+                Intent intent = new Intent(MainActivity.this, ProductView.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("original_name", model.getOrigianlName());
+                intent.putExtra("id", model.getID());
+                intent.putExtra("name", model.getName());
+                intent.putExtra("img", model.getUrl());
+                intent.putExtra("assortments", model.getASSORTEMTNS_DATA());
+                intent.putExtra("desc", model.getDesc());
+                intent.putExtra("brand_id", model.getBrand_id());
+                intent.putExtra("coupon_value", model.getCoupon_value());
+                intent.putExtra("coupon_value_discount", model.getValue_discount());
+                startActivity(intent);
+                overridePendingTransition(0,0);
 
 
+            });
+            c.setCategory_holder(adp);
         }
     }
 
-    private void NotifyAdapter(CategoryClass c){
-        if (c.getCategory_title().equals("Καλάθι του Νοικοκυριού")) adapter.notifyItemChanged(1);
-        if (c.getCategory_brand().equals("Τρόφιμα")) adapter.notifyItemChanged(1);
-        if (c.getCategory_brand().equals("Γαλακτοκομικά & Τυριά")) adapter.notifyItemChanged(2);
-        if (c.getCategory_brand().equals("Χυμοί, Σνακς & Κάβα")) adapter.notifyItemChanged(3);
-        if (c.getCategory_brand().equals("Προσωπική φροντίδα")) adapter.notifyItemChanged(4);
-        if (c.getCategory_brand().equals("Οικιακή φροντίδα")) adapter.notifyItemChanged(5);
-        if (c.getCategory_brand().equals("Παιδικά & Βρεφικά")) adapter.notifyItemChanged(6);
-        if (c.getCategory_brand().equals("Διάφορα")) adapter.notifyItemChanged(7);
+
+
+    private void NotifyAdapter(CategoryClass c) {
+        switch (c.getCategory_brand()) {
+            case "Τρόφιμα": adapter.notifyItemChanged(1); break;
+            case "Καλάθι του Νοικοκυριού": adapter.notifyItemChanged(1); break;
+            case "Γαλακτοκομικά & Τυριά": adapter.notifyItemChanged(2); break;
+            case "Χυμοί, Σνακς & Κάβα": adapter.notifyItemChanged(3); break;
+            case "Προσωπική φροντίδα": adapter.notifyItemChanged(4); break;
+            case "Οικιακή φροντίδα": adapter.notifyItemChanged(5); break;
+            case "Παιδικά & Βρεφικά": adapter.notifyItemChanged(6); break;
+            case "Διάφορα": adapter.notifyItemChanged(7); break;
+            default: break;
+        }
     }
     private void sss(String e){
         new AlertDialog.Builder(this)

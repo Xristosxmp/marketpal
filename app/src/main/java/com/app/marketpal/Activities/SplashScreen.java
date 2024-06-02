@@ -66,8 +66,10 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean cc = isNetworkConnected(this);
 
         flanch = getBaseContext().getSharedPreferences("flanch", Context.MODE_PRIVATE);
         date = getBaseContext().getSharedPreferences("date", Context.MODE_PRIVATE);
@@ -82,58 +84,40 @@ public class SplashScreen extends AppCompatActivity {
             supermarkets.edit().putBoolean("ΣΚΛΑΒΕΝΙΤΗΣ" , true).apply();
             supermarkets.edit().putBoolean("ΓΑΛΑΞΙΑΣ" , true).apply();
         }
+        if(!date.contains("date")) date.edit().putString("date" , G()).apply();
+        else{
 
-        if(!date.contains("date")){
-            date.edit().putString("date" , G()).apply();
-
-        }else{
-            String current_date = G();
-            String pref_date = date.getString("date" , "");
-            //String pref_date = "2024-01-12";
-
-            if(!current_date.equals(pref_date))
-                new update_shopping_cart().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-            date.edit().putString("date" , G()).apply();
-        }
-
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean cc = isNetworkConnected(this);
-
-        if (Build.VERSION.SDK_INT >= 26) {
-            getWindow().setNavigationBarColor(Color.parseColor("#FFFFFF"));
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.white));
-        }
-
-
-        if(!cc){
-            rec = findViewById(R.id.btn_reconnect);
-            rec_error = findViewById(R.id.splash_error_text);
-            rec.setVisibility(View.VISIBLE);
-            rec_error.setVisibility(View.VISIBLE);
-            rec.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-            });
-        }else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    finish();
-                }
-            }, SPLASH);
+            if(!cc){
+                rec = findViewById(R.id.btn_reconnect);
+                rec_error = findViewById(R.id.splash_error_text);
+                rec.setVisibility(View.VISIBLE);
+                rec_error.setVisibility(View.VISIBLE);
+                rec.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = getIntent();
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+            else {
+                String current_date = G();
+                String pref_date = date.getString("date", "");
+                if (!current_date.equals(pref_date))
+                    new update_shopping_cart().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                date.edit().putString("date", G()).apply();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0,0);
+                        finish();
+                    }
+                }, SPLASH);
+            }
         }
     }
 
@@ -236,7 +220,6 @@ public class SplashScreen extends AppCompatActivity {
                     shopping_cart.edit().putString(pname , b.toString().trim()).apply();
                 } catch (JSONException e) {throw new RuntimeException(e);}
             }
-
         }
     }
 

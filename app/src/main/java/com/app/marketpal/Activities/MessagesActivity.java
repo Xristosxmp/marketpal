@@ -132,4 +132,10 @@ public class MessagesActivity extends AppCompatActivity {
     }
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,0);
+
+    }
 }

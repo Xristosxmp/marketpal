@@ -469,5 +469,10 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,0);
 
+    }
 }

@@ -151,9 +151,9 @@ public class ShoppingCart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 OptimalCartIntent = new Intent(getBaseContext() , optimal_cart.class);
-                OptimalCartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                OptimalCartIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(OptimalCartIntent);
+                overridePendingTransition(0,0);
+
             }
         });
         ScrollView scrl = findViewById(R.id.cart_scroller);
@@ -167,9 +167,6 @@ public class ShoppingCart extends AppCompatActivity {
         AdBottom();
         GoHome();
     }
-
-
-
     private void ConfigureVariables(){
         MY_MARKET_LIST = new ArrayList<>();
         SKLAVENITIS_LIST = new ArrayList<>();
@@ -220,8 +217,6 @@ public class ShoppingCart extends AppCompatActivity {
         GALAXIAS_SUM = 0;
         MASOUTHS_SUM = 0;
     }
-
-
     void AdBottom(){
         LinearLayout linearLayout = new LinearLayout(getBaseContext());
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
@@ -232,7 +227,6 @@ public class ShoppingCart extends AppCompatActivity {
         LinearLayout ln = findViewById(R.id.shopping_cart_container);
         ln.addView(linearLayout);
     }
-
     private void Navigation(){
         LinearLayout ln = findViewById(R.id.shopping_cart_container);
         findViewById(R.id.clean_cart).setOnClickListener(new View.OnClickListener() {
@@ -275,15 +269,13 @@ public class ShoppingCart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     ProfileIntent = new Intent(getBaseContext() , Profile.class);
-                    ProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    ProfileIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(ProfileIntent);
+                    overridePendingTransition(0,0);
                     finish();
             }
         });
 
     }
-
     void CreateProductsInsideMarkets(String supplier, LinearLayout ln){
         for (Map.Entry<String, Map<String, Double>> entry : products.entrySet()) {
             String product = entry.getKey();
@@ -297,7 +289,6 @@ public class ShoppingCart extends AppCompatActivity {
         }
 
     }
-
     LinearLayout CreateFullProduct(String p_name , String supplier){
         LinearLayout ln = new LinearLayout(getBaseContext());
         ln = new LinearLayout(getBaseContext());
@@ -382,7 +373,6 @@ public class ShoppingCart extends AppCompatActivity {
 
         return ln;
     }
-
     void CreateImportantComp(String supplier){
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -486,20 +476,17 @@ public class ShoppingCart extends AppCompatActivity {
 
 
     }
-
     void GoHome(){
         findViewById(R.id.CartToHome).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HomeIntent = new Intent(getBaseContext() , MainActivity.class);
-                HomeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                HomeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(HomeIntent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });
     }
-
     void MyProductsInit(){
         parent = findViewById(R.id.shopping_cart_container);
 
@@ -601,8 +588,6 @@ public class ShoppingCart extends AppCompatActivity {
         }
 
     }
-
-
     private static void addProductPrice(Map<String, Map<String, Double>> products, String product, String supplier, double price) {
         if (Build.VERSION.SDK_INT <= 23) {
             ArrayMap<String, Double> supplierPrices = (ArrayMap<String, Double>) products.get(product);
@@ -617,7 +602,6 @@ public class ShoppingCart extends AppCompatActivity {
             products.put(product, supplierPrices);
         }
     }
-
     LinearLayout ln_create(String p_name , String p_img , String p_price , String p_market){
         LinearLayout ln = new LinearLayout(getBaseContext());
         ln.setLayoutParams(new LinearLayout.LayoutParams(
@@ -683,11 +667,9 @@ public class ShoppingCart extends AppCompatActivity {
 
         return ln;
     }
-
     void ImageLoader(String img_url , ImageView v){
         Glide.with(getBaseContext()).load(img_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate().into(v);
     }
-
     void SetModifierForAmount(LinearLayout price_and_logo , String p_name){
 
         LinearLayout ModifyLayout = new LinearLayout(getBaseContext());
@@ -934,10 +916,6 @@ public class ShoppingCart extends AppCompatActivity {
 
         price_and_logo.addView(ModifyLayout);
     }
-
-
-
-
     private void InitAdsMain(){
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -952,12 +930,7 @@ public class ShoppingCart extends AppCompatActivity {
 
 
     }
-
-
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
-
-
-
     private void InitData(){
 
         MY_MARKET_LIST.clear(); MY_MARKET_SUM = 0;
@@ -1117,4 +1090,11 @@ public class ShoppingCart extends AppCompatActivity {
 
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,0);
+
+
+    }
 }

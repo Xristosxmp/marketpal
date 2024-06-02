@@ -333,6 +333,9 @@ public class ProductView extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+        overridePendingTransition(0,0);
+
+
     }
 
     @Override

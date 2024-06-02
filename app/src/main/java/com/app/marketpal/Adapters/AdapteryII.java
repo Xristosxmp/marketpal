@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,165 +26,190 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import java.util.List;
 
-public class AdapteryII extends RecyclerView.Adapter{
-
+public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<CategoryClass> mData;
+    private LayoutInflater inflater;
+    private boolean adXl = true;
 
-
-    public AdapteryII(Context mContext , List<CategoryClass> mData){
+    public AdapteryII(Context mContext, List<CategoryClass> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        this.inflater = LayoutInflater.from(mContext);
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        switch (viewType){
+        switch (viewType) {
             case CategoryClass.DEFAULT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_recycler , parent , false);
+                view = inflater.inflate(R.layout.category_recycler, parent, false);
                 return new DefaultTypeView(view);
             case CategoryClass.HEADER_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_header , parent , false);
+                view = inflater.inflate(R.layout.category_header, parent, false);
                 return new HeaderTypeView(view);
             case CategoryClass.NO_TITLE_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_recycler2 , parent , false);
+                view = inflater.inflate(R.layout.category_recycler2, parent, false);
                 return new NoTitleTypeView(view);
+            default:
+                throw new IllegalArgumentException("Invalid view type");
         }
-        return null;
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    private boolean adXl = true;
-    @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         CategoryClass object = mData.get(position);
-        if(object != null){
-            switch (object.type){
-                case CategoryClass.DEFAULT_TYPE:
-                    ((DefaultTypeView) holder).category_title.setText(mData.get(position).getCategory_title());
-                    ((DefaultTypeView) holder).category_desc.setText(mData.get(position).getCategory_desc());
-                    ((DefaultTypeView) holder).category_brand.setText(mData.get(position).getCategory_brand());
-                    ((DefaultTypeView) holder).category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                    ((DefaultTypeView) holder).category_holder.setAdapter(mData.get(position).getCategory_holder());
-                    ((DefaultTypeView) holder).category_holder.setItemAnimator(null);
-                    ((DefaultTypeView) holder).category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
+        if (object == null) return;
 
-
-                    if(mData.get(position).getStatus()){
-                        ((DefaultTypeView) holder).sm.stopShimmer();((DefaultTypeView) holder).sm.setVisibility(View.GONE);
-                        if(mData.get(position).getCategory_holder() == null){((DefaultTypeView) holder).no_products.setVisibility(View.VISIBLE);}
-                        else {((DefaultTypeView) holder).no_products.setVisibility(View.GONE);}
-                    }else{((DefaultTypeView) holder).sm.startShimmer(); ((DefaultTypeView) holder).sm.setVisibility(View.VISIBLE);}
+        switch (object.type) {
+            case CategoryClass.DEFAULT_TYPE:
+                bindDefaultType((DefaultTypeView) holder, object);
                 break;
-                case CategoryClass.HEADER_TYPE:
-
-                    if(adXl) {
-                        MobileAds.initialize(mContext, new OnInitializationCompleteListener() {
-                            @Override
-                            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                                AdRequest adRequest = new AdRequest.Builder().build();
-                                ((HeaderTypeView) holder).ad.loadAd(adRequest);
-                                ((HeaderTypeView) holder).ad.setAdListener(new AdListener() {
-                                    @Override
-                                    public void onAdLoaded() {
-                                        super.onAdLoaded();
-                                        ((HeaderTypeView) holder).ad.setVisibility(View.VISIBLE);
-                                    }
-
-                                    @Override
-                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                        super.onAdFailedToLoad(loadAdError);
-                                        ((HeaderTypeView) holder).ad.setVisibility(View.GONE);
-                                    }
-                                });
-
-                            }
-                        });
-                        adXl = false;
-                    }
+            case CategoryClass.HEADER_TYPE:
+                bindHeaderType((HeaderTypeView) holder);
                 break;
-                case CategoryClass.NO_TITLE_TYPE:
-                    ((NoTitleTypeView) holder).category_brand.setText(mData.get(position).getCategory_brand());
-                    ((NoTitleTypeView) holder).category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                    ((NoTitleTypeView) holder).category_holder.setAdapter(mData.get(position).getCategory_holder());
-                    ((NoTitleTypeView) holder).category_holder.setItemAnimator(null);
-                    ((NoTitleTypeView) holder).category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
-                    if(mData.get(position).getStatus()){
-                        ((NoTitleTypeView) holder).sm.stopShimmer();((NoTitleTypeView) holder).sm.setVisibility(View.GONE);
-                        if(mData.get(position).getCategory_holder() == null){((NoTitleTypeView) holder).no_products.setVisibility(View.VISIBLE);}
-                        else{((NoTitleTypeView) holder).no_products.setVisibility(View.GONE);}
-                    }else{((NoTitleTypeView) holder).sm.startShimmer(); ((NoTitleTypeView) holder).sm.setVisibility(View.VISIBLE); }
-
-                    break;
-                default:
-                    return;
-            }
+            case CategoryClass.NO_TITLE_TYPE:
+                bindNoTitleType((NoTitleTypeView) holder, object);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid view type");
         }
+    }
+
+    private void bindDefaultType(DefaultTypeView holder, CategoryClass object) {
+        holder.category_title.setText(object.getCategory_title());
+        holder.category_desc.setText(object.getCategory_desc());
+        holder.category_brand.setText(object.getCategory_brand());
+
+        holder.category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        holder.category_holder.setAdapter(object.getCategory_holder());
+        holder.category_holder.setItemAnimator(null);
+        holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
+    }
+
+    private void bindHeaderType(HeaderTypeView holder) {
+        if (adXl) {
+            MobileAds.initialize(mContext, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    holder.ad.loadAd(adRequest);
+                    holder.ad.setAdListener(new AdListener() {
+                        @Override
+                        public void onAdLoaded() {
+                            super.onAdLoaded();
+                            holder.ad.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                            super.onAdFailedToLoad(loadAdError);
+                            holder.ad.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            });
+            adXl = false;
+        }
+    }
+
+    private void bindNoTitleType(NoTitleTypeView holder, CategoryClass object) {
+        holder.category_brand.setText(object.getCategory_brand());
+
+        holder.category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        holder.category_holder.setAdapter(object.getCategory_holder());
+        holder.category_holder.setItemAnimator(null);
+        holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public int getItemViewType(int position) {
-        switch (mData.get(position).type) {
-            case 0: return CategoryClass.DEFAULT_TYPE;
-            case 1: return CategoryClass.HEADER_TYPE;
-            case 2: return CategoryClass.NO_TITLE_TYPE;
-            default: return -1;
-        }
+        return mData.get(position).type;
     }
 
     @Override
-    public int getItemCount() {return mData.size();}
+    public int getItemCount() {
+        return mData.size();
+    }
 
-    public static class DefaultTypeView extends RecyclerView.ViewHolder{
+    public void updateData(List<CategoryClass> newData) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallback(this.mData, newData));
+        this.mData.clear();
+        this.mData.addAll(newData);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    public static class DefaultTypeView extends RecyclerView.ViewHolder {
         TextView category_title;
         TextView category_desc;
         TextView category_brand;
         RecyclerView category_holder;
-        ImageView arrow;
-        LinearLayout ln;
-        ShimmerFrameLayout sm;
         LinearLayout no_products;
 
         public DefaultTypeView(View itemView) {
             super(itemView);
-            sm = itemView.findViewById(R.id.category_recycler_shimmer);
             category_title = itemView.findViewById(R.id.category_recycler_title);
             category_desc = itemView.findViewById(R.id.category_recycler_desc);
             category_brand = itemView.findViewById(R.id.category_recycler_brand);
             category_holder = itemView.findViewById(R.id.category_recycler_holder);
             no_products = itemView.findViewById(R.id.category_recycler_no_products);
-
         }
     }
-    public static class HeaderTypeView extends RecyclerView.ViewHolder{
+
+    public static class HeaderTypeView extends RecyclerView.ViewHolder {
         AdView ad;
+
         public HeaderTypeView(View itemView) {
             super(itemView);
             ad = itemView.findViewById(R.id.categoty_ad);
         }
     }
-    public static class NoTitleTypeView extends RecyclerView.ViewHolder{
+
+    public static class NoTitleTypeView extends RecyclerView.ViewHolder {
         TextView category_brand;
         RecyclerView category_holder;
-        ShimmerFrameLayout sm;
         LinearLayout no_products;
+
         public NoTitleTypeView(View itemView) {
             super(itemView);
-            sm = itemView.findViewById(R.id.category_recycler_shimmer);
             category_brand = itemView.findViewById(R.id.category_recycler_brand);
             category_holder = itemView.findViewById(R.id.category_recycler_holder);
             no_products = itemView.findViewById(R.id.category_recycler_no_products);
-
         }
     }
 
+    static class DiffCallback extends DiffUtil.Callback {
+
+        private final List<CategoryClass> oldList;
+        private final List<CategoryClass> newList;
+
+        public DiffCallback(List<CategoryClass> oldList, List<CategoryClass> newList) {
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            // Assuming CategoryClass has a unique ID field
+            return oldList.get(oldItemPosition) == newList.get(newItemPosition);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        }
+    }
 
 }

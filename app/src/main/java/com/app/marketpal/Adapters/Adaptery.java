@@ -58,32 +58,30 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         holder.txt_02.setText(mData.get(position).getPrice().replace("." , ","));
 
         Glide.with(mContext).load(product)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .skipMemoryCache(false)
                 .dontAnimate()
                 .error(R.drawable.product_not_found)
                 .priority(Priority.HIGH)
+                .placeholder(R.drawable.product_placeholder)
                 .into(holder.img_02);
 
+        switch (mData.get(position).getMarket()) {
+            case "MYMARKET": holder.img_01.setImageResource(R.drawable.mymarket);  break;
+            case "ΜΑΣΟΥΤΗΣ": holder.img_01.setImageResource(R.drawable.masouths); break;
+            case "E-FRESH.GR": holder.img_01.setImageResource(R.drawable.efresh);  break;
+            case "ΓΑΛΑΞΙΑΣ":  holder.img_01.setImageResource(R.drawable.galaxias); break;
+            case "MARKET IN": holder.img_01.setImageResource(R.drawable.market_in); break;
+            case "ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ": holder.img_01.setImageResource(R.drawable.ab); break;
+            case "ΣΚΛΑΒΕΝΙΤΗΣ": holder.img_01.setImageResource(R.drawable.sklavenitis_logo); break;
+            case "NULL": holder.img_01.setVisibility(View.GONE); break;
+            default:  break;
+        }
 
-        if (mData.get(position).getMarket().equals("MYMARKET"))  holder.img_01.setImageResource(R.drawable.mymarket);
-        if (mData.get(position).getMarket().equals("ΜΑΣΟΥΤΗΣ"))  holder.img_01.setImageResource(R.drawable.masouths);
-        if (mData.get(position).getMarket().equals("E-FRESH.GR")) holder.img_01.setImageResource(R.drawable.efresh);
-        if (mData.get(position).getMarket().equals("ΓΑΛΑΞΙΑΣ"))    holder.img_01.setImageResource(R.drawable.galaxias);
-        if (mData.get(position).getMarket().equals("MARKET IN")) holder.img_01.setImageResource(R.drawable.market_in);
-        if (mData.get(position).getMarket().equals("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ"))   holder.img_01.setImageResource(R.drawable.ab);
-        if (mData.get(position).getMarket().equals("ΣΚΛΑΒΕΝΙΤΗΣ"))  holder.img_01.setImageResource(R.drawable.sklavenitis_logo);
-        if (mData.get(position).getMarket().equals("NULL"))  holder.img_01.setVisibility(View.GONE);
 
-
-        ProductClass product_ = mData.get(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickListener != null) {
-                    onClickListener.onClick(position, product_);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (onClickListener != null) {
+                onClickListener.onClick(position, mData.get(position));
             }
         });
 

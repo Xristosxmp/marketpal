@@ -62,6 +62,13 @@ public class optimal_cart extends AppCompatActivity {
     private TextView total_cost_optimal;
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,0);
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         Config();
