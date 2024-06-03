@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,6 +114,7 @@ public class Profile extends AppCompatActivity {
     SetRecommented TASK1;
     SetRecommented TASK2;
     SetRecommented TASK3;
+    SetFavorites   FAVORITES_TASK;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -371,6 +373,7 @@ public class Profile extends AppCompatActivity {
             productAmountNav.setText(String.valueOf(size));
         }
 
+
         SetRecentlyViewed(false);
         SetFavoritesProducts(false);
     }
@@ -445,29 +448,24 @@ public class Profile extends AppCompatActivity {
                 s.smoothScrollTo(0 , (int )findViewById(R.id.RECENTLY_VIEWED_LAYOUT).getTop());
             }
         });
-
-
         findViewById(R.id.view_recommended_product).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 s.smoothScrollTo(0 , (int )findViewById(R.id.RECOMMENDED_LAYOUT).getTop());
             }
         });
-
         findViewById(R.id.view_cashack_product).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 s.smoothScrollTo(0 , (int )findViewById(R.id.CASHBACK_LAYOUT).getTop());
             }
         });
-
         findViewById(R.id.view_one_plus_one_product).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 s.smoothScrollTo(0 , (int )findViewById(R.id.PLUSGIFT_LAYOUT).getTop());
             }
         });
-
     }
 
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
@@ -505,72 +503,6 @@ public class Profile extends AppCompatActivity {
         LN.addView(img);
         LN.addView(t);
         return LN;
-    }
-
-
-
-
-    private void SetLoadingVisibility(RecyclerView rv , boolean c){
-        if (c) {
-            ViewParent parent = rv.getParent();
-            if(parent instanceof LinearLayout){
-                LinearLayout p = (LinearLayout) parent;
-                for(int i=0; i<p.getChildCount(); i++){
-                    View child = p.getChildAt(i);
-                    if(child instanceof LinearLayout){
-                        LinearLayout ln_child = (LinearLayout) child;
-                        if(child.getTag() != null)
-                            if(child.getTag().toString().equals("loading"))
-                                child.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        }else{
-            ViewParent parent = rv.getParent();
-            if(parent instanceof LinearLayout){
-                LinearLayout p = (LinearLayout) parent;
-                for(int i=0; i<p.getChildCount(); i++){
-                    View child = p.getChildAt(i);
-                    if(child instanceof LinearLayout){
-                        if(child.getTag() != null)
-                            if(child.getTag().toString().equals("loading"))
-                                child.setVisibility(View.GONE);
-                    }
-                }
-            }
-        }
-
-    }
-    private void NoProductsSetter(RecyclerView rv , boolean c){
-
-        if (c) {
-            ViewParent parent = rv.getParent();
-            if(parent instanceof LinearLayout){
-                LinearLayout p = (LinearLayout) parent;
-                for(int i=0; i<p.getChildCount(); i++){
-                    View child = p.getChildAt(i);
-                    if(child instanceof LinearLayout){
-                        LinearLayout ln_child = (LinearLayout) child;
-                        ln_child.setVisibility(View.VISIBLE);
-                        rv.setVisibility(View.GONE);
-                    }
-                }
-            }
-        }else{
-            ViewParent parent = rv.getParent();
-            if(parent instanceof LinearLayout){
-                LinearLayout p = (LinearLayout) parent;
-                for(int i=0; i<p.getChildCount(); i++){
-                    View child = p.getChildAt(i);
-                    if(child instanceof LinearLayout){
-                        LinearLayout ln_child = (LinearLayout) child;
-                        ln_child.setVisibility(View.GONE);
-                        rv.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        }
-
     }
 
     private List<Integer> IDS;
@@ -634,16 +566,23 @@ public class Profile extends AppCompatActivity {
             API[index] = "https://v8api.pockee.com/api/v8/public/products/"+value.toString();
             index++;
         }
-        if(favorites.getAll().size() != favorites_size || flag == 1 || c)
-        new SetFavorites(API, findViewById(R.id.profile_favorites_recycler)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if(favorites.getAll().size() != favorites_size || flag == 1 || c) {
+            if (FAVORITES_TASK == null)
+                FAVORITES_TASK = (SetFavorites) new SetFavorites(API, findViewById(R.id.profile_favorites_recycler)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            else if(FAVORITES_TASK.getStatus() == AsyncTask.Status.RUNNING){
+                FAVORITES_TASK.cancel(true);
+                FAVORITES_TASK = (SetFavorites) new SetFavorites(API, findViewById(R.id.profile_favorites_recycler)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }else{
+                FAVORITES_TASK = (SetFavorites) new SetFavorites(API, findViewById(R.id.profile_favorites_recycler)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }
         favorites_size = favorites.getAll().size();
         flag = 0;
     }
 
-    private class SetFavorites extends AsyncTask<String,String, JSONObject[]>{
+    private class SetFavorites extends AsyncTask<String,String,ArrayList<JSONObject>>{
 
         private RecyclerView rv_01;
-
         private String API[];
 
         SetFavorites(String API[]  , RecyclerView rv_01){
@@ -656,20 +595,17 @@ public class Profile extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if(rv_01 != null)
-                rv_01.removeAllViews();
-            SetLoadingVisibility(rv_01 , true);
-            NoProductsSetter(rv_01 , false);
+            if(rv_01 != null)  rv_01.removeAllViews();
             FavoritesList.clear();
             FavoritesList = new ArrayList<>();
         }
 
         @Override
-        protected JSONObject[] doInBackground(String... strings) {
-            JSONObject JSON_OBJECT[] = new JSONObject[API.length];
+        protected ArrayList<JSONObject> doInBackground(String... strings) {
+            ArrayList<JSONObject> l = new ArrayList<>();
+
             for(int i=0; i<API.length; i++) {
                 try {
-                    JSON_OBJECT[i] = new JSONObject();
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .connectTimeout(10, TimeUnit.SECONDS)
                             .readTimeout(10, TimeUnit.SECONDS)
@@ -686,85 +622,75 @@ public class Profile extends AppCompatActivity {
 
                     ResponseBody responseBody = response.body();
                     String json = responseBody != null ? responseBody.string() : "";
-                    JSON_OBJECT[i] = new JSONObject(json);
-                } catch (Exception e) {e.printStackTrace(); JSON_OBJECT[i] = null; continue;}
+                    l.add(new JSONObject(json));
+                } catch (Exception e) {e.printStackTrace();
+                    Log.e("FAVORITES" , e.getLocalizedMessage()); continue;}
+            }
+            try {
+                for(JSONObject jsonObject : l) {
+                        JSONObject product = jsonObject.getJSONObject("data");
+                        if (product == null) continue;
+                        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                        ProductClass model = new ProductClass();
+                        double final_price = Double.MAX_VALUE;
+                        JSONArray assortments = product.getJSONArray("assortments");
+                        String[][] assortmentsData = new String[assortments.length()][2];
+
+                        if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
+                            JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
+                            if (coupon.getDouble("value") > 0)  model.setCoupon_value(decimalFormat.format(coupon.getDouble("value")));                            else model.setCoupon_value("null");
+                            if (coupon.getDouble("value_discount") > 0)  model.setValue_discount(decimalFormat.format(coupon.getDouble("value_discount")));
+                            else model.setValue_discount("null");
+                        }
+
+                        if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                        else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
+
+
+                        for (int j = 0; j < assortments.length(); j++) {
+                            JSONObject item = assortments.getJSONObject(j);
+                            JSONObject retailer = item.getJSONObject("retailer");
+                            JSONObject productPivot = item.getJSONObject("product_pivot");
+                            String name = retailer.getString("name");
+                            if (!supermarkets.contains(name)) continue;
+
+                            double current_price = productPivot.isNull("final_price")
+                                    ? productPivot.getDouble("start_price")
+                                    : productPivot.getDouble("final_price");
+                            if (current_price < final_price) {
+                                model.setMarket(name.trim());
+                                final_price = current_price;
+                                model.setPrice(current_price + " €");
+                            }
+                            assortmentsData[j][0] = name;
+                            assortmentsData[j][1] = String.valueOf(current_price);
+                        }
+                        if (final_price == Double.MAX_VALUE) continue;
+
+                        model.setName(product.getString("name"));
+                        model.setID(product.getString("id"));
+                        model.setASSORTEMTNS_DATA(assortmentsData);
+                        model.setDesc(product.getString("description"));
+                        model.setOrigianlName(product.getString("name"));
+                        model.setBrand_id(product.getString("brand_id"));
+                        Log.d("FAVORITES" , model.getName());
+
+                        FavoritesList.add(model);
+                    }
+            }catch (Exception e){
+                Log.e("FAVORITES" , e.getLocalizedMessage());
             }
 
-            return JSON_OBJECT;
+
+            return l;
         }
 
         @Override
-        protected void onPostExecute(JSONObject[] JSON_OBJECT) {
-            super.onPostExecute(JSON_OBJECT);
+        protected void onPostExecute(ArrayList<JSONObject> l) {
+            super.onPostExecute(l);
 
-            if(API.length == 0){
-                NoProductsSetter(rv_01 , true);
-                SetLoadingVisibility(rv_01 , false);
-                return;
-            }
-            if(JSON_OBJECT == null){
-                NoProductsSetter(rv_01 , true);
-                SetLoadingVisibility(rv_01 , false);
-                return;
-            }
+            if(API.length == 0) return;
             try {
-                for(int i=0; i<JSON_OBJECT.length; i++){
-                    JSONArray ASSORTMENTS = JSON_OBJECT[i].getJSONObject("data").getJSONArray("assortments");
-                    String ASSORTEMTNS_DATA[][] = new String[ASSORTMENTS.length()][2];
-                    String coupon_value = "null";
-                    String coupon_value_discount = "null";
-                    String product_brand = JSON_OBJECT[i].getJSONObject("data").getString("brand_id");
-                    if(JSON_OBJECT[i] == null) continue;
-                    if(JSON_OBJECT[i].isNull("data")) continue;
-                    if(JSON_OBJECT[i].getJSONObject("data").isNull("assortments")) continue;
-                    double FINAL_PRICE = 55555;
-                    String FINAL_NAME = "";
-                    String product_img = null;
-                    if(!JSON_OBJECT[i].getJSONObject("data").isNull("image_versions"))
-                        product_img = JSON_OBJECT[i].getJSONObject("data").getJSONObject("image_versions").getString("original");
-                    else product_img = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-
-
-
-                    if(JSON_OBJECT[i].has("coupons"))
-                    if(JSON_OBJECT[i].getJSONArray("coupons").length() > 0){
-                        JSONArray J = JSON_OBJECT[i].getJSONArray("coupons");
-                        JSONObject P = J.getJSONObject(0);
-                        double v1 = P.getDouble("value");
-                        double v2 = P.getDouble("value_discount");
-                        if (v1 > 0) coupon_value = new DecimalFormat("#0.00").format(v1);
-                        if (v2 > 0) coupon_value_discount = new DecimalFormat("#0.00").format(v2);
-                    }
-                    for(int j=0; j<ASSORTMENTS.length(); j++){
-                        JSONObject item = ASSORTMENTS.getJSONObject(j);
-                        JSONObject retailer = item.getJSONObject("retailer");
-                        JSONObject productPivot = item.getJSONObject("product_pivot");
-                        String name = retailer.getString("name");
-                        if(!supermarkets.contains(name)) continue;
-
-                        double finalPrice;
-                        if (productPivot.isNull("final_price")) {finalPrice = productPivot.getDouble("start_price");}
-                        else {finalPrice = productPivot.getDouble("final_price");}
-                        if (finalPrice < FINAL_PRICE) {FINAL_NAME = name; FINAL_PRICE = finalPrice;}
-                        ASSORTEMTNS_DATA[j][0] = name;
-                        ASSORTEMTNS_DATA[j][1] = String.valueOf(finalPrice);
-                    }
-
-                    if(FINAL_PRICE == 55555) continue;
-
-                    ProductClass model = new ProductClass();
-                    model.setName(JSON_OBJECT[i].getJSONObject("data").getString("name"));
-                    model.setUrl(product_img);
-                    model.setMarket(FINAL_NAME.trim());  model.setPrice(String.valueOf(FINAL_PRICE) + " €");
-                    model.setID(JSON_OBJECT[i].getJSONObject("data").getString("id"));
-                    model.setASSORTEMTNS_DATA(ASSORTEMTNS_DATA);
-                    model.setDesc(JSON_OBJECT[i].getJSONObject("data").getString("description"));
-                    model.setOrigianlName(JSON_OBJECT[i].getJSONObject("data").getString("name"));
-                    model.setBrand_id(product_brand);
-                    model.setValue_discount(coupon_value_discount);
-                    model.setCoupon_value(coupon_value);
-                    FavoritesList.add(model);
-                }
 
                 Collections.sort(FavoritesList, new Comparator<ProductClass>() {
                     @Override
@@ -788,10 +714,8 @@ public class Profile extends AppCompatActivity {
 
                     }
                 });
-
+                adp.notifyDataSetChanged();
             }catch (Exception e){e.printStackTrace();}
-            SetLoadingVisibility(rv_01 , false);
-            NoProductsSetter(rv_01 , false);
 
         }
     }
@@ -814,8 +738,6 @@ public class Profile extends AppCompatActivity {
             super.onPreExecute();
             if(rv_01 != null)
                 rv_01.removeAllViews();
-            SetLoadingVisibility(rv_01 , true);
-
             RecentlyViewedList.clear();
             RecentlyViewedList = new ArrayList<>();
         }
@@ -852,14 +774,7 @@ public class Profile extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONObject[] JSON_OBJECT) {
             super.onPostExecute(JSON_OBJECT);
-
-            if(API.length == 0){
-                NoProductsSetter(rv_01 , true);
-                SetLoadingVisibility(rv_01 , false);
-
-                return;
-            }
-
+            if(API.length == 0) return;
             try {
                 for(int i=0; i<JSON_OBJECT.length; i++){
                     JSONArray ASSORTMENTS = JSON_OBJECT[i].getJSONObject("data").getJSONArray("assortments");
@@ -946,9 +861,6 @@ public class Profile extends AppCompatActivity {
                 });
 
             }catch (Exception e){e.printStackTrace();}
-
-            SetLoadingVisibility(rv_01 , false);
-            NoProductsSetter(rv_01 , false);
         }
     }
     private class SetRecommented extends AsyncTask<String,String,JSONObject>{
@@ -1004,86 +916,59 @@ public class Profile extends AppCompatActivity {
             super.onPostExecute(JSON_OBJECT);
 
 
-            if(JSON_OBJECT == null){
-                NoProductsSetter(RecommentedRecycler , true);
-                SetLoadingVisibility(RecommentedRecycler , false);
-                return;
-            }
-            if(JSON_OBJECT.length() <= 0 || !JSON_OBJECT.has("data")){
-                    NoProductsSetter(RecommentedRecycler , true);
-                    SetLoadingVisibility(RecommentedRecycler , false);
-                    return;
-            }
+            if(JSON_OBJECT == null) return;
+            if(JSON_OBJECT.length() <= 0 || !JSON_OBJECT.has("data"))  return;
 
-
-
-            NoProductsSetter(RecommentedRecycler , false);
             try {
                 JSONArray data = JSON_OBJECT.getJSONArray("data");
-                if(data.length() <= 0){
-                    NoProductsSetter(RecommentedRecycler , true);
-                    SetLoadingVisibility(RecommentedRecycler , false);
-                    return;
-                }
+                if(data.length() <= 0) return;
 
-                for(int i=0; i<data.length(); i++){
+                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                for (int i = 0; i < data.length(); i++) {
+                    ProductClass model = new ProductClass();
                     JSONObject product = data.getJSONObject(i);
-                    String product_id = product.getString("id");
-                    String product_name = product.getString("name");
-                    String product_desc = product.getString("description");
-                    String product_brand = product.getString("brand_id");
-                    String coupon_value = "null";
-                    String coupon_value_discount = "null";
-                    JSONArray ASSORTMENTS =  product.getJSONArray("assortments");
-                    double FINAL_PRICE = 55555;
-                    String FINAL_NAME = "";
-                    String ASSORTEMTNS_DATA[][] = new String[ASSORTMENTS.length()][2];
-                    String product_img = null;
+                    double final_price = Double.MAX_VALUE;
+                    JSONArray assortments = product.getJSONArray("assortments");
+                    String[][] assortmentsData = new String[assortments.length()][2];
 
-
-
-                    if(!product.isNull("image_versions"))
-                        product_img = product.getJSONObject("image_versions").getString("original");
-                    else product_img = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-
-                    if(product.getJSONArray("coupons").length() > 0){
-                        JSONArray J = product.getJSONArray("coupons");
-                        JSONObject P = J.getJSONObject(0);
-                        double v1 = P.getDouble("value");
-                        double v2 = P.getDouble("value_discount");
-                        if (v1 > 0) coupon_value = new DecimalFormat("#0.00").format(v1);
-                        if (v2 > 0) coupon_value_discount = new DecimalFormat("#0.00").format(v2);
+                    if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
+                        JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
+                        if (coupon.getDouble("value") > 0) model.setCoupon_value(decimalFormat.format(coupon.getDouble("value")));
+                        else model.setCoupon_value("null");
+                        if (coupon.getDouble("value_discount") > 0) model.setValue_discount(decimalFormat.format(coupon.getDouble("value_discount")));
+                        else model.setValue_discount("null");
                     }
 
-                    for(int j=0; j<ASSORTMENTS.length(); j++){
-                        JSONObject item = ASSORTMENTS.getJSONObject(j);
+                    if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                    else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
+
+
+                    for (int j = 0; j < assortments.length(); j++) {
+                        JSONObject item = assortments.getJSONObject(j);
                         JSONObject retailer = item.getJSONObject("retailer");
                         JSONObject productPivot = item.getJSONObject("product_pivot");
                         String name = retailer.getString("name");
-                        if(!supermarkets.contains(name)) continue;
+                        if (!supermarkets.contains(name)) continue;
 
-                        double finalPrice;
-                        if (productPivot.isNull("final_price")) {finalPrice = productPivot.getDouble("start_price");}
-                        else {finalPrice = productPivot.getDouble("final_price");}
-                        if (finalPrice < FINAL_PRICE) {FINAL_NAME = name; FINAL_PRICE = finalPrice;}
-                        ASSORTEMTNS_DATA[j][0] = name;
-                        ASSORTEMTNS_DATA[j][1] = String.valueOf(finalPrice);
+                        double current_price = productPivot.isNull("final_price")
+                                ? productPivot.getDouble("start_price")
+                                : productPivot.getDouble("final_price");
+                        if (current_price < final_price) {
+                            model.setMarket(name.trim());
+                            final_price = current_price;
+                            model.setPrice(current_price + " €");
+                        }
+                        assortmentsData[j][0] = name;
+                        assortmentsData[j][1] = String.valueOf(current_price);
                     }
+                    if (final_price == Double.MAX_VALUE) continue;
 
-                    if(FINAL_PRICE == 55555) continue;
-
-                    ProductClass model = new ProductClass();
-                    model.setName(product_name);
-                    model.setUrl(product_img);
-                    model.setMarket(FINAL_NAME.trim());
-                    model.setID(product_id);
-                    model.setASSORTEMTNS_DATA(ASSORTEMTNS_DATA);
-                    model.setDesc(product_desc);
-                    model.setOrigianlName(product_name);
-                    model.setPrice(String.valueOf(FINAL_PRICE) + " €");
-                    model.setBrand_id(product_brand);
-                    model.setValue_discount(coupon_value_discount);
-                    model.setCoupon_value(coupon_value);
+                    model.setName(product.getString("name"));
+                    model.setID(product.getString("id"));
+                    model.setASSORTEMTNS_DATA(assortmentsData);
+                    model.setDesc(product.getString("description"));
+                    model.setOrigianlName(product.getString("name"));
+                    model.setBrand_id( product.getString("brand_id"));
                     product_list.add(model);
                 }
                 Collections.sort(product_list, new Comparator<ProductClass>() {
@@ -1107,34 +992,6 @@ public class Profile extends AppCompatActivity {
 
                     }
                 });
-
-
-                /*
-                rv_01.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    boolean isLoading = false;
-                    static int page = 2;
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-
-                        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        int visibleItemCount = layoutManager.getChildCount();
-                        int totalItemCount = layoutManager.getItemCount();
-                        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                        int visibleThreshold = 5; // Adjust this value as needed
-
-                        if (!isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItemPosition + visibleThreshold)) {
-                            isLoading = true;
-                            new AsyncProductUpdate(API.replaceAll("&page=1", "&page=" + page), adp)
-                                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            page++;
-                            isLoading = false;
-                        }
-                    }
-                });
-
-
-                 */
 
 
             }catch (Exception e){e.printStackTrace();}

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -108,6 +109,13 @@ public class Offers_activity extends AppCompatActivity {
         adp3 = new Adaptery(getBaseContext(), list_ab, ActivityType.MAIN_ACTIVITY);
         adp4 = new Adaptery(getBaseContext(), list_masouths, ActivityType.MAIN_ACTIVITY);
         adp5 = new Adaptery(getBaseContext(), list_galaxias, ActivityType.MAIN_ACTIVITY);
+
+        adp.setOnClickListener((position, model) -> startActivity(position,  model, list_mymarket));
+        adp2.setOnClickListener((position, model) -> startActivity(position, model, list_sklavenitis));
+        adp3.setOnClickListener((position, model) -> startActivity(position, model, list_ab));
+        adp4.setOnClickListener((position, model) -> startActivity(position, model, list_masouths));
+        adp5.setOnClickListener((position, model) -> startActivity(position, model, list_galaxias));
+
 
         API_DATA_RV[0].setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
         API_DATA_RV[0].setAdapter(adp);
@@ -585,9 +593,15 @@ public class Offers_activity extends AppCompatActivity {
         }
 
     }
-    private class AsyncProducts extends AsyncTask<String,String,JSONObject>{
+    private class AsyncProducts extends AsyncTask<String,String,Void>{
 
         private String API;
+
+        LinearLayout s1 = findViewById(R.id.MYMARKET_CAT_OFFERS);
+        LinearLayout s2 = findViewById(R.id.SKLAVENITHS_CAT_OFFERS);
+        LinearLayout s3 = findViewById(R.id.AB_CAT_OFFERS);
+        LinearLayout s4 = findViewById(R.id.MASOUTHS_CAT_OFFERS);
+        LinearLayout s5 = findViewById(R.id.GALAXIAS_CAT_OFFERS);
 
         AsyncProducts(String API){
             this.API = API;
@@ -616,12 +630,9 @@ public class Offers_activity extends AppCompatActivity {
         }
 
         @Override
-        protected JSONObject doInBackground(String... strings) {
-            JSONObject JSON_OBJECT = new JSONObject();
-
+        protected Void doInBackground(String... strings) {
 
             try {
-                JSON_OBJECT = new JSONObject();
                 OkHttpClient client = new OkHttpClient().newBuilder()
                         .connectTimeout(60, TimeUnit.SECONDS)
                         .readTimeout(60, TimeUnit.SECONDS)
@@ -638,44 +649,28 @@ public class Offers_activity extends AppCompatActivity {
 
                 ResponseBody responseBody = response.body();
                 String json = responseBody != null ? responseBody.string() : "";
-                JSON_OBJECT = new JSONObject(json);
-            } catch (Exception e) {e.printStackTrace();JSON_OBJECT = null;}
 
 
-            return JSON_OBJECT;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject JSON_OBJECT) {
-            try {
-
-
-
-                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-                JSONArray data = JSON_OBJECT.getJSONArray("data");
-                for(int i=0; i<data.length(); i++){
+                try {
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                    JSONArray data = new JSONObject(json).getJSONArray("data");
+                    for (int i = 0; i < data.length(); i++) {
+                        ProductClass model = new ProductClass();
                         JSONObject product = data.getJSONObject(i);
-                        String productImg;
-                        String couponValue = "null";
-                        String couponValueDiscount = "null";
-                        double finalPrice = Double.MAX_VALUE;
-                        String finalName = "";
+                        double final_price = Double.MAX_VALUE;
                         JSONArray assortments = product.getJSONArray("assortments");
                         String[][] assortmentsData = new String[assortments.length()][2];
 
                         if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
                             JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
-                            double value = coupon.getDouble("value");
-                            double valueDiscount = coupon.getDouble("value_discount");
-                            if (value > 0) couponValue = decimalFormat.format(value);
-                            if (valueDiscount > 0) couponValueDiscount = decimalFormat.format(valueDiscount);
+                            if (coupon.getDouble("value") > 0) model.setCoupon_value(decimalFormat.format(coupon.getDouble("value")));
+                            else model.setCoupon_value("null");
+                            if (coupon.getDouble("value_discount") > 0) model.setValue_discount(decimalFormat.format(coupon.getDouble("value_discount")));
+                            else model.setValue_discount("null");
                         }
 
-                        if (!product.isNull("image_versions")) {
-                            productImg = product.getJSONObject("image_versions").getString("original");
-                        } else {
-                            productImg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-                        }
+                        if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                        else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
 
                         for (int j = 0; j < assortments.length(); j++) {
                             JSONObject item = assortments.getJSONObject(j);
@@ -684,126 +679,91 @@ public class Offers_activity extends AppCompatActivity {
                             String name = retailer.getString("name");
                             if (!supermarkets.contains(name)) continue;
 
-                            double currentFinalPrice = productPivot.isNull("final_price")
+                            double current_price = productPivot.isNull("final_price")
                                     ? productPivot.getDouble("start_price")
                                     : productPivot.getDouble("final_price");
-                            if (currentFinalPrice < finalPrice) {
-                                finalName = name;
-                                finalPrice = currentFinalPrice;
+                            if (current_price < final_price) {
+                                model.setMarket(name.trim());
+                                final_price = current_price;
+                                model.setPrice(current_price + " €");
                             }
                             assortmentsData[j][0] = name;
-                            assortmentsData[j][1] = String.valueOf(currentFinalPrice);
+                            assortmentsData[j][1] = String.valueOf(current_price);
                         }
-                        if (finalPrice == Double.MAX_VALUE) continue;
+                        if (final_price == Double.MAX_VALUE) continue;
 
-                        ProductClass model = new ProductClass();
                         model.setName(product.getString("name"));
-                        model.setUrl(productImg);
-                        model.setMarket(finalName.trim());
                         model.setID(product.getString("id"));
                         model.setASSORTEMTNS_DATA(assortmentsData);
                         model.setDesc(product.getString("description"));
                         model.setOrigianlName(product.getString("name"));
-                        model.setPrice(finalPrice + " €");
                         model.setBrand_id( product.getString("brand_id"));
-                        model.setValue_discount(couponValueDiscount);
-                        model.setCoupon_value(couponValue);
+
+                        if(model.getMarket().equals("MYMARKET")) list_mymarket.add(model);
+                        if(model.getMarket().equals("ΣΚΛΑΒΕΝΙΤΗΣ")) list_sklavenitis.add(model);
+                        if(model.getMarket().equals("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ")) list_ab.add(model);
+                        if(model.getMarket().equals("ΜΑΣΟΥΤΗΣ")) list_masouths.add(model);
+                        if(model.getMarket().equals("ΓΑΛΑΞΙΑΣ")) list_galaxias.add(model);
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        list_mymarket.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                        list_sklavenitis.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                        list_ab.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                        list_masouths.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                        list_galaxias.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                    }else {
+                        Collections.sort(list_mymarket, new Comparator<ProductClass>() {
+                            @Override
+                            public int compare(ProductClass product1, ProductClass product2) {
+                                double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                                double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                                return Double.compare(price1, price2);
+                            }
+                        });
+                        Collections.sort(list_sklavenitis, new Comparator<ProductClass>() {
+                            @Override
+                            public int compare(ProductClass product1, ProductClass product2) {
+                                double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                                double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                                return Double.compare(price1, price2);
+                            }
+                        });
+                        Collections.sort(list_ab, new Comparator<ProductClass>() {
+                            @Override
+                            public int compare(ProductClass product1, ProductClass product2) {
+                                double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                                double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                                return Double.compare(price1, price2);
+                            }
+                        });
+                        Collections.sort(list_masouths, new Comparator<ProductClass>() {
+                            @Override
+                            public int compare(ProductClass product1, ProductClass product2) {
+                                double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                                double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                                return Double.compare(price1, price2);
+                            }
+                        });
+                        Collections.sort(list_galaxias, new Comparator<ProductClass>() {
+                            @Override
+                            public int compare(ProductClass product1, ProductClass product2) {
+                                double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                                double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                                return Double.compare(price1, price2);
+                            }
+                        });
+                    }
+                }catch (Exception e){e.printStackTrace();}
+
+            } catch (Exception e) {e.printStackTrace();}
+            return null;
+        }
 
 
-                    if(finalName.equals("MYMARKET")) list_mymarket.add(model);
-                    if(finalName.equals("ΣΚΛΑΒΕΝΙΤΗΣ")) list_sklavenitis.add(model);
-                    if(finalName.equals("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ")) list_ab.add(model);
-                    if(finalName.equals("ΜΑΣΟΥΤΗΣ")) list_masouths.add(model);
-                    if(finalName.equals("ΓΑΛΑΞΙΑΣ")) list_galaxias.add(model);
-                }
-
-                Collections.sort(list_mymarket, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
-                Collections.sort(list_sklavenitis, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
-                Collections.sort(list_ab, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
-                Collections.sort(list_masouths, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
-                Collections.sort(list_galaxias, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
-
-                LinearLayout s1 = findViewById(R.id.MYMARKET_CAT_OFFERS);
-                LinearLayout s2 = findViewById(R.id.SKLAVENITHS_CAT_OFFERS);
-                LinearLayout s3 = findViewById(R.id.AB_CAT_OFFERS);
-                LinearLayout s4 = findViewById(R.id.MASOUTHS_CAT_OFFERS);
-                LinearLayout s5 = findViewById(R.id.GALAXIAS_CAT_OFFERS);
-
-
-                if(list_mymarket.isEmpty())    S(s1 , true); else S(s1 , false);
-                if(list_sklavenitis.isEmpty()) S(s2 , true); else S(s2 , false);
-                if(list_ab.isEmpty())          S(s3 , true); else S(s3 , false);
-                if(list_masouths.isEmpty())    S(s4 , true); else S(s4 , false);
-                if(list_galaxias.isEmpty())    S(s5 , true); else S(s5 , false);
-
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        startActivity(position , model , list_mymarket);
-                    }
-                });
-                adp2.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        startActivity(position , model , list_sklavenitis);
-                    }
-                });
-                adp3.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        startActivity(position , model , list_ab);
-                    }
-                });
-                adp4.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        startActivity(position , model , list_masouths);
-                    }
-                });
-                adp5.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        startActivity(position , model , list_galaxias);
-                    }
-                });
-            }catch (Exception e){e.printStackTrace();}
-
-
+        @Override
+        protected void onPostExecute(Void params) {
+            super.onPostExecute(params);
             API_DATA_SHIMMER[0].stopShimmer();
             API_DATA_SHIMMER[1].stopShimmer();
             API_DATA_SHIMMER[2].stopShimmer();
@@ -814,6 +774,12 @@ public class Offers_activity extends AppCompatActivity {
             API_DATA_SHIMMER[2].setVisibility(View.GONE);
             API_DATA_SHIMMER[3].setVisibility(View.GONE);
             API_DATA_SHIMMER[4].setVisibility(View.GONE);
+
+            if(list_mymarket.isEmpty())    S(s1 , true); else S(s1 , false);
+            if(list_sklavenitis.isEmpty()) S(s2 , true); else S(s2 , false);
+            if(list_ab.isEmpty())          S(s3 , true); else S(s3 , false);
+            if(list_masouths.isEmpty())    S(s4 , true); else S(s4 , false);
+            if(list_galaxias.isEmpty())    S(s5 , true); else S(s5 , false);
 
             adp.notifyDataSetChanged();
             adp2.notifyDataSetChanged();

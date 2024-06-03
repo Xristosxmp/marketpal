@@ -154,10 +154,11 @@ public class ProductView extends AppCompatActivity {
         String c2 = PRODUCT_OBJECT.getValue_discount();
         if(c1 != null && c2 != null)
         if(!c1.equals("null") && !c2.equals("null")) {
+            System.out.println(c1 + " ---HERE " + c2);
             coupon_value.setText(c1.replace("." , ",") + "€");
             coupon_value_discount.setText(c2.replace("." , ",") + "€");
         }else  coupon_container.setVisibility(View.GONE);
-
+        else coupon_container.setVisibility(View.GONE);
 
         // Prices
         StringBuilder _cart_data_ = new StringBuilder("");
@@ -188,20 +189,16 @@ public class ProductView extends AppCompatActivity {
 
 
                 ImageView image = new ImageView(ln.getContext());
-                if (assortments[i][0].equals("MYMARKET"))
-                    image.setImageResource(R.drawable.mymarket);
-                if (assortments[i][0].equals("ΜΑΣΟΥΤΗΣ"))
-                    image.setImageResource(R.drawable.masouths);
-                if (assortments[i][0].equals("E-FRESH.GR"))
-                    image.setImageResource(R.drawable.efresh);
-                if (assortments[i][0].equals("ΓΑΛΑΞΙΑΣ"))
-                    image.setImageResource(R.drawable.galaxias);
-                if (assortments[i][0].equals("MARKET IN"))
-                    image.setImageResource(R.drawable.market_in);
-                if (assortments[i][0].equals("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ"))
-                    image.setImageResource(R.drawable.ab);
-                if (assortments[i][0].equals("ΣΚΛΑΒΕΝΙΤΗΣ"))
-                    image.setImageResource(R.drawable.sklavenitis_logo);
+                switch (assortments[i][0]) {
+                    case "MYMARKET": image.setImageResource(R.drawable.mymarket); break;
+                    case "ΜΑΣΟΥΤΗΣ": image.setImageResource(R.drawable.masouths); break;
+                    case "ΓΑΛΑΞΙΑΣ":  image.setImageResource(R.drawable.galaxias); break;
+                    case "MARKET IN": image.setImageResource(R.drawable.market_in); break;
+                    case "ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ": image.setImageResource(R.drawable.ab); break;
+                    case "ΣΚΛΑΒΕΝΙΤΗΣ": image.setImageResource(R.drawable.sklavenitis_logo); break;
+                    default: break;
+                }
+
                 image.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(48), dpToPx(48)));
 
                 TextView text = new TextView(ln.getContext());

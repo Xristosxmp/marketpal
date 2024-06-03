@@ -766,34 +766,26 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(responseBody.string());
                         JSONArray data = jsonObject.getJSONArray("data");
                         if (data.length() == 0) return productList;
-
                         c.setCategory_brand(BRAND);
-
                         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-
                         for (int i = 0; i < data.length(); i++) {
+                            ProductClass model = new ProductClass();
                             JSONObject product = data.getJSONObject(i);
-                            String productImg;
-                            String couponValue = "null";
-                            String couponValueDiscount = "null";
-                            double finalPrice = Double.MAX_VALUE;
-                            String finalName = "";
+                            double final_price = Double.MAX_VALUE;
                             JSONArray assortments = product.getJSONArray("assortments");
                             String[][] assortmentsData = new String[assortments.length()][2];
 
                             if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
                                 JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
-                                double value = coupon.getDouble("value");
-                                double valueDiscount = coupon.getDouble("value_discount");
-                                if (value > 0) couponValue = decimalFormat.format(value);
-                                if (valueDiscount > 0) couponValueDiscount = decimalFormat.format(valueDiscount);
+                                if (coupon.getDouble("value") > 0) model.setCoupon_value(decimalFormat.format(coupon.getDouble("value")));
+                                else model.setCoupon_value("null");
+                                if (coupon.getDouble("value_discount") > 0) model.setValue_discount(decimalFormat.format(coupon.getDouble("value_discount")));
+                                else model.setValue_discount("null");
                             }
 
-                            if (!product.isNull("image_versions")) {
-                                productImg = product.getJSONObject("image_versions").getString("original");
-                            } else {
-                                productImg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-                            }
+                            if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                            else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
+
 
                             for (int j = 0; j < assortments.length(); j++) {
                                 JSONObject item = assortments.getJSONObject(j);
@@ -802,34 +794,30 @@ public class MainActivity extends AppCompatActivity {
                                 String name = retailer.getString("name");
                                 if (!supermarkets.contains(name)) continue;
 
-                                double currentFinalPrice = productPivot.isNull("final_price")
+                                double current_price = productPivot.isNull("final_price")
                                         ? productPivot.getDouble("start_price")
                                         : productPivot.getDouble("final_price");
-                                if (currentFinalPrice < finalPrice) {
-                                    finalName = name;
-                                    finalPrice = currentFinalPrice;
+                                if (current_price < final_price) {
+                                    model.setMarket(name.trim());
+                                    final_price = current_price;
+                                    model.setPrice(current_price + " €");
                                 }
                                 assortmentsData[j][0] = name;
-                                assortmentsData[j][1] = String.valueOf(currentFinalPrice);
+                                assortmentsData[j][1] = String.valueOf(current_price);
                             }
-                            if (finalPrice == Double.MAX_VALUE) continue;
+                            if (final_price == Double.MAX_VALUE) continue;
 
-                            ProductClass model = new ProductClass();
                             model.setName(product.getString("name"));
-                            model.setUrl(productImg);
-                            model.setMarket(finalName.trim());
                             model.setID(product.getString("id"));
                             model.setASSORTEMTNS_DATA(assortmentsData);
                             model.setDesc(product.getString("description"));
                             model.setOrigianlName(product.getString("name"));
-                            model.setPrice(finalPrice + " €");
                             model.setBrand_id( product.getString("brand_id"));
-                            model.setValue_discount(couponValueDiscount);
-                            model.setCoupon_value(couponValue);
                             productList.add(model);
                         }
                     }
                 }
+                response.close();
             } catch (Exception e) {
                 // Handle exception
             }
@@ -842,31 +830,34 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 c.setCategory_brand(BRAND);
-                PRODUCTS.clear();
-                PRODUCTS.addAll(productList);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    PRODUCTS.sort(Comparator.comparingDouble(product ->
-                            Double.parseDouble(product.getPrice().replace(" €", ""))
-                    ));
-                } else {
-                    Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
-                        @Override
-                        public int compare(ProductClass p1, ProductClass p2) {
-                            double price1 = Double.parseDouble(p1.getPrice().replace(" €", ""));
-                            double price2 = Double.parseDouble(p2.getPrice().replace(" €", ""));
-                            return Double.compare(price1, price2);
-                        }
+                if(!productList.isEmpty()){
+                    PRODUCTS.addAll(productList);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        PRODUCTS.sort(Comparator.comparingDouble(product ->
+                                Double.parseDouble(product.getPrice().replace(" €", ""))
+                        ));
+                    } else {
+                        Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
+                            @Override
+                            public int compare(ProductClass p1, ProductClass p2) {
+                                double price1 = Double.parseDouble(p1.getPrice().replace(" €", ""));
+                                double price2 = Double.parseDouble(p2.getPrice().replace(" €", ""));
+                                return Double.compare(price1, price2);
+                            }
+                        });
+                    }
+                    adp = new Adaptery(getBaseContext(), PRODUCTS, ActivityType.MAIN_ACTIVITY);
+                    adp.setHasStableIds(true);
+                    adp.setOnClickListener((position, model) -> {
+                        Intent intent = new Intent(MainActivity.this, ProductView.class);
+                        intent.putExtra("PRODUCT_OBJ", model);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
                     });
+                    c.setCategory_holder(adp);
+                } else{
+                    c.setCategory_holder(null);
                 }
-                adp = new Adaptery(getBaseContext(), PRODUCTS, ActivityType.MAIN_ACTIVITY);
-                adp.setHasStableIds(true);
-                adp.setOnClickListener((position, model) -> {
-                    Intent intent = new Intent(MainActivity.this, ProductView.class);
-                    intent.putExtra("PRODUCT_OBJ", model);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                });
-                c.setCategory_holder(adp);
             } catch (Exception e) {
                 NotifyAdapter(c);
                 sss(e.toString());
@@ -894,11 +885,6 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Error")
                 .setMessage("Πρόβλημα Async. Report Bug")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();

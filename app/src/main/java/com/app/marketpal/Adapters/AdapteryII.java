@@ -79,6 +79,7 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.category_holder.setNestedScrollingEnabled(false);
         holder.category_holder.setItemViewCacheSize(15);
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
+
     }
 
     private void bindHeaderType(HeaderTypeView holder) {
@@ -130,20 +131,12 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mData == null ? 0 : mData.size();
     }
 
-    public void updateData(List<CategoryClass> newData) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffCallback(this.mData, newData));
-        this.mData.clear();
-        this.mData.addAll(newData);
-        diffResult.dispatchUpdatesTo(this);
-    }
-
     public static class DefaultTypeView extends RecyclerView.ViewHolder {
         TextView category_title;
         TextView category_desc;
         TextView category_brand;
         RecyclerView category_holder;
         LinearLayout no_products;
-
         public DefaultTypeView(View itemView) {
             super(itemView);
             category_title = itemView.findViewById(R.id.category_recycler_title);
@@ -156,7 +149,6 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class HeaderTypeView extends RecyclerView.ViewHolder {
         AdView ad;
-
         public HeaderTypeView(View itemView) {
             super(itemView);
             ad = itemView.findViewById(R.id.categoty_ad);
@@ -167,7 +159,6 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView category_brand;
         RecyclerView category_holder;
         LinearLayout no_products;
-
         public NoTitleTypeView(View itemView) {
             super(itemView);
             category_brand = itemView.findViewById(R.id.category_recycler_brand);
@@ -176,37 +167,6 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    static class DiffCallback extends DiffUtil.Callback {
-
-        private final List<CategoryClass> oldList;
-        private final List<CategoryClass> newList;
-
-        public DiffCallback(List<CategoryClass> oldList, List<CategoryClass> newList) {
-            this.oldList = oldList;
-            this.newList = newList;
-        }
-
-        @Override
-        public int getOldListSize() {
-            return oldList.size();
-        }
-
-        @Override
-        public int getNewListSize() {
-            return newList.size();
-        }
-
-        @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            // Assuming CategoryClass has a unique ID field
-            return oldList.get(oldItemPosition) == newList.get(newItemPosition);
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
-        }
-    }
 
     @Override
     public long getItemId(int position) {

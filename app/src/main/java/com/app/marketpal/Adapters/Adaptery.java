@@ -53,20 +53,17 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        String product = mData.get(position).getUrl();
         holder.txt_01.setText(mData.get(position).getName());
         holder.txt_02.setText(mData.get(position).getPrice().replace("." , ","));
-
-        Glide.with(mContext).load(product)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+        Glide.with(mContext).load(mData.get(position).getUrl())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .skipMemoryCache(false)
                 .placeholder(R.drawable.product_placeholder)
                 .dontAnimate()
                 .error(R.drawable.product_not_found)
                 .priority(Priority.HIGH)
+                .fitCenter()
                 .into(holder.img_02);
-
-
         switch (mData.get(position).getMarket()) {
             case "MYMARKET": holder.img_01.setImageResource(R.drawable.mymarket);  break;
             case "ΜΑΣΟΥΤΗΣ": holder.img_01.setImageResource(R.drawable.masouths); break;
@@ -78,7 +75,6 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
             case "NULL": holder.img_01.setVisibility(View.GONE); break;
             default:  break;
         }
-
 
         holder.itemView.setOnClickListener(v -> {
             if (onClickListener != null) {
@@ -96,7 +92,7 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
     @Override
