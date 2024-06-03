@@ -44,17 +44,13 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case CategoryClass.DEFAULT_TYPE:
-                view = inflater.inflate(R.layout.category_recycler, parent, false);
+            case CategoryClass.DEFAULT_TYPE: view = inflater.inflate(R.layout.category_recycler, parent, false);
                 return new DefaultTypeView(view);
-            case CategoryClass.HEADER_TYPE:
-                view = inflater.inflate(R.layout.category_header, parent, false);
+            case CategoryClass.HEADER_TYPE: view = inflater.inflate(R.layout.category_header, parent, false);
                 return new HeaderTypeView(view);
-            case CategoryClass.NO_TITLE_TYPE:
-                view = inflater.inflate(R.layout.category_recycler2, parent, false);
+            case CategoryClass.NO_TITLE_TYPE: view = inflater.inflate(R.layout.category_recycler2, parent, false);
                 return new NoTitleTypeView(view);
-            default:
-                throw new IllegalArgumentException("Invalid view type");
+            default: throw new IllegalArgumentException("Invalid view type");
         }
     }
 
@@ -62,32 +58,26 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         CategoryClass object = mData.get(position);
         if (object == null) return;
-
         switch (object.type) {
-            case CategoryClass.DEFAULT_TYPE:
-                bindDefaultType((DefaultTypeView) holder, object);
-                break;
-            case CategoryClass.HEADER_TYPE:
-                bindHeaderType((HeaderTypeView) holder);
-                break;
-            case CategoryClass.NO_TITLE_TYPE:
-                bindNoTitleType((NoTitleTypeView) holder, object);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid view type");
+            case CategoryClass.DEFAULT_TYPE: bindDefaultType((DefaultTypeView) holder, object); break;
+            case CategoryClass.HEADER_TYPE: bindHeaderType((HeaderTypeView) holder); break;
+            case CategoryClass.NO_TITLE_TYPE: bindNoTitleType((NoTitleTypeView) holder, object);  break;
+            default: throw new IllegalArgumentException("Invalid view type");
         }
     }
 
+    @SuppressWarnings("InvalidSetHasFixedSize")
     private void bindDefaultType(DefaultTypeView holder, CategoryClass object) {
         holder.category_title.setText(object.getCategory_title());
         holder.category_desc.setText(object.getCategory_desc());
         holder.category_brand.setText(object.getCategory_brand());
-
         holder.category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         holder.category_holder.setAdapter(object.getCategory_holder());
         holder.category_holder.setItemAnimator(null);
         holder.category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
-
+        holder.category_holder.setHasFixedSize(true);
+        holder.category_holder.setNestedScrollingEnabled(false);
+        holder.category_holder.setItemViewCacheSize(15);
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 
@@ -117,13 +107,16 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    @SuppressWarnings("InvalidSetHasFixedSize")
     private void bindNoTitleType(NoTitleTypeView holder, CategoryClass object) {
         holder.category_brand.setText(object.getCategory_brand());
-
         holder.category_holder.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         holder.category_holder.setAdapter(object.getCategory_holder());
         holder.category_holder.setItemAnimator(null);
         holder.category_holder.setRecycledViewPool(new RecyclerView.RecycledViewPool());
+        holder.category_holder.setHasFixedSize(true);
+        holder.category_holder.setNestedScrollingEnabled(false);
+        holder.category_holder.setItemViewCacheSize(15);
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 
@@ -134,7 +127,7 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
     public void updateData(List<CategoryClass> newData) {
@@ -215,4 +208,8 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 }

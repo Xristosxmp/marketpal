@@ -782,16 +782,7 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onClick(int position, ProductClass model) {
                         Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("original_name" , FavoritesList.get(position).getOrigianlName());
-                        intent.putExtra("id" , FavoritesList.get(position).getID());
-                        intent.putExtra("name" , FavoritesList.get(position).getName());
-                        intent.putExtra("img" , FavoritesList.get(position).getUrl());
-                        //intent.putExtra("desc" , dairy_01_list.get(position).get());
-                        intent.putExtra("assortments" , FavoritesList.get(position).getASSORTEMTNS_DATA());
-                        intent.putExtra("desc" , FavoritesList.get(position).getDesc());
-                        intent.putExtra("brand_id" , FavoritesList.get(position).getBrand_id());
-                        intent.putExtra("coupon_value" , FavoritesList.get(position).getCoupon_value());
-                        intent.putExtra("coupon_value_discount" , FavoritesList.get(position).getValue_discount());
+                        intent.putExtra("PRODUCT_OBJ", model);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
 
@@ -947,16 +938,7 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onClick(int position, ProductClass model) {
                         Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("original_name" , RecentlyViewedList.get(position).getOrigianlName());
-                        intent.putExtra("id" , RecentlyViewedList.get(position).getID());
-                        intent.putExtra("name" , RecentlyViewedList.get(position).getName());
-                        intent.putExtra("img" , RecentlyViewedList.get(position).getUrl());
-                        //intent.putExtra("desc" , dairy_01_list.get(position).get());
-                        intent.putExtra("assortments" , RecentlyViewedList.get(position).getASSORTEMTNS_DATA());
-                        intent.putExtra("desc" , RecentlyViewedList.get(position).getDesc());
-                        intent.putExtra("brand_id" , RecentlyViewedList.get(position).getBrand_id());
-                        intent.putExtra("coupon_value" , RecentlyViewedList.get(position).getCoupon_value());
-                        intent.putExtra("coupon_value_discount" , RecentlyViewedList.get(position).getValue_discount());
+                        intent.putExtra("PRODUCT_OBJ", model);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
 
@@ -1119,16 +1101,7 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onClick(int position, ProductClass model) {
                         Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("original_name" , product_list.get(position).getOrigianlName());
-                        intent.putExtra("id" , product_list.get(position).getID());
-                        intent.putExtra("name" , product_list.get(position).getName());
-                        intent.putExtra("img" , product_list.get(position).getUrl());
-                        //intent.putExtra("desc" , dairy_01_list.get(position).get());
-                        intent.putExtra("assortments" , product_list.get(position).getASSORTEMTNS_DATA());
-                        intent.putExtra("desc" , product_list.get(position).getDesc());
-                        intent.putExtra("brand_id" , product_list.get(position).getBrand_id());
-                        intent.putExtra("coupon_value" , product_list.get(position).getCoupon_value());
-                        intent.putExtra("coupon_value_discount" , product_list.get(position).getValue_discount());
+                        intent.putExtra("PRODUCT_OBJ", model);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
 

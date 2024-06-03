@@ -126,8 +126,6 @@ public class Offers_activity extends AppCompatActivity {
 
         new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&type=TYPE_RECOMMENDED&page=1&per_page=90&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-
-        ScrollToCat();
         InitAdsMain();
         NavigateCart();
 
@@ -541,40 +539,6 @@ public class Offers_activity extends AppCompatActivity {
     }
 
 
-    private void ScrollToCat(){
-        ScrollView scrl = findViewById(R.id.offers_scroller);
-        findViewById(R.id.mymarket_scroll_to).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrl.smoothScrollTo(0 , (int )findViewById(R.id.MYMARKET_CAT_OFFERS).getTop());
-            }
-        });
-        findViewById(R.id.sklaveniths_scroll_to).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrl.smoothScrollTo(0 , (int) findViewById(R.id.SKLAVENITHS_CAT_OFFERS).getTop());
-            }
-        });
-        findViewById(R.id.ab_scroll_to).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrl.smoothScrollTo(0 , (int) findViewById(R.id.AB_CAT_OFFERS).getTop());
-            }
-        });
-        findViewById(R.id.masouths_scroll_to).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrl.smoothScrollTo(0 , (int) findViewById(R.id.MASOUTHS_CAT_OFFERS).getTop());
-            }
-        });
-        findViewById(R.id.galaxias_scroll_to).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrl.smoothScrollTo(0 , (int) findViewById(R.id.GALAXIAS_CAT_OFFERS).getTop());
-            }
-        });
-    }
-
 
     private void NavigateCart(){
 
@@ -687,72 +651,70 @@ public class Offers_activity extends AppCompatActivity {
 
 
 
-
+                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
                 JSONArray data = JSON_OBJECT.getJSONArray("data");
                 for(int i=0; i<data.length(); i++){
-                    JSONObject product = data.getJSONObject(i);
-                    String product_id = product.getString("id");
-                    String product_name = product.getString("name");
-                    String product_desc = product.getString("description");
-                    String product_brand = product.getString("brand_id");
-                    String product_img = null;
-                    JSONArray ASSORTMENTS =  product.getJSONArray("assortments");
-                    String ASSORTEMTNS_DATA[][] = new String[ASSORTMENTS.length()][2];
-                    double FINAL_PRICE = 55555;
-                    String FINAL_NAME = "";
-                    String coupon_value = "null";
-                    String coupon_value_discount = "null";
+                        JSONObject product = data.getJSONObject(i);
+                        String productImg;
+                        String couponValue = "null";
+                        String couponValueDiscount = "null";
+                        double finalPrice = Double.MAX_VALUE;
+                        String finalName = "";
+                        JSONArray assortments = product.getJSONArray("assortments");
+                        String[][] assortmentsData = new String[assortments.length()][2];
 
-                    if(!product.isNull("image_versions"))
-                        product_img = product.getJSONObject("image_versions").getString("original");
-                    else product_img = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
+                        if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
+                            JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
+                            double value = coupon.getDouble("value");
+                            double valueDiscount = coupon.getDouble("value_discount");
+                            if (value > 0) couponValue = decimalFormat.format(value);
+                            if (valueDiscount > 0) couponValueDiscount = decimalFormat.format(valueDiscount);
+                        }
+
+                        if (!product.isNull("image_versions")) {
+                            productImg = product.getJSONObject("image_versions").getString("original");
+                        } else {
+                            productImg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
+                        }
+
+                        for (int j = 0; j < assortments.length(); j++) {
+                            JSONObject item = assortments.getJSONObject(j);
+                            JSONObject retailer = item.getJSONObject("retailer");
+                            JSONObject productPivot = item.getJSONObject("product_pivot");
+                            String name = retailer.getString("name");
+                            if (!supermarkets.contains(name)) continue;
+
+                            double currentFinalPrice = productPivot.isNull("final_price")
+                                    ? productPivot.getDouble("start_price")
+                                    : productPivot.getDouble("final_price");
+                            if (currentFinalPrice < finalPrice) {
+                                finalName = name;
+                                finalPrice = currentFinalPrice;
+                            }
+                            assortmentsData[j][0] = name;
+                            assortmentsData[j][1] = String.valueOf(currentFinalPrice);
+                        }
+                        if (finalPrice == Double.MAX_VALUE) continue;
+
+                        ProductClass model = new ProductClass();
+                        model.setName(product.getString("name"));
+                        model.setUrl(productImg);
+                        model.setMarket(finalName.trim());
+                        model.setID(product.getString("id"));
+                        model.setASSORTEMTNS_DATA(assortmentsData);
+                        model.setDesc(product.getString("description"));
+                        model.setOrigianlName(product.getString("name"));
+                        model.setPrice(finalPrice + " €");
+                        model.setBrand_id( product.getString("brand_id"));
+                        model.setValue_discount(couponValueDiscount);
+                        model.setCoupon_value(couponValue);
 
 
-
-                    if(product.getJSONArray("coupons").length() > 0){
-                        JSONArray J = product.getJSONArray("coupons");
-                        JSONObject P = J.getJSONObject(0);
-                        double v1 = P.getDouble("value");
-                        double v2 = P.getDouble("value_discount");
-                        if (v1 > 0) coupon_value = new DecimalFormat("#0.00").format(v1);
-                        if (v2 > 0) coupon_value_discount = new DecimalFormat("#0.00").format(v2);
-                    }
-
-
-                    for(int j=0; j<ASSORTMENTS.length(); j++){
-                        JSONObject item = ASSORTMENTS.getJSONObject(j);
-                        JSONObject retailer = item.getJSONObject("retailer");
-                        JSONObject productPivot = item.getJSONObject("product_pivot");
-                        String name = retailer.getString("name");
-                        if(!supermarkets.contains(name)) continue;
-                        double finalPrice;
-                        if (productPivot.isNull("final_price")) {finalPrice = productPivot.getDouble("start_price");}
-                        else {finalPrice = productPivot.getDouble("final_price");}
-                        if (finalPrice < FINAL_PRICE) {FINAL_NAME = name; FINAL_PRICE = finalPrice;}
-                        ASSORTEMTNS_DATA[j][0] = name;
-                        ASSORTEMTNS_DATA[j][1] = String.valueOf(finalPrice);
-                    }
-                    if(FINAL_PRICE == 55555) continue;
-
-
-                    ProductClass model = new ProductClass();
-                    model.setName(product_name);
-                    model.setUrl(product_img);
-                    model.setMarket("NULL");
-                    model.setID(product_id);
-                    model.setASSORTEMTNS_DATA(ASSORTEMTNS_DATA);
-                    model.setDesc(product_desc);
-                    model.setPrice(String.valueOf(FINAL_PRICE) + " €");
-                    model.setOrigianlName(product_name);
-                    model.setBrand_id(product_brand);
-                    model.setValue_discount(coupon_value_discount);
-                    model.setCoupon_value(coupon_value);
-
-                    if(FINAL_NAME.equals("MYMARKET")) list_mymarket.add(model);
-                    if(FINAL_NAME.equals("ΣΚΛΑΒΕΝΙΤΗΣ")) list_sklavenitis.add(model);
-                    if(FINAL_NAME.equals("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ")) list_ab.add(model);
-                    if(FINAL_NAME.equals("ΜΑΣΟΥΤΗΣ")) list_masouths.add(model);
-                    if(FINAL_NAME.equals("ΓΑΛΑΞΙΑΣ")) list_galaxias.add(model);
+                    if(finalName.equals("MYMARKET")) list_mymarket.add(model);
+                    if(finalName.equals("ΣΚΛΑΒΕΝΙΤΗΣ")) list_sklavenitis.add(model);
+                    if(finalName.equals("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ")) list_ab.add(model);
+                    if(finalName.equals("ΜΑΣΟΥΤΗΣ")) list_masouths.add(model);
+                    if(finalName.equals("ΓΑΛΑΞΙΑΣ")) list_galaxias.add(model);
                 }
 
                 Collections.sort(list_mymarket, new Comparator<ProductClass>() {
@@ -863,16 +825,7 @@ public class Offers_activity extends AppCompatActivity {
 
     private void startActivity(int position, ProductClass model , List<ProductClass> list){
         Intent intent = new Intent(Offers_activity.this, ProductView.class);
-        intent.putExtra("original_name" , list.get(position).getOrigianlName());
-        intent.putExtra("id" , list.get(position).getID());
-        intent.putExtra("name" , list.get(position).getName());
-        intent.putExtra("img" , list.get(position).getUrl());
-        intent.putExtra("assortments" , list.get(position).getASSORTEMTNS_DATA());
-        intent.putExtra("desc" , list.get(position).getDesc());
-        intent.putExtra("brand_id" , list.get(position).getBrand_id());
-        intent.putExtra("coupon_value" , list.get(position).getCoupon_value());
-        intent.putExtra("coupon_value_discount" , list.get(position).getValue_discount());
-
+        intent.putExtra("PRODUCT_OBJ", model);
         startActivity(intent);
         overridePendingTransition(0, 0);
 

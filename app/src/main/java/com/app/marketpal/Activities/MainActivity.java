@@ -32,11 +32,15 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -100,20 +104,13 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences supermarkets;
     private int supermarkets_size;
 
-    private File HttpCacheDir;
-    private int  CacheSize = 10 * 1024 * 1024;
-    private Cache Cache;
-
+    private LinearLayoutManager RecyclerViewManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-        HttpCacheDir = new File(this.getCacheDir() , "http-cache");
-        Cache = new Cache(HttpCacheDir , CacheSize);
-
 
         d = findViewById(R.id.NavigationViewLeft);
         d.setItemIconTintList(null);
@@ -132,15 +129,12 @@ public class MainActivity extends AppCompatActivity {
         parent_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         parent_recycler_view.setAdapter(adapter);
         parent_recycler_view.setHasFixedSize(true);
-        parent_recycler_view.setItemViewCacheSize(5);
+        parent_recycler_view.setItemViewCacheSize(15);
         parent_recycler_view.setRecycledViewPool(new RecyclerView.RecycledViewPool());
         parent_recycler_view.setNestedScrollingEnabled(false);
+        RecyclerViewManager = (LinearLayoutManager) parent_recycler_view.getLayoutManager();
 
-
-        // Settings 1.0 ~ Markets Included
         Settings();
-
-
         HomeNavigation();
         OffersNavigation();
         NavigateSearch();
@@ -159,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         int corePoolSize = Runtime.getRuntime().availableProcessors(); // Adjust as needed
         int maximumPoolSize = corePoolSize * 2; // Adjust as needed
-        long keepAliveTime = 0L; // Time for non-core threads to be kept alive
+        long keepAliveTime = 15L; // Time for non-core threads to be kept alive
         TimeUnit timeUnit = TimeUnit.MILLISECONDS;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(128 * 2); // Adjust the capacity
 
@@ -169,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 keepAliveTime,
                 timeUnit,
                 workQueue
-        );
+        ); pool.allowCoreThreadTimeOut(true);
 
         new CollectData("https://v8api.pockee.com/api/v8/public/products?type=HOME_BASKET&category_id=158&page=1&per_page=30&in_stock=true" , "Καλάθι του Νοικοκυριού" ,
                 "Ανακαλύψτε το καλάθι του νοικοκοιριού σε προϊόντα της εβδομάδας. Τρόφιμα, Γαλακτοκομικά, Τυριά και Χυμούς, Σνακς, Κάβα, Προσωπική Φροντίδα, Οικιακή Φροντίδα, Παιδικά, Βρεφικά & Διάφορα" , "Τρόφιμα" , new ArrayList<>()).executeOnExecutor(pool);
@@ -254,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=48&page=1&per_page=30&in_stock=true" , "Ρύζι" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=199&page=1&per_page=30&in_stock=true" , "Όσπρια" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=200&page=1&per_page=30&in_stock=true" , "Κύβοι, Σούπες, Πουρές και άλλα σχετικά" , new ArrayList<>()).executeOnExecutor(pool);
-        new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=213&page=1&per_page=30&in_stock=true" , "Προιόντα Ζύμης" ,
+        new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=213&page=1&per_page=30&in_stock=true" , "Προϊόντα Ζύμης" ,
                 "Οι καλύτερες τιμές σε προιόντα ζύμης απευθείας σε εσάς. Έτοιμες πίτες, πιτάκια, τρίγωνα, croissants κ.ά., κατεψυγμένα φύλλα ζύμης, φύλλα ζύμης ψυγείου, πίτσες & πεϊνιρλί, γλυκες πίτες και ζύμες" , "Έτοιμες Πίτες" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=211&page=1&per_page=30&in_stock=true" , "Πιτάκια,Τρίγωνα, Croissants κ.ά." , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=209&page=1&per_page=30&in_stock=true" , "Κατεψυγμένα φύλλα ζύμης" , new ArrayList<>()).executeOnExecutor(pool);
@@ -358,52 +352,36 @@ public class MainActivity extends AppCompatActivity {
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=185&page=1&per_page=30&in_stock=true" , "Γάτα" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=186&page=1&per_page=30&in_stock=true" , "Αξεσουάρ & Υγιεινή Ζώων" , new ArrayList<>()).executeOnExecutor(pool);
 
-
-
-
-
-
         HorizontalScrollView category_horizontal_scroll = findViewById(R.id.nav_categories_inside_scroll);
         LinearLayout categoryContainer = findViewById(R.id.CategoryContainer);
         int ChildLoops = categoryContainer.getChildCount();
-
         parent_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
                 int start_index = layoutManager.findFirstVisibleItemPosition();
                 int last_index = layoutManager.findLastVisibleItemPosition();
-
                 String categ = null;
                 int maxCount = 0;
                 Map<String, Integer> categoryTitleCount = new HashMap<>();
-
                 for (int i = start_index; i <= last_index; i++) {
                     CategoryClass config = category_list.get(i);
                     String categoryTitle = config.getCategory_title();
 
                     if (categoryTitle != null) {
                         int count;
-                        if (categoryTitleCount.containsKey(categoryTitle)) {
-                            count = categoryTitleCount.get(categoryTitle) + 1;
-                        } else {
-                            count = 1;
-                        }
+                        if (categoryTitleCount.containsKey(categoryTitle)) count = categoryTitleCount.get(categoryTitle) + 1;
+                        else count = 1;
                         categoryTitleCount.put(categoryTitle, count);
-
                         if (count > maxCount) {
                             maxCount = count;
                             categ = categoryTitle;
                         }
                     }
                 }
-
                 int scrollViewWidth = category_horizontal_scroll.getWidth();
                 View firstChild = category_horizontal_scroll.getChildAt(0);
-
                 if (categ != null) {
                     for (int j = 0; j < ChildLoops; j++) {
                         View ln = categoryContainer.getChildAt(j);
@@ -413,25 +391,11 @@ public class MainActivity extends AppCompatActivity {
                                 category.setTextColor(ContextCompat.getColor(getBaseContext(), android.R.color.black));
                                 View underline = ((LinearLayout) ln).getChildAt(1);
                                 underline.setVisibility(View.VISIBLE);
-
                                 int targetViewWidth = ln.getWidth();
                                 int targetScrollX = (int) (ln.getX() + ln.getWidth() / 2 - scrollViewWidth / 2);
-
                                 targetScrollX = Math.max(0, Math.min(targetScrollX, firstChild.getWidth() - scrollViewWidth));
-
-
-                                category_horizontal_scroll.smoothScrollTo(targetScrollX , 0);
-                                //ObjectAnimator animator = ObjectAnimator.ofInt(category_horizontal_scroll, "scrollX", targetScrollX);
-                                //animator.setDuration(0); // Adjust animation duration as needed
-                                //animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                //    @Override
-                                //    public void onAnimationUpdate(ValueAnimator animation) {
-                                //        int scrollTo = (int) animation.getAnimatedValue();
-                                //        category_horizontal_scroll.scrollTo(scrollTo, 0);
-                                //    }
-                                //});
-                                //animator.start();
-                            } else {
+                               category_horizontal_scroll.smoothScrollTo(targetScrollX , 0);
+                             } else {
                                 category.setTextColor(Color.parseColor("#696969")); // Use your own color resource
                                 View underline = ((LinearLayout) ln).getChildAt(1);
                                 underline.setVisibility(View.GONE);
@@ -441,6 +405,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
 
@@ -455,8 +420,6 @@ public class MainActivity extends AppCompatActivity {
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Οικιακή Φροντίδα"); d.getMenu().findItem(R.id.house_care).setActionView(cc);
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Παιδικά & Βρεφικά"); d.getMenu().findItem(R.id.kids).setActionView(cc);
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Κατικοίδια"); d.getMenu().findItem(R.id.pets).setActionView(cc);
-
-
     }
 
     @Override
@@ -619,7 +582,7 @@ public class MainActivity extends AppCompatActivity {
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
 
 
-    private class CollectData extends AsyncTask<String,String,JSONObject>{
+    private class CollectData extends AsyncTask<String,String,List<ProductClass>> {
 
         private List<ProductClass> PRODUCTS;
         private String API;
@@ -632,13 +595,14 @@ public class MainActivity extends AppCompatActivity {
         private String BRAND;
 
 
-
-        /** Category **/
-        CollectData(String API ,
+        /**
+         * Category
+         **/
+        CollectData(String API,
                     String TITLE,
                     String DESC,
                     String BRAND,
-                    List<ProductClass> PRODUCTS){
+                    List<ProductClass> PRODUCTS) {
             this.API = API;
             this.PRODUCTS = PRODUCTS;
 
@@ -649,8 +613,10 @@ public class MainActivity extends AppCompatActivity {
             this.BRAND = BRAND;
         }
 
-        /** Solo **/
-        CollectData(String API , String BRAND , List<ProductClass> PRODUCTS){
+        /**
+         * Solo
+         **/
+        CollectData(String API, String BRAND, List<ProductClass> PRODUCTS) {
             this.API = API;
             this.PRODUCTS = PRODUCTS;
             this.BRAND = BRAND;
@@ -668,460 +634,121 @@ public class MainActivity extends AppCompatActivity {
             c.setCategory_desc(DESC);
             c.setCategory_brand(BRAND);
 
-            if(!c.getCategory_title().equals("NULL")){
+            if (!c.getCategory_title().equals("NULL")) {
                 category_list.add(c);
-                if(TITLE.equals("Καλάθι του Νοικοκυριού")) {
-                    findViewById(R.id.to_kalathi).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_kalathi).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Παντοπωλείο")){
-                    findViewById(R.id.to_grocery).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_grocery).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-
-                }
-                else if(TITLE.equals("Γάλατα Ραφιού")){
-                    findViewById(R.id.to_galata_rafiou).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_galata_rafiou).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Φρέσκα Γάλατα")){
-                    findViewById(R.id.to_freska_galata).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_freska_galata).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Τυριά")){
-                    findViewById(R.id.to_turia).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_turia).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Γιαούρτια & Επιδόρπια")){
-                    findViewById(R.id.to_giaourtia).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_giaourtia).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Κρέμες Γάλακτος & Βούτυρα")){
-                    findViewById(R.id.to_kremes_galaktos).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_kremes_galaktos).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Παγωτά & Είδη Ψυγείου")){
-                    findViewById(R.id.to_pagwta).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_pagwta).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Μπύρες, Ποτά, Νερά")){
-                    findViewById(R.id.to_pota).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_mpures).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Χυμοί & Αναψυκτικά")){
-                    findViewById(R.id.to_xumous).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_xumous).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Σνακς")){
-                    findViewById(R.id.to_snacks).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_snacks).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Καφές & Ροφήματα")){
-                    findViewById(R.id.to_cafe).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_cafe).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Φρούτα & Λαχανικά")){
-                    findViewById(R.id.to_veges_and_fruits).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_veges_fruits).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Ψάρια & Θαλασσινά")){
-                    findViewById(R.id.to_fishes).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_fishes).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Ψωμί & Δημητριακά")){
-                    findViewById(R.id.to_bread).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_bread).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Ζυμαρικά & Όσπρια")){
-                    findViewById(R.id.to_pasta).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) {((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_pasta).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Αλλαντικά & Κρέατα")){
-                    findViewById(R.id.to_meat).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_meat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Προιόντα Ζύμης")){
-                    findViewById(R.id.to_dough).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_dough).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Γυναικεία Περιποίηση")){
-                    findViewById(R.id.to_women).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_women).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Αντρική Περιποίηση")){
-                    findViewById(R.id.to_men).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_men).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Καθαριότητα & Προσωπική Υγιεινή")){
-                    findViewById(R.id.to_personal_care).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_self_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Περιποίηση Μαλλιών")){
-                    findViewById(R.id.to_hair_care).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_hair_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer(Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Στοματική Υγιεινή")){
-                    findViewById(R.id.to_mouth_care).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_mouth_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Ένδυση & Υπόδηση")){
-                    findViewById(R.id.to_dressing).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_dressing_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Προϊόντα Περιποίησης")){
-                    findViewById(R.id.to_general_care).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_general_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-
-                }
-                else if(TITLE.equals("Κουζίνα & Μπάνιο")){
-                    findViewById(R.id.to_kitchen_bath).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_kitchen_bathe).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-
-                }
-                else if(TITLE.equals("Καθαριότητα Σπιτιού")){
-                    findViewById(R.id.to_house_clean).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_house_clean).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-
-                }
-                else if(TITLE.equals("Πλύσιμο Ρούχων")){
-                    findViewById(R.id.to_clothes).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_clothes).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Εξοπλισμός Σπιτιού")){
-                    findViewById(R.id.to_equipment).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_equipment).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Περιποίηση Βρέφους")){
-                    findViewById(R.id.to_baby_care).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_baby_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Βρεφικές Τροφές")){
-                    findViewById(R.id.to_baby_food).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_baby_food).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @SuppressLint("RtlHardcoded")
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Πάνες & Μωρομάντηλα")){
-                    findViewById(R.id.to_diapers).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_diapers).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @SuppressLint("RtlHardcoded")
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Βρεφικά Απορρυπαντικά")){
-                    findViewById(R.id.to_baby_clean).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                    d.getMenu().findItem(R.id.nav_to_baby_clean).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @SuppressLint("RtlHardcoded")
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-
-                }
-                else if(TITLE.equals("Κατικοίδια")){
-                    findViewById(R.id.to_pets).setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);}});
-                }
-
-                if(BRAND.equals("Σκύλος")){
-                    d.getMenu().findItem(R.id.nav_to_dog).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-                }
-            }else{
+            } else {
                 c = new CategoryClass(CategoryClass.NO_TITLE_TYPE);
                 c.setCategory_title(CategorySelector);
                 c.setCategory_brand(BRAND);
                 category_list.add(c);
-                if(BRAND.equals("Γάτα")){
-                    d.getMenu().findItem(R.id.nav_to_cat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-                }
-                if(BRAND.equals("Αξεσουάρ & Υγιεινή Ζώων")){
-                    d.getMenu().findItem(R.id.nav_to_accessories).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            drawer.closeDrawer((int) Gravity.LEFT);
-                            ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(category_list.indexOf(c),0);
-                            return false;
-                        }
-                    });
-                }
             }
 
+            if(BRAND.equals("Αξεσουάρ & Υγιεινή Ζώων")){
+                LinearLayout categoryContainer = findViewById(R.id.CategoryContainer);
+                for(int pos = 0; pos < category_list.size(); pos++){
+                    CategoryClass clas = category_list.get(pos);
+                    if(clas.type == clas.DEFAULT_TYPE){
+                        LinearLayout l = new LinearLayout(getBaseContext());
+                        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                        l.setLayoutParams(linearLayoutParams);
+                        l.setOrientation(LinearLayout.VERTICAL);
+                        l.setGravity(Gravity.CENTER);
+                        l.setPadding(dpToPx(15), 0, dpToPx(15), 0);
+                        TextView t = new TextView(getBaseContext());
+                        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        t.setLayoutParams(textViewParams);
+                        t.setText(clas.getCategory_title());
+                        t.setTextSize(12);
+                        t.setTextColor(Color.parseColor("#696969"));
+                        t.setTypeface(null, android.graphics.Typeface.BOLD);
+                        View h = new View(getBaseContext());
+                        LinearLayout.LayoutParams hv = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dpToPx(3));
+                        hv.gravity = Gravity.BOTTOM;
+                        h.setLayoutParams(hv);
+                        h.setBackgroundColor(Color.BLACK);
+                        h.setVisibility(View.GONE);
+                        l.addView(t);
+                        l.addView(h);
+                        categoryContainer.addView(l);
+                        int p = pos;
+                        l.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p , 0));
+                            }
+                        });
+                    }
+                }
+
+                for(int j=0; j<d.getMenu().size(); j++){
+                    MenuItem item = d.getMenu().getItem(j);
+                    if(item != null){
+                        if(item.getTitle() != null){
+                            for(int pos = 0; pos < category_list.size(); pos++){
+                                CategoryClass clas = category_list.get(pos);
+                                if(clas.type == clas.DEFAULT_TYPE){
+                                    if(item.getTitle().equals(clas.getCategory_title())){
+                                        int p = pos;
+                                        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                            @Override
+                                            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                                drawer.closeDrawer(Gravity.LEFT);
+                                                parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p, 0));
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                }else if(clas.type == clas.NO_TITLE_TYPE) {
+                                    switch (item.getTitle().toString()) {
+                                        case "Σκύλος":
+                                            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                                @Override
+                                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                                    drawer.closeDrawer(Gravity.LEFT);
+                                                    parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(category_list.size() - 3, 0));
+                                                    return false;
+                                                }
+                                            });
+                                            break;
+                                        case "Γάτα":
+                                            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                                @Override
+                                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                                    drawer.closeDrawer(Gravity.LEFT);
+                                                    parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(category_list.size() - 1, 0));
+                                                    return false;
+                                                }
+                                            });
+                                            break;
+                                        default:
+                                            if(item.getTitle().equals(clas.getCategory_brand())){
+                                                int p = pos;
+                                                item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                                    @Override
+                                                    public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                                        drawer.closeDrawer(Gravity.LEFT);
+                                                        parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p, 0));
+                                                        return false;
+                                                    }
+                                                });
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                            Log.d("MENU", item.getTitle().toString());
+                        }
+                    }
+                }
+            }
         }
 
+        List<ProductClass> productList = new ArrayList<>();
         @Override
-        protected JSONObject doInBackground(String... strings) {
+        protected List<ProductClass> doInBackground(String... strings) {
             try {
                 OkHttpClient client = new OkHttpClient.Builder()
                         .connectTimeout(15, TimeUnit.SECONDS)
-                        .cache(Cache)
                         .readTimeout(15, TimeUnit.SECONDS)
                         .build();
 
@@ -1136,123 +763,118 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     ResponseBody responseBody = response.body();
                     if (responseBody != null) {
-                        String json = responseBody.string();
-                        return new JSONObject(json);
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        JSONArray data = jsonObject.getJSONArray("data");
+                        if (data.length() == 0) return productList;
+
+                        c.setCategory_brand(BRAND);
+
+                        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject product = data.getJSONObject(i);
+                            String productImg;
+                            String couponValue = "null";
+                            String couponValueDiscount = "null";
+                            double finalPrice = Double.MAX_VALUE;
+                            String finalName = "";
+                            JSONArray assortments = product.getJSONArray("assortments");
+                            String[][] assortmentsData = new String[assortments.length()][2];
+
+                            if (product.has("coupons") && product.getJSONArray("coupons").length() > 0) {
+                                JSONObject coupon = product.getJSONArray("coupons").getJSONObject(0);
+                                double value = coupon.getDouble("value");
+                                double valueDiscount = coupon.getDouble("value_discount");
+                                if (value > 0) couponValue = decimalFormat.format(value);
+                                if (valueDiscount > 0) couponValueDiscount = decimalFormat.format(valueDiscount);
+                            }
+
+                            if (!product.isNull("image_versions")) {
+                                productImg = product.getJSONObject("image_versions").getString("original");
+                            } else {
+                                productImg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
+                            }
+
+                            for (int j = 0; j < assortments.length(); j++) {
+                                JSONObject item = assortments.getJSONObject(j);
+                                JSONObject retailer = item.getJSONObject("retailer");
+                                JSONObject productPivot = item.getJSONObject("product_pivot");
+                                String name = retailer.getString("name");
+                                if (!supermarkets.contains(name)) continue;
+
+                                double currentFinalPrice = productPivot.isNull("final_price")
+                                        ? productPivot.getDouble("start_price")
+                                        : productPivot.getDouble("final_price");
+                                if (currentFinalPrice < finalPrice) {
+                                    finalName = name;
+                                    finalPrice = currentFinalPrice;
+                                }
+                                assortmentsData[j][0] = name;
+                                assortmentsData[j][1] = String.valueOf(currentFinalPrice);
+                            }
+                            if (finalPrice == Double.MAX_VALUE) continue;
+
+                            ProductClass model = new ProductClass();
+                            model.setName(product.getString("name"));
+                            model.setUrl(productImg);
+                            model.setMarket(finalName.trim());
+                            model.setID(product.getString("id"));
+                            model.setASSORTEMTNS_DATA(assortmentsData);
+                            model.setDesc(product.getString("description"));
+                            model.setOrigianlName(product.getString("name"));
+                            model.setPrice(finalPrice + " €");
+                            model.setBrand_id( product.getString("brand_id"));
+                            model.setValue_discount(couponValueDiscount);
+                            model.setCoupon_value(couponValue);
+                            productList.add(model);
+                        }
                     }
                 }
             } catch (Exception e) {
                 // Handle exception
             }
-            return null;
+            return productList;
         }
 
         @Override
-        protected void onPostExecute(JSONObject JSON_OBJECT) {
-            super.onPostExecute(JSON_OBJECT);
+        protected void onPostExecute(List<ProductClass> productList) {
+            super.onPostExecute(productList);
 
             try {
-                if(JSON_OBJECT == null)return;
-                JSONArray data = JSON_OBJECT.getJSONArray("data");
-                if(data.length() == 0) return;
                 c.setCategory_brand(BRAND);
-                for(int i=0; i<data.length(); i++){
-                    JSONObject product = data.getJSONObject(i);
-                    String product_id = product.getString("id");
-                    String product_name = product.getString("name");
-                    String product_desc = product.getString("description");
-                    String product_brand = product.getString("brand_id");
-                    String product_img = null;
-                    String coupon_value = "null";
-                    String coupon_value_discount = "null";
-                    double FINAL_PRICE = 55555;
-                    String FINAL_NAME = "";
-                    JSONArray ASSORTMENTS =  product.getJSONArray("assortments");
-                    String ASSORTEMTNS_DATA[][] = new String[ASSORTMENTS.length()][2];
-
-
-                    if(product.has("coupons"))
-                        if(product.getJSONArray("coupons").length() > 0){
-                            JSONArray J = product.getJSONArray("coupons");
-                            JSONObject P = J.getJSONObject(0);
-                            double v1 = P.getDouble("value");
-                            double v2 = P.getDouble("value_discount");
-                            if (v1 > 0) coupon_value = new DecimalFormat("#0.00").format(v1);
-                            if (v2 > 0) coupon_value_discount = new DecimalFormat("#0.00").format(v2);
+                PRODUCTS.clear();
+                PRODUCTS.addAll(productList);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    PRODUCTS.sort(Comparator.comparingDouble(product ->
+                            Double.parseDouble(product.getPrice().replace(" €", ""))
+                    ));
+                } else {
+                    Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
+                        @Override
+                        public int compare(ProductClass p1, ProductClass p2) {
+                            double price1 = Double.parseDouble(p1.getPrice().replace(" €", ""));
+                            double price2 = Double.parseDouble(p2.getPrice().replace(" €", ""));
+                            return Double.compare(price1, price2);
                         }
-
-
-                    if(!product.isNull("image_versions"))
-                        product_img = product.getJSONObject("image_versions").getString("original");
-                    else product_img = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-
-
-                    for(int j=0; j<ASSORTMENTS.length(); j++){
-                        JSONObject item = ASSORTMENTS.getJSONObject(j);
-                        JSONObject retailer = item.getJSONObject("retailer");
-                        JSONObject productPivot = item.getJSONObject("product_pivot");
-                        String name = retailer.getString("name");
-                        if(!supermarkets.contains(name)) continue;
-
-                        double finalPrice;
-                        if (productPivot.isNull("final_price")) {finalPrice = productPivot.getDouble("start_price");}
-                        else {finalPrice = productPivot.getDouble("final_price");}
-                        if (finalPrice < FINAL_PRICE) {FINAL_NAME = name; FINAL_PRICE = finalPrice;}
-                        ASSORTEMTNS_DATA[j][0] = name;
-                        ASSORTEMTNS_DATA[j][1] = String.valueOf(finalPrice);
-                    }
-                    if(FINAL_PRICE == 55555) continue;
-
-                    ProductClass model = new ProductClass();
-                    model.setName(product_name);
-                    model.setUrl(product_img);
-                    model.setMarket(FINAL_NAME.trim());
-                    model.setID(product_id);
-                    model.setASSORTEMTNS_DATA(ASSORTEMTNS_DATA);
-                    model.setDesc(product_desc);
-                    model.setOrigianlName(product_name);
-                    model.setPrice(String.valueOf(FINAL_PRICE) + " €");
-                    model.setBrand_id(product_brand);
-                    model.setValue_discount(coupon_value_discount);
-                    model.setCoupon_value(coupon_value);
-                    PRODUCTS.add(model);
+                    });
                 }
-                Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
-                    @Override
-                    public int compare(ProductClass product1, ProductClass product2) {
-                        double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                        double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                        return Double.compare(price1, price2);
-                    }
-                });
                 adp = new Adaptery(getBaseContext(), PRODUCTS, ActivityType.MAIN_ACTIVITY);
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        Intent intent = new Intent(MainActivity.this, ProductView.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        intent.putExtra("original_name" , PRODUCTS.get(position).getOrigianlName());
-                        intent.putExtra("id" , PRODUCTS.get(position).getID());
-                        intent.putExtra("name" , PRODUCTS.get(position).getName());
-                        intent.putExtra("img" , PRODUCTS.get(position).getUrl());
-                        intent.putExtra("assortments" , PRODUCTS.get(position).getASSORTEMTNS_DATA());
-                        intent.putExtra("desc" , PRODUCTS.get(position).getDesc());
-                        intent.putExtra("brand_id" , PRODUCTS.get(position).getBrand_id());
-                        intent.putExtra("coupon_value" , PRODUCTS.get(position).getCoupon_value());
-                        intent.putExtra("coupon_value_discount" , PRODUCTS.get(position).getValue_discount());
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-                    }
+                adp.setHasStableIds(true);
+                adp.setOnClickListener((position, model) -> {
+                    Intent intent = new Intent(MainActivity.this, ProductView.class);
+                    intent.putExtra("PRODUCT_OBJ", model);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 });
                 c.setCategory_holder(adp);
-            }catch (Exception e){
+            } catch (Exception e) {
                 NotifyAdapter(c);
                 sss(e.toString());
             }
 
             NotifyAdapter(c);
-
-
         }
+
     }
 
     private void NotifyAdapter(CategoryClass c) {

@@ -17,7 +17,7 @@
 
 
     <item android:id="@+id/juices" android:enabled="false"/>
-    <item android:id="@+id/nav_to_mpures" android:icon="@drawable/beer" android:title="Μπύρες,Ποτά,Νερά" />
+    <item android:id="@+id/nav_to_mpures" android:icon="@drawable/beer" android:title="Μπύρες, Ποτά, Νερά" />
     <item android:id="@+id/nav_to_xumous" android:icon="@drawable/juice" android:title="Χυμοί &amp; Αναψυκτικά" />
     <item android:id="@+id/nav_to_snacks" android:icon="@drawable/snacks" android:title="Σνακς" />
     <item android:id="@+id/nav_to_cafe" android:icon="@drawable/cafe" android:title="Καφές &amp; Ροφήματα" />
@@ -37,7 +37,7 @@
     <item android:id="@+id/personal_care" android:enabled="false"/>
     <item android:id="@+id/nav_to_women" android:icon="@drawable/dress" android:title="Γυναικεία Περιποίηση" />
     <item android:id="@+id/nav_to_men" android:icon="@drawable/moustache" android:title="Αντρική Περιποίηση" />
-    <item android:id="@+id/nav_to_self_care" android:icon="@drawable/self_care" android:title="Καθαριότητα &amp; Υγιεινή" />
+    <item android:id="@+id/nav_to_self_care" android:icon="@drawable/self_care" android:title="Καθαριότητα &amp; Προσωπική Υγιεινή" />
     <item android:id="@+id/nav_to_hair_care" android:icon="@drawable/hair" android:title="Περιποίηση Μαλλιών" />
     <item android:id="@+id/nav_to_mouth_care" android:icon="@drawable/brush" android:title="Στοματική Υγιεινή" />
     <item android:id="@+id/nav_to_dressing_care" android:icon="@drawable/socks" android:title="Ένδυση &amp; Υπόδηση" />

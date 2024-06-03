@@ -1,6 +1,8 @@
 package com.app.marketpal.Models;
 
-public class ProductClass {
+import java.io.Serializable;
+
+public class ProductClass implements Serializable {
 
     String market;
     String url;

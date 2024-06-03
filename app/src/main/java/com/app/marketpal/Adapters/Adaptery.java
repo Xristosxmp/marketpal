@@ -58,7 +58,6 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         holder.txt_02.setText(mData.get(position).getPrice().replace("." , ","));
 
         Glide.with(mContext).load(product)
-                .transition(DrawableTransitionOptions.withCrossFade())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .placeholder(R.drawable.product_placeholder)
@@ -100,6 +99,10 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         return mData.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 

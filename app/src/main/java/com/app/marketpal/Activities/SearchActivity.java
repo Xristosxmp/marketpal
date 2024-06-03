@@ -439,16 +439,7 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onClick(int position, ProductClass model) {
                         Intent intent = new Intent(SearchActivity.this, ProductView.class);
-                        intent.putExtra("original_name" , search_list.get(position).getOrigianlName());
-                        intent.putExtra("id" , search_list.get(position).getID());
-                        intent.putExtra("name" , search_list.get(position).getName());
-                        intent.putExtra("img" , search_list.get(position).getUrl());
-                        //intent.putExtra("desc" , dairy_01_list.get(position).get());
-                        intent.putExtra("assortments" , search_list.get(position).getASSORTEMTNS_DATA());
-                        intent.putExtra("desc" , search_list.get(position).getDesc());
-                        intent.putExtra("brand_id" , search_list.get(position).getBrand_id());
-                        intent.putExtra("coupon_value" , search_list.get(position).getCoupon_value());
-                        intent.putExtra("coupon_value_discount" , search_list.get(position).getValue_discount());
+                        intent.putExtra("PRODUCT_OBJ", model);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
 
@@ -469,5 +460,9 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,0);
+    }
 }
