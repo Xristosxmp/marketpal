@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="38dp"
             android:layout_weight="1"
-            android:text="Ακύρωση"
+            android:text="Ακυρωση"
             android:textColor="@color/black"
             android:background="@drawable/button_solid_border"
             android:backgroundTint="#ebebeb"
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="38dp"
             android:layout_weight="1"
-            android:text="Διαγραφή"
+            android:text="Καθαρισμος"
             android:textColor="@color/white"
             android:background="@drawable/button_solid_border_forblack"
             />

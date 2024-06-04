@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <HorizontalScrollView android:visibility="visible" android:background="@color/white" android:id="@+id/nav_categories_inside_scroll" android:overScrollMode="never" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp" android:scrollbars="none">
+        <HorizontalScrollView android:visibility="visible" android:background="@color/white" android:id="@+id/nav_categories_inside_scroll" android:overScrollMode="always" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp" android:scrollbars="none">
             <LinearLayout android:id="@+id/CategoryContainer" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center">
 
 

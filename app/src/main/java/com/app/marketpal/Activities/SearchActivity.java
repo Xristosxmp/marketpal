@@ -434,12 +434,8 @@ public class SearchActivity extends AppCompatActivity {
             try {
                 if(!search_list.isEmpty()){
                     findViewById(R.id.no_products).setVisibility(View.GONE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        search_list.sort(Comparator.comparingDouble(product ->
-                                Double.parseDouble(product.getPrice().replace(" €", ""))
-                        ));
-                    } else {
-                        Collections.sort(search_list, new Comparator<ProductClass>() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) search_list.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                    else Collections.sort(search_list, new Comparator<ProductClass>() {
                             @Override
                             public int compare(ProductClass p1, ProductClass p2) {
                                 double price1 = Double.parseDouble(p1.getPrice().replace(" €", ""));
@@ -447,7 +443,7 @@ public class SearchActivity extends AppCompatActivity {
                                 return Double.compare(price1, price2);
                             }
                         });
-                    }
+
                     adp.notifyDataSetChanged();
                 }else findViewById(R.id.no_products).setVisibility(View.VISIBLE);
             } catch (Exception e) {

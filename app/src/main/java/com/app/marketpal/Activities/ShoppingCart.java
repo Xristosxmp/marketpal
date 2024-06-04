@@ -259,6 +259,8 @@ public class ShoppingCart extends AppCompatActivity {
                         ln.removeAllViews();
                         InitData();
                         dialog.dismiss();
+                        TextView amount__p = findViewById(R.id.products_amound_header); amount__p.setText("("  + shopping_cart.getAll().size() + ")");
+
                     }
                 });
 
@@ -504,6 +506,7 @@ public class ShoppingCart extends AppCompatActivity {
 
         shopping_cart = getBaseContext().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE);
         Set<String> allKeys = shopping_cart.getAll().keySet();
+        TextView amount__p = findViewById(R.id.products_amound_header); amount__p.setText("("  + allKeys.size() + ")");
 
 
         double total_price_from_products = 0f;
@@ -801,6 +804,7 @@ public class ShoppingCart extends AppCompatActivity {
                             Set<String> allKeys = shopping_cart.getAll().keySet();
                             //TextView product_counter = findViewById(R.id.product_counter);
                             //product_counter.setText(allKeys.size() + " Προιόντα");
+                            TextView amount__p = findViewById(R.id.products_amound_header); amount__p.setText("("  + allKeys.size() + ")");
 
                             double total_price_from_products = 0f;
                             int index = 0;

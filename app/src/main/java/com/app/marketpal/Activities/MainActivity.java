@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         new CollectData("https://v8api.pockee.com/api/v8/public/products?type=HOME_BASKET&category_id=40&page=1&per_page=30&in_stock=true" , "Παιδικά & Βρεφικά" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?type=HOME_BASKET&category_id=463&page=1&per_page=30&in_stock=true" , "Διάφορα" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=214&page=1&per_page=30&in_stock=true" , "Παντοπωλείο" ,
-                "Οι καλύτερες τιμές στο παντοπωλείο απευθείας σε εσάς. χυμός/πελτές τομάτας, σάλτες, dips & dressing, αλάτι & μπαχαρικά, ζάχαρη, αλεύρι κ.ά., είδη επάλειψης, λάδι, ξύδι, ζαχαροπλαστική, ετοιμα γεύματα ψυγείου, delicatessen, αυγά και ψάρια/θαλασσινά σε κονσέρβα" , "Χυμός/πελτές τομάτας"  , new ArrayList<>()).executeOnExecutor(pool);
+                "Οι καλύτερες τιμές στο παντοπωλείο απευθείας σε εσάς. χυμός/πελτές τομάτας, σάλτσες, dips & dressing, αλάτι & μπαχαρικά, ζάχαρη, αλεύρι κ.ά., είδη επάλειψης, λάδι, ξύδι, ζαχαροπλαστική, ετοιμα γεύματα ψυγείου, delicatessen, αυγά και ψάρια/θαλασσινά σε κονσέρβα" , "Χυμός/πελτές τομάτας"  , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=215&page=1&per_page=30&in_stock=true" , "Σάλτσες, Dips & Dressing" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=299&page=1&per_page=30&in_stock=true" , "Αλάτι & Μπαχαρικά" , new ArrayList<>()).executeOnExecutor(pool);
         new CollectData("https://v8api.pockee.com/api/v8/public/products?category_id=217&page=1&per_page=30&in_stock=true" , "Ζάχαρη, Αλεύρι κ.ά." , new ArrayList<>()).executeOnExecutor(pool);
@@ -827,16 +827,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<ProductClass> productList) {
             super.onPostExecute(productList);
-
             try {
-                c.setCategory_brand(BRAND);
                 if(!productList.isEmpty()){
                     PRODUCTS.addAll(productList);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        PRODUCTS.sort(Comparator.comparingDouble(product ->
-                                Double.parseDouble(product.getPrice().replace(" €", ""))
-                        ));
-                    } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) PRODUCTS.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+                    else {
                         Collections.sort(PRODUCTS, new Comparator<ProductClass>() {
                             @Override
                             public int compare(ProductClass p1, ProductClass p2) {
@@ -855,15 +850,12 @@ public class MainActivity extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                     });
                     c.setCategory_holder(adp);
-                } else{
-                    c.setCategory_holder(null);
-                }
+                    NotifyAdapter(c);
+                } else c.setCategory_holder(null);
             } catch (Exception e) {
                 NotifyAdapter(c);
                 sss(e.toString());
             }
-
-            NotifyAdapter(c);
         }
 
     }
