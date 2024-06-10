@@ -974,37 +974,41 @@ public class ShoppingCart extends AppCompatActivity {
                 Double PRICE_TYPECAST_DOUBLE = Double.parseDouble(lines[i].split(" ")[0]) * Integer.parseInt(shopping_cart_amount.getString(key , "1").toString());
 
 
-                if(lines[i].split(" ")[1].equals("MYMARKET")){
-                    model.setPrice(PRICE + " €");
-                    MY_MARKET_SUM += PRICE_TYPECAST_DOUBLE;
-                    MY_MARKET_LIST.add(model);
-                    MY_MARKET_ADAPTERY.notifyDataSetChanged();
-                    continue;
-                }else if(lines[i].split(" ")[1].equals("ΣΚΛΑΒΕΝΙΤΗΣ")){
-                    model.setPrice(PRICE + " €");
-                    SKLAVENITIS_SUM += PRICE_TYPECAST_DOUBLE;
-                    SKLAVENITIS_LIST.add(model);
-                    SKLAVENITIS_ADAPTERY.notifyDataSetChanged();
-                    continue;
-                }else if(lines[i].split(" ")[1].equals("ΑΒ")){
-                    model.setPrice(PRICE + " €");
-                    AB_SUM += PRICE_TYPECAST_DOUBLE;
-                    AB_LIST.add(model);
-                    AB_ADAPTERY.notifyDataSetChanged();
-                    continue;
-                }else if(lines[i].split(" ")[1].equals("ΓΑΛΑΞΙΑΣ")){
-                    model.setPrice(PRICE + " €");
-                    GALAXIAS_SUM += PRICE_TYPECAST_DOUBLE;
-                    GALAXIAS_LIST.add(model);
-                    GALAXIAS_ADAPTERY.notifyDataSetChanged();
-                    continue;
-                }else if(lines[i].split(" ")[1].equals("ΜΑΣΟΥΤΗΣ")){
-                    model.setPrice(PRICE + " €");
-                    MASOUTHS_SUM += PRICE_TYPECAST_DOUBLE;
-                    MASOUTHS_LIST.add(model);
-                    MASOUTHS_ADAPTERY.notifyDataSetChanged();
-                    continue;
+                switch (lines[i].split(" ")[1]) {
+                    case "MYMARKET":
+                        model.setPrice(PRICE + " €");
+                        MY_MARKET_SUM += PRICE_TYPECAST_DOUBLE;
+                        MY_MARKET_LIST.add(model);
+                        MY_MARKET_ADAPTERY.notifyDataSetChanged();
+                        break;
+                    case "ΣΚΛΑΒΕΝΙΤΗΣ":
+                        model.setPrice(PRICE + " €");
+                        SKLAVENITIS_SUM += PRICE_TYPECAST_DOUBLE;
+                        SKLAVENITIS_LIST.add(model);
+                        SKLAVENITIS_ADAPTERY.notifyDataSetChanged();
+                        break;
+                    case "ΑΒ":
+                        model.setPrice(PRICE + " €");
+                        AB_SUM += PRICE_TYPECAST_DOUBLE;
+                        AB_LIST.add(model);
+                        AB_ADAPTERY.notifyDataSetChanged();
+                        break;
+                    case "ΓΑΛΑΞΙΑΣ":
+                        model.setPrice(PRICE + " €");
+                        GALAXIAS_SUM += PRICE_TYPECAST_DOUBLE;
+                        GALAXIAS_LIST.add(model);
+                        GALAXIAS_ADAPTERY.notifyDataSetChanged();
+                        break;
+                    case "ΜΑΣΟΥΤΗΣ":
+                        model.setPrice(PRICE + " €");
+                        MASOUTHS_SUM += PRICE_TYPECAST_DOUBLE;
+                        MASOUTHS_LIST.add(model);
+                        MASOUTHS_ADAPTERY.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
                 }
+
             }
         }
 
@@ -1024,46 +1028,57 @@ public class ShoppingCart extends AppCompatActivity {
         detail = findViewById(R.id.MASOUTHS_DETAILS);
         detail.setText("ΜΑΣΟΥΤΗΣ • " + new DecimalFormat("#0.00", symbols).format(MASOUTHS_SUM) +" €\nΠΑΡΕΧΕΙ " +  MASOUTHS_LIST.size()  + " ΣΤΑ " + data.size() + " ΠΡΟΪΟΝΤΑ ΤΟΥ ΚΑΛΑΘΙΟΥ");
 
-        Collections.sort(MY_MARKET_LIST, new Comparator<ProductClass>() {
-            @Override
-            public int compare(ProductClass product1, ProductClass product2) {
-                double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                return Double.compare(price1, price2);
-            }
-        });
-        Collections.sort(SKLAVENITIS_LIST, new Comparator<ProductClass>() {
-            @Override
-            public int compare(ProductClass product1, ProductClass product2) {
-                double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                return Double.compare(price1, price2);
-            }
-        });
-        Collections.sort(AB_LIST, new Comparator<ProductClass>() {
-            @Override
-            public int compare(ProductClass product1, ProductClass product2) {
-                double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                return Double.compare(price1, price2);
-            }
-        });
-        Collections.sort(GALAXIAS_LIST, new Comparator<ProductClass>() {
-            @Override
-            public int compare(ProductClass product1, ProductClass product2) {
-                double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                return Double.compare(price1, price2);
-            }
-        });
-        Collections.sort(MASOUTHS_LIST, new Comparator<ProductClass>() {
-            @Override
-            public int compare(ProductClass product1, ProductClass product2) {
-                double price1 = Double.parseDouble(product1.getPrice().replace(" €" , ""));
-                double price2 = Double.parseDouble(product2.getPrice().replace(" €" , ""));
-                return Double.compare(price1, price2);
-            }
-        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            MY_MARKET_LIST.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+            SKLAVENITIS_LIST.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+            AB_LIST.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+            GALAXIAS_LIST.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+            MASOUTHS_LIST.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
+        }
+        else {
+            Collections.sort(MY_MARKET_LIST, new Comparator<ProductClass>() {
+                @Override
+                public int compare(ProductClass product1, ProductClass product2) {
+                    double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                    double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                    return Double.compare(price1, price2);
+                }
+            });
+            Collections.sort(SKLAVENITIS_LIST, new Comparator<ProductClass>() {
+                @Override
+                public int compare(ProductClass product1, ProductClass product2) {
+                    double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                    double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                    return Double.compare(price1, price2);
+                }
+            });
+            Collections.sort(AB_LIST, new Comparator<ProductClass>() {
+                @Override
+                public int compare(ProductClass product1, ProductClass product2) {
+                    double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                    double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                    return Double.compare(price1, price2);
+                }
+            });
+            Collections.sort(GALAXIAS_LIST, new Comparator<ProductClass>() {
+                @Override
+                public int compare(ProductClass product1, ProductClass product2) {
+                    double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                    double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                    return Double.compare(price1, price2);
+                }
+            });
+            Collections.sort(MASOUTHS_LIST, new Comparator<ProductClass>() {
+                @Override
+                public int compare(ProductClass product1, ProductClass product2) {
+                    double price1 = Double.parseDouble(product1.getPrice().replace(" €", ""));
+                    double price2 = Double.parseDouble(product2.getPrice().replace(" €", ""));
+                    return Double.compare(price1, price2);
+                }
+            });
+        }
 
 
         if(MY_MARKET_LIST.size() == 0){

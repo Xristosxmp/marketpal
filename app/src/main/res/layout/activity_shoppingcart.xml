@@ -103,9 +103,10 @@
             <androidx.recyclerview.widget.RecyclerView  android:id="@+id/masouths_recycler" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
             <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
         </LinearLayout>
-
+            
         </LinearLayout>
     </ScrollView>
+
 
 
 </LinearLayout>

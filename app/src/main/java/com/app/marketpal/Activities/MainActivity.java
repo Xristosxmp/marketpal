@@ -1,9 +1,9 @@
 /**
  *
- *              Copyright | 2023
+ *              Copyright | 2024
  *
  *              Android Εφαρμογή
- *
+ *        Thesis / Διπλωματική Εργασία
  *
  *
  *
@@ -22,8 +22,8 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,7 +46,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import com.app.marketpal.Adapters.Adaptery;
 import com.app.marketpal.Adapters.AdapteryII;
 import com.app.marketpal.Models.CategoryClass;
@@ -54,10 +53,8 @@ import com.app.marketpal.Models.ProductClass;
 import com.app.marketpal.R;
 import com.app.marketpal.enumActivities.ActivityType;
 import com.google.android.material.navigation.NavigationView;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.net.InetAddress;
 import java.text.DecimalFormat;
@@ -71,7 +68,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -80,35 +76,27 @@ import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private SearchView searchView;
-
-
     private Intent SearchIntent;
     private Intent OffersIntent;
     private Intent ProfileIntent;
     private Intent CartIntent;
     private Intent MessagesIntent;
-
     private RecyclerView parent_recycler_view;
     private List<CategoryClass> category_list;
     private AdapteryII adapter;
-
     private String CategorySelector;
-
     private CategoryClass config;
-
     private DrawerLayout drawer;
     private NavigationView d;
-
     private SharedPreferences supermarkets;
     private int supermarkets_size;
-
     private LinearLayoutManager RecyclerViewManager;
+    public static Activity main_activity_object;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        main_activity_object = this;
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -146,7 +134,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        TextView productAmount = findViewById(R.id.product_amount);
+        TextView productAmountNav = findViewById(R.id.product_amount_nav);
 
+        int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
+        if(size == 0) {productAmount.setVisibility(View.GONE);productAmountNav.setVisibility(View.GONE);}
+        else {productAmountNav.setVisibility(View.VISIBLE);productAmount.setVisibility(View.VISIBLE);productAmount.setText(String.valueOf(size));productAmountNav.setText(String.valueOf(size));}
+    }
 
     private void DataInit(){
 
@@ -421,18 +417,6 @@ public class MainActivity extends AppCompatActivity {
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Παιδικά & Βρεφικά"); d.getMenu().findItem(R.id.kids).setActionView(cc);
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Κατικοίδια"); d.getMenu().findItem(R.id.pets).setActionView(cc);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        TextView productAmount = findViewById(R.id.product_amount);
-        TextView productAmountNav = findViewById(R.id.product_amount_nav);
-
-        int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
-        if(size == 0) {productAmount.setVisibility(View.GONE);productAmountNav.setVisibility(View.GONE);}
-        else {productAmountNav.setVisibility(View.VISIBLE);productAmount.setVisibility(View.VISIBLE);productAmount.setText(String.valueOf(size));productAmountNav.setText(String.valueOf(size));}
-    }
-
     private void Settings(){
 
         findViewById(R.id.category_dropout).setOnClickListener(new View.OnClickListener() {
@@ -463,7 +447,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void setBorderOnScroll() {
         LinearLayout hz = findViewById(R.id.Header);
         parent_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -477,7 +460,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void Messages(){
         findViewById(R.id.messages_icon).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -558,15 +540,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
-                CartIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CartIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
 
             }
         });
     }
-
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
@@ -577,11 +556,7 @@ public class MainActivity extends AppCompatActivity {
             return !ipAddr.equals("");
         } catch (Exception e) {return false;}
     }
-
-
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
-
-
     private class CollectData extends AsyncTask<String,String,List<ProductClass>> {
 
         private List<ProductClass> PRODUCTS;
@@ -853,13 +828,11 @@ public class MainActivity extends AppCompatActivity {
                     NotifyAdapter(c);
                 } else c.setCategory_holder(null);
             } catch (Exception e) {
-                NotifyAdapter(c);
-                sss(e.toString());
+                Log.e("MAIN_ACTIVITY" , e.getLocalizedMessage());
             }
         }
 
     }
-
     private void NotifyAdapter(CategoryClass c) {
         switch (c.getCategory_brand()) {
             case "Τρόφιμα": adapter.notifyItemChanged(1); break;
@@ -873,13 +846,6 @@ public class MainActivity extends AppCompatActivity {
             default: break;
         }
     }
-    private void sss(String e){
-        new AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage("Πρόβλημα Async. Report Bug")
-                .setNegativeButton(android.R.string.no, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
+
 }
 

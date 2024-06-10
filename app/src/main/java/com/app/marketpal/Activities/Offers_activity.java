@@ -59,29 +59,18 @@ public class Offers_activity extends AppCompatActivity {
     private List<ProductClass> list_ab;
     private List<ProductClass> list_masouths;
     private List<ProductClass> list_galaxias;
-
-
-    Adaptery adp;
-    Adaptery adp2;
-    Adaptery adp3;
-    Adaptery adp4;
-    Adaptery adp5;
-
+    private Adaptery adp;
+    private Adaptery adp2;
+    private Adaptery adp3;
+    private Adaptery adp4;
+    private Adaptery adp5;
     private SharedPreferences supermarkets;
-
-
     private ShimmerFrameLayout API_DATA_SHIMMER[];
     private RecyclerView API_DATA_RV[];
-
-
     private Intent CartIntent;
-
     private DrawerLayout drawer;
     private NavigationView d;
-
     private Intent SearchIntent;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -1,6 +1,5 @@
 package com.app.marketpal.Activities;
 
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,29 +29,24 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.app.marketpal.Adapters.Adaptery;
 import com.app.marketpal.Adapters.AdapteryIII;
 import com.app.marketpal.Models.ProductClass;
 import com.app.marketpal.R;
 import com.app.marketpal.RecentlyViewerDatabase;
 import com.app.marketpal.enumActivities.ActivityType;
-
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.google.android.material.navigation.NavigationView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,8 +60,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -74,50 +69,40 @@ import okhttp3.ResponseBody;
 
 public class Profile extends AppCompatActivity {
 
-
     private SharedPreferences favorites;
     private int favorites_size;
     private int flag;
     private int rFLAG;
-
     private Intent HomeIntent;
     private Intent OffersIntent;
     private Intent CartIntent;
     private Intent SearchIntent;
     private Intent MessagesIntent;
-
-
-    CompoundButton c1;
-    CompoundButton c2;
-    CompoundButton c3;
-    CompoundButton c4;
-    CompoundButton c5;
-
+    private CompoundButton c1;
+    private CompoundButton c2;
+    private CompoundButton c3;
+    private CompoundButton c4;
+    private CompoundButton c5;
     private SharedPreferences supermarkets;
     private int supermarkets_size;
-
     private DrawerLayout drawer;
     private NavigationView d;
-
     private List<ProductClass> FavoritesList;
     private List<ProductClass> RecentlyViewedList;
-
     private List<ProductClass> recommendedList;
     private List<ProductClass> CashbackList;
     private List<ProductClass> OfferPlusList;
     private SharedPreferences shopping_cart;
-
     private RecentlyViewerDatabase recently_view_db;
-
     private final String APP_URL = "https://play.google.com/store/apps/details?id=com.app.marketpal";
+    private final String base_product_url = "https://v8api.pockee.com/api/v8/public/products/";
+    private SetRecommented TASK1;
+    private SetRecommented TASK2;
+    private SetRecommented TASK3;
+    private SetFavorites   FAVORITES_TASK;
+    private Dialog dialog_loading;
 
-    SetRecommented TASK1;
-    SetRecommented TASK2;
-    SetRecommented TASK3;
-    SetFavorites   FAVORITES_TASK;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -156,6 +141,35 @@ public class Profile extends AppCompatActivity {
         TASK2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         TASK3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        dialog_loading = new Dialog(this);
+        dialog_loading.setContentView(R.layout.loading_dialog_layout);
+        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable inset = new InsetDrawable(back, 30);
+        dialog_loading.getWindow().setBackgroundDrawable(inset);
+        dialog_loading.setCancelable(false);
+        Window window = dialog_loading.getWindow();
+        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(155));
+    }
+    @Override protected void onResume() {
+        super.onResume();
+        TextView headercart = findViewById(R.id.product_amount_profile);
+        TextView productAmountNav = findViewById(R.id.product_amount_nav);
+        int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
+        if(size == 0) {
+            productAmountNav.setVisibility(View.GONE);
+            headercart.setVisibility(View.GONE);
+        }
+        else {
+            productAmountNav.setVisibility(View.VISIBLE);
+            headercart.setVisibility(View.VISIBLE);
+            headercart.setText(String.valueOf(size));
+            productAmountNav.setText(String.valueOf(size));
+        }
+
+
+        drawer.closeDrawer(Gravity.LEFT);
+        SetRecentlyViewed(false);
+        SetFavoritesProducts(false);
     }
 
     private void SetBrochures(){
@@ -211,7 +225,6 @@ public class Profile extends AppCompatActivity {
 
 
     }
-
     private boolean h(){
         if (!c1.isChecked() && !c2.isChecked() && !c3.isChecked()
                 && !c4.isChecked() && !c5.isChecked()) {
@@ -240,36 +253,33 @@ public class Profile extends AppCompatActivity {
 
         SetRecentlyViewed(true);
         SetFavoritesProducts(true);
-        new update_shopping_cart().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        Dialog dialog = new Dialog(this);
+        Set<String> k = shopping_cart.getAll().keySet();
+        CountDownLatch latch = new CountDownLatch(shopping_cart.getAll().size());
+        for (String key : k)
+            new update_shopping_cart("https://v8api.pockee.com/api/v8/public/products/" + shopping_cart.getString(key, "").split("\n")[0].split(" ")[3], latch).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        dialog.setContentView(R.layout.loading_dialog_layout);
-        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-        InsetDrawable inset = new InsetDrawable(back, 30);
-        dialog.getWindow().setBackgroundDrawable(inset);
-        dialog.setCancelable(false);
-        dialog.show();
-        Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(155));
-
+        dialog_loading.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2500);
+                    latch.await();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog_loading.dismiss();
+                            MainActivity.main_activity_object.finish();
+                            onResume();
+                        }
+                    });
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //new UpdateShoppingCartSharedPreferences(getBaseContext());
-                        dialog.dismiss();
-                    }
-                });
             }
         }).start();
+
+
 
     }
     private void Supermarket_settings(){
@@ -355,29 +365,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        TextView headercart = findViewById(R.id.product_amount_profile);
-        TextView productAmountNav = findViewById(R.id.product_amount_nav);
-        int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
-        if(size == 0) {
-            productAmountNav.setVisibility(View.GONE);
-            headercart.setVisibility(View.GONE);
-        }
-        else {
-            productAmountNav.setVisibility(View.VISIBLE);
-            headercart.setVisibility(View.VISIBLE);
-            headercart.setText(String.valueOf(size));
-            productAmountNav.setText(String.valueOf(size));
-        }
-
-
-        SetRecentlyViewed(false);
-        SetFavoritesProducts(false);
-    }
-
     private void NavigateHome(){
         findViewById(R.id.homenav).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,8 +425,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-
-
     private void Services(){
         ScrollView s = findViewById(R.id.activity_profile_scroller);
         findViewById(R.id.view_recently_product).setOnClickListener(new View.OnClickListener() {
@@ -467,7 +452,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
     private LinearLayout LNerror(){
         LinearLayout LN = new LinearLayout(this);
@@ -504,9 +488,7 @@ public class Profile extends AppCompatActivity {
         LN.addView(t);
         return LN;
     }
-
     private List<Integer> IDS;
-    private String base_product_url = "https://v8api.pockee.com/api/v8/public/products/";
     private void SetRecentlyViewed(boolean c) {
         SQLiteDatabase db = recently_view_db.getReadableDatabase();
         String[] projection = {RecentlyViewerDatabase.COLUMN_PRODUCT_ID, RecentlyViewerDatabase.COLUMN_DATE};
@@ -533,14 +515,28 @@ public class Profile extends AppCompatActivity {
             for (int i = 0; i < IDS_q.size(); i++)
                 if (IDS_q.get(i) != null)
                     m.put(IDS_q.get(i), i);
-            IDS.sort((a, b) -> {
-                Integer A = m.get(a);
-                Integer B = m.get(b);
-                if (A != null && B != null) return Integer.compare(A, B);
-                else if (A != null) return 1;
-                else if (B != null) return -1;
-                else return 0;
-            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                IDS.sort((a, b) -> {
+                    Integer A = m.get(a);
+                    Integer B = m.get(b);
+                    if (A != null && B != null) return Integer.compare(A, B);
+                    else if (A != null) return 1;
+                    else if (B != null) return -1;
+                    else return 0;
+                });
+            }else{
+                Collections.sort(IDS, new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer a, Integer b) {
+                        Integer A = m.get(a);
+                        Integer B = m.get(b);
+                        if (A != null && B != null) return Integer.compare(A, B);
+                        else if (A != null) return 1;
+                        else if (B != null) return -1;
+                        else return 0;
+                    }
+                });
+            }
         }
 
 
@@ -579,7 +575,6 @@ public class Profile extends AppCompatActivity {
         favorites_size = favorites.getAll().size();
         flag = 0;
     }
-
     private class SetFavorites extends AsyncTask<String,String,ArrayList<JSONObject>>{
 
         private RecyclerView rv_01;
@@ -620,11 +615,14 @@ public class Profile extends AppCompatActivity {
 
                     Response response = client.newCall(request).execute();
 
-                    ResponseBody responseBody = response.body();
-                    String json = responseBody != null ? responseBody.string() : "";
-                    l.add(new JSONObject(json));
-                } catch (Exception e) {e.printStackTrace();
-                    Log.e("FAVORITES" , e.getLocalizedMessage()); continue;}
+                    if(response.isSuccessful()) {
+                        ResponseBody responseBody = response.body();
+                        if (responseBody != null)
+                            l.add(new JSONObject(responseBody.string()));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             try {
                 for(JSONObject jsonObject : l) {
@@ -666,21 +664,17 @@ public class Profile extends AppCompatActivity {
                             assortmentsData[j][1] = String.valueOf(current_price);
                         }
                         if (final_price == Double.MAX_VALUE) continue;
-
                         model.setName(product.getString("name"));
                         model.setID(product.getString("id"));
                         model.setASSORTEMTNS_DATA(assortmentsData);
                         model.setDesc(product.getString("description"));
                         model.setOrigianlName(product.getString("name"));
                         model.setBrand_id(product.getString("brand_id"));
-                        Log.d("FAVORITES" , model.getName());
-
                         FavoritesList.add(model);
                     }
             }catch (Exception e){
                 Log.e("FAVORITES" , e.getLocalizedMessage());
             }
-
 
             return l;
         }
@@ -1001,31 +995,18 @@ public class Profile extends AppCompatActivity {
 
 
     }
-    private class update_shopping_cart extends AsyncTask<String,String, JSONObject[]>{
+    private class update_shopping_cart extends AsyncTask<String,String, Void>{
 
-        String API[];
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Set<String> k = shopping_cart.getAll().keySet();
-            API = new String[shopping_cart.getAll().size()]; int i = 0;
-            for (String key : k) {
-                String value = shopping_cart.getString(key, "");
-                String[] l = value.split("\n");
-                String pid = l[0].split(" ")[3];
-                API[i] = "https://v8api.pockee.com/api/v8/public/products/" + pid;
-                i++;
-            }
+        String API;
+        private CountDownLatch latch;
+        update_shopping_cart(String API,CountDownLatch latch){
+            this.API = API;
+            this.latch = latch;
         }
 
         @Override
-        protected JSONObject[] doInBackground(String... strings) {
-
-            JSONObject JSON_OBJECT[] = new JSONObject[API.length];
-            for(int i=0; i<API.length; i++) {
+        protected Void doInBackground(String... strings) {
                 try {
-                    JSON_OBJECT[i] = new JSONObject();
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .connectTimeout(10, TimeUnit.SECONDS)
                             .readTimeout(10, TimeUnit.SECONDS)
@@ -1033,80 +1014,70 @@ public class Profile extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url(API[i])
+                            .url(API)
                             .addHeader("Content-Type", "application/json")
                             .addHeader("Accept", "application/json")
                             .build();
 
                     Response response = client.newCall(request).execute();
+                    if(response.isSuccessful()){
+                        ResponseBody responseBody = response.body();
+                        if(responseBody != null){
+                            try {
+                                JSONObject p = new JSONObject(responseBody.string()).getJSONObject("data");
 
-                    ResponseBody responseBody = response.body();
-                    String json = responseBody != null ? responseBody.string() : "";
-                    JSON_OBJECT[i] = new JSONObject(json);
-                } catch (Exception e) {e.printStackTrace(); JSON_OBJECT[i] = null; continue;}
-            }
+                                String pimg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
+                                if(!p.isNull("image_versions"))
+                                    pimg = p.getJSONObject("image_versions").getString("original");
 
-            return JSON_OBJECT;
+                                double final_price = Double.MAX_VALUE;
+                                String FINAL_NAME = "";
+                                JSONArray ASSORTMENTS = p.getJSONArray("assortments");
+                                String assortments[][] = new String[ASSORTMENTS.length()][2];
+
+                                for(int j=0; j<ASSORTMENTS.length(); j++){
+                                    JSONObject item = ASSORTMENTS.getJSONObject(j);
+                                    JSONObject retailer = item.getJSONObject("retailer");
+                                    JSONObject productPivot = item.getJSONObject("product_pivot");
+                                    String name = retailer.getString("name");
+                                    if(!supermarkets.contains(name)) continue;
+                                    double current_price = productPivot.isNull("final_price")
+                                            ? productPivot.getDouble("start_price")
+                                            : productPivot.getDouble("final_price");
+
+                                    if (current_price < final_price) {FINAL_NAME = name; final_price = current_price;}
+                                    assortments[j][0] = name;
+                                    assortments[j][1] = String.valueOf(current_price);
+                                }
+                                if(final_price == Double.MAX_VALUE){
+                                    shopping_cart.edit().remove(p.getString("name")).apply();
+                                    return null;
+                                }
+
+                                StringBuilder b = new StringBuilder();
+                                b.append(final_price + " " + FINAL_NAME.replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "") + " " + pimg + " " + p.getString("id") + "\n");
+                                for(int j=0; j<assortments.length; j++)
+                                    if(assortments[j][0] == null) continue;
+                                    else{
+                                        if(j == assortments.length-1) b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim());
+                                        else                          b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim() + "\n");
+                                    }
+
+                                shopping_cart.edit().putString(p.getString("name") , b.toString().trim()).apply();
+                            } catch (JSONException e) {throw new RuntimeException(e);}
+                        }
+                    }
+                } catch (Exception e) {e.printStackTrace();}
+
+            return null;
         }
 
         @Override
-        protected void onPostExecute(JSONObject[] JSON_OBJECT) {
-            super.onPostExecute(JSON_OBJECT);
-            for(int i=0; i<JSON_OBJECT.length; i++){
-                try {
-                    if(JSON_OBJECT[i] == null) continue;
-                    JSONObject p = JSON_OBJECT[i].getJSONObject("data");
-                    String pname = p.getString("name");
-                    String pid   = p.getString("id");
-
-                    String pimg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-                    if(!p.isNull("image_versions"))
-                        pimg = p.getJSONObject("image_versions").getString("original");
-
-                    double FINAL_PRICE = 55555;
-                    String FINAL_NAME = "";
-                    JSONArray ASSORTMENTS = p.getJSONArray("assortments");
-                    String assortments[][] = new String[ASSORTMENTS.length()][2];
-
-                    for(int j=0; j<ASSORTMENTS.length(); j++){
-                        JSONObject item = ASSORTMENTS.getJSONObject(j);
-                        JSONObject retailer = item.getJSONObject("retailer");
-                        JSONObject productPivot = item.getJSONObject("product_pivot");
-                        String name = retailer.getString("name");
-                        if(!supermarkets.contains(name)) continue;
-                        double finalPrice;
-                        if (productPivot.isNull("final_price")) {finalPrice = productPivot.getDouble("start_price");}
-                        else {finalPrice = productPivot.getDouble("final_price");}
-                        if (finalPrice < FINAL_PRICE) {FINAL_NAME = name; FINAL_PRICE = finalPrice;}
-                        assortments[j][0] = name;
-                        assortments[j][1] = String.valueOf(finalPrice);
-
-                    }
-
-
-
-                    StringBuilder b = new StringBuilder();
-                    if(FINAL_PRICE == 55555) {
-                        shopping_cart.edit().remove(pname).apply();
-                        continue;
-                    }
-                    b.append(FINAL_PRICE + " " + FINAL_NAME.replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "") + " " + pimg + " " + pid + "\n");
-                    for(int j=0; j<assortments.length; j++)
-                        if(assortments[j][0] == null) continue;
-                        else{
-                            if(j == assortments.length-1) b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim());
-                            else                          b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim() + "\n");
-                        }
-
-                        shopping_cart.edit().putString(pname , b.toString().trim()).apply();
-                        onResume();
-                } catch (JSONException e) {throw new RuntimeException(e);}
-            }
-            onResume();
-
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            latch.countDown();
         }
     }
-
     class RetrivePdfStream extends AsyncTask<String, Void, InputStream> {
 
         PDFView pdfView;
@@ -1142,5 +1113,4 @@ public class Profile extends AppCompatActivity {
             }).load();
         }
     }
-
 }

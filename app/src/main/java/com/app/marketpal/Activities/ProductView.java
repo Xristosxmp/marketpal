@@ -1,5 +1,6 @@
 package com.app.marketpal.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -97,6 +98,7 @@ public class ProductView extends AppCompatActivity {
 
     private RecentlyViewerDatabase recently_view_db;
 
+    @SuppressLint("SuspiciousIndentation")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -274,10 +276,7 @@ public class ProductView extends AppCompatActivity {
             }
         });
         int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
-        if(size == 0) {
-            productAmount.setVisibility(View.GONE);
-
-        }
+        if(size == 0) productAmount.setVisibility(View.GONE);
         else {
 
             productAmount.setVisibility(View.VISIBLE);
@@ -288,11 +287,10 @@ public class ProductView extends AppCompatActivity {
         // Αγαπημενο
         //favorites_btn
         ImageView fv = findViewById(R.id.favorites_btn);
-        if (favorites.contains(product_original_name)) {
-            fv.setImageResource(R.drawable.favorites_red);
-        } else {
-            fv.setImageResource(R.drawable.favorites);
-        }
+
+        if (favorites.contains(product_original_name)) fv.setImageResource(R.drawable.favorites_red);
+        else fv.setImageResource(R.drawable.favorites);
+
         fv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -550,36 +548,11 @@ public class ProductView extends AppCompatActivity {
                         Intent intent = new Intent(getBaseContext(), ProductView.class);
                         intent.putExtra("PRODUCT_OBJ", model);
                         startActivity(intent);
+                        overridePendingTransition(0,0);
+                        finish();
                     }
                 });
 
-
-                /*
-                rv_01.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    boolean isLoading = false;
-                    static int page = 2;
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-
-                        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        int visibleItemCount = layoutManager.getChildCount();
-                        int totalItemCount = layoutManager.getItemCount();
-                        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                        int visibleThreshold = 5; // Adjust this value as needed
-
-                        if (!isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItemPosition + visibleThreshold)) {
-                            isLoading = true;
-                            new AsyncProductUpdate(API.replaceAll("&page=1", "&page=" + page), adp)
-                                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            page++;
-                            isLoading = false;
-                        }
-                    }
-                });
-
-
-                 */
 
 
             }catch (Exception e){e.printStackTrace();}

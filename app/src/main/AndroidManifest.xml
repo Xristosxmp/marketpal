@@ -21,8 +21,6 @@
         android:hardwareAccelerated="true"
         tools:targetApi="23">
 
-
-
         <activity android:noHistory="true" android:name="com.app.marketpal.Activities.SplashScreen" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,9 +35,6 @@
         <activity android:launchMode="singleTask" android:name="com.app.marketpal.Activities.Profile" android:screenOrientation="portrait"></activity>
         <activity android:launchMode="singleTask" android:name=".Activities.optimal_cart" android:screenOrientation="portrait"></activity>
         <activity android:launchMode="singleTask" android:name=".Activities.MessagesActivity" android:screenOrientation="portrait"></activity>
-
-
-
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="@string/admob_app_id"/>
     </application>
 
