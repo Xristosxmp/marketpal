@@ -15,8 +15,8 @@ android {
         applicationId "com.app.marketpal"
         minSdk 23
         targetSdk 33
-        versionCode 9
-        versionName "10.0.3"
+        versionCode 12
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

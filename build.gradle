@@ -3,7 +3,3 @@ plugins {
     id 'com.android.application' version '8.3.2' apply false
     id 'com.android.library' version '8.3.2' apply false
 }
-
-ext {
-    key_private = '123456'
-}

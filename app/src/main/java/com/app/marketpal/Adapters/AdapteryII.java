@@ -121,15 +121,8 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return mData.get(position).type;
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData == null ? 0 : mData.size();
-    }
+    @Override public int getItemViewType(int position) {return mData.get(position).type;}
+    @Override public int getItemCount() {return mData == null ? 0 : mData.size();}
 
     public static class DefaultTypeView extends RecyclerView.ViewHolder {
         TextView category_title;
