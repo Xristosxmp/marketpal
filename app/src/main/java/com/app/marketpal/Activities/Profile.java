@@ -194,32 +194,22 @@ public class Profile extends AppCompatActivity {
         int i = 0;
         for(LinearLayout l : p){
             int finalI = i;
-            l.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            l.setOnClickListener(vi -> {
                     Dialog dialog = new Dialog(Profile.this);
                     dialog.setContentView(R.layout.webview_dialog);
                     ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-
                     InsetDrawable inset = new InsetDrawable(back, 0);
                     dialog.getWindow().setBackgroundDrawable(inset);
                     Window window = dialog.getWindow();
                     window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
                     String URL = URLS[finalI];
                     PDFView v = dialog.findViewById(R.id.pdfView);
-                    dialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                        }
-                    });
+                    dialog.findViewById(R.id.exit).setOnClickListener(vii -> { dialog.dismiss(); });
                     ProgressBar b = dialog.findViewById(R.id.loading);
                     v.setPageFling(true);
                     v.setPageSnap(true);
                     new RetrivePdfStream(v,b).execute(URL);
                     dialog.show();
-                }
             }); i++;
         }
 
@@ -260,24 +250,17 @@ public class Profile extends AppCompatActivity {
             new update_shopping_cart("https://v8api.pockee.com/api/v8/public/products/" + shopping_cart.getString(key, "").split("\n")[0].split(" ")[3], latch).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         dialog_loading.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    latch.await();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog_loading.dismiss();
-                            MainActivity.main_activity_object.finish();
-                            onResume();
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        new Thread(() -> {
+            try {
+                latch.await();
+                runOnUiThread(() -> {
+                    dialog_loading.dismiss();
+                    MainActivity.main_activity_object.finish();
+                    onResume();
+                });
+            } catch (InterruptedException e) {e.printStackTrace();}
         }).start();
+
 
 
 
@@ -307,150 +290,82 @@ public class Profile extends AppCompatActivity {
         if(supermarkets.contains("ΓΑΛΑΞΙΑΣ")) c5.setChecked(true);
 
 
-        c1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton c, boolean b) {
-                if(!h()) {c.setChecked(true); return;}
-                if(b == true)supermarkets.edit().putBoolean("MYMARKET" , true).apply();
-                else  supermarkets.edit().remove("MYMARKET").apply();
-                s_update();
-
-            }
+        c1.setOnCheckedChangeListener((CompoundButton c, boolean b) -> {
+            if (!h()) {c.setChecked(true); return; }
+            if (b) supermarkets.edit().putBoolean("MYMARKET", true).apply();
+            else supermarkets.edit().remove("MYMARKET").apply();
+            s_update();
         });
-        c2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton c, boolean b) {
+
+        c2.setOnCheckedChangeListener((CompoundButton c, boolean b) -> {
                 if(!h()) {c.setChecked(true); return;}
                 if(b == true)supermarkets.edit().putBoolean("ΣΚΛΑΒΕΝΙΤΗΣ" , true).apply();
                 else  supermarkets.edit().remove("ΣΚΛΑΒΕΝΙΤΗΣ").apply();
                 s_update();
-            }
         });
-        c3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton c, boolean b) {
+        c3.setOnCheckedChangeListener((CompoundButton c, boolean b) -> {
                 if(!h()) {c.setChecked(true); return;}
                 if(b == true)supermarkets.edit().putBoolean("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ" , true).apply();
                 else  supermarkets.edit().remove("ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ").apply();
                 s_update();
-
-            }
         });
-        c4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton c, boolean b) {
+        c4.setOnCheckedChangeListener((CompoundButton c, boolean b) -> {
                 if(!h()) {c.setChecked(true); return;}
                 if(b == true)supermarkets.edit().putBoolean("ΜΑΣΟΥΤΗΣ" , true).apply();
                 else  supermarkets.edit().remove("ΜΑΣΟΥΤΗΣ").apply();
                 s_update();
-
-            }
         });
-        c5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton c, boolean b) {
+        c5.setOnCheckedChangeListener((CompoundButton c, boolean b) -> {
                 if(!h()) {c.setChecked(true); return;}
                 if(b == true)supermarkets.edit().putBoolean("ΓΑΛΑΞΙΑΣ" , true).apply();
                 else  supermarkets.edit().remove("ΓΑΛΑΞΙΑΣ").apply();
                 s_update();
-
-            }
         });
 
-
-        findViewById(R.id.supermarkets_settings_viewer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawer.openDrawer((int) Gravity.LEFT);
-            }
-        });
+        findViewById(R.id.supermarkets_settings_viewer).setOnClickListener(v -> {drawer.openDrawer((int) Gravity.LEFT);});
     }
     private void NavigateHome(){
-        findViewById(R.id.homenav).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(supermarkets_size != supermarkets.getAll().size()){
+        findViewById(R.id.homenav).setOnClickListener(v -> {
                     HomeIntent = new Intent(getBaseContext() , MainActivity.class);
+                    HomeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP );
                     startActivity(HomeIntent);
                     overridePendingTransition(0, 0);
-                }else{
-                    HomeIntent = new Intent(getBaseContext() , MainActivity.class);
-                    startActivity(HomeIntent);
-                    overridePendingTransition(0, 0);
-                }
-
-
-
-
-            }
         });
     }
     private void NavigateOffers(){
-        findViewById(R.id.today_offers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.today_offers).setOnClickListener(today_offers_v -> {
                 OffersIntent = new Intent(getBaseContext() , Offers_activity.class);
                 startActivity(OffersIntent);
                 overridePendingTransition(0, 0);
-            }
         });
     }
     private void NavigateCart(){
-        findViewById(R.id.cart_container_nav).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_container_nav).setOnClickListener(v ->{
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
-            }
         });
-        findViewById(R.id.cart_container_profile).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_container_profile).setOnClickListener(v -> {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
-            }
         });
     }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void NavigateSearch(){
-        findViewById(R.id.focussearchbar).setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.focussearchbar).setOnClickListener(v ->  {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
                 overridePendingTransition(0, 0);
-            }
         });
     }
     private void Services(){
         ScrollView s = findViewById(R.id.activity_profile_scroller);
-        findViewById(R.id.view_recently_product).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                s.smoothScrollTo(0 , (int )findViewById(R.id.RECENTLY_VIEWED_LAYOUT).getTop());
-            }
-        });
-        findViewById(R.id.view_recommended_product).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                s.smoothScrollTo(0 , (int )findViewById(R.id.RECOMMENDED_LAYOUT).getTop());
-            }
-        });
-        findViewById(R.id.view_cashack_product).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                s.smoothScrollTo(0 , (int )findViewById(R.id.CASHBACK_LAYOUT).getTop());
-            }
-        });
-        findViewById(R.id.view_one_plus_one_product).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                s.smoothScrollTo(0 , (int )findViewById(R.id.PLUSGIFT_LAYOUT).getTop());
-            }
-        });
+        findViewById(R.id.view_recently_product).setOnClickListener(v ->  {s.smoothScrollTo(0 , (int )findViewById(R.id.RECENTLY_VIEWED_LAYOUT).getTop());});
+        findViewById(R.id.view_recommended_product).setOnClickListener(v-> {s.smoothScrollTo(0 , (int )findViewById(R.id.RECOMMENDED_LAYOUT).getTop()); });
+        findViewById(R.id.view_cashack_product).setOnClickListener(v-> {s.smoothScrollTo(0 , (int )findViewById(R.id.CASHBACK_LAYOUT).getTop());});
+        findViewById(R.id.view_one_plus_one_product).setOnClickListener(v-> {s.smoothScrollTo(0 , (int )findViewById(R.id.PLUSGIFT_LAYOUT).getTop());});
     }
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
     private LinearLayout LNerror(){
@@ -698,16 +613,13 @@ public class Profile extends AppCompatActivity {
                 Adaptery adp = new Adaptery(getBaseContext(), FavoritesList, ActivityType.MAIN_ACTIVITY);
                 rv_01.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 rv_01.setAdapter(adp);
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("PRODUCT_OBJ", model);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-
-                    }
+                adp.setOnClickListener((position, model) -> {
+                    Intent intent = new Intent(getBaseContext(), ProductView.class);
+                    intent.putExtra("PRODUCT_OBJ", model);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 });
+
                 adp.notifyDataSetChanged();
             }catch (Exception e){e.printStackTrace();}
 
@@ -843,16 +755,13 @@ public class Profile extends AppCompatActivity {
                 AdapteryIII adp = new AdapteryIII(getBaseContext(), RecentlyViewedList);
                 rv_01.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 rv_01.setAdapter(adp);
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("PRODUCT_OBJ", model);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-
-                    }
+                adp.setOnClickListener((position, model) -> {
+                    Intent intent = new Intent(getBaseContext(), ProductView.class);
+                    intent.putExtra("PRODUCT_OBJ", model);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 });
+
 
             }catch (Exception e){e.printStackTrace();}
         }
@@ -976,16 +885,13 @@ public class Profile extends AppCompatActivity {
                 Adaptery adp = new Adaptery(getBaseContext(), product_list, ActivityType.MAIN_ACTIVITY);
                 RecommentedRecycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 RecommentedRecycler.setAdapter(adp);
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("PRODUCT_OBJ", model);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-
-                    }
+                adp.setOnClickListener((position, model) -> {
+                    Intent intent = new Intent(getBaseContext(), ProductView.class);
+                    intent.putExtra("PRODUCT_OBJ", model);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 });
+
 
 
             }catch (Exception e){e.printStackTrace();}
@@ -1006,76 +912,73 @@ public class Profile extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... strings) {
-                try {
-                    OkHttpClient client = new OkHttpClient().newBuilder()
-                            .connectTimeout(10, TimeUnit.SECONDS)
-                            .readTimeout(10, TimeUnit.SECONDS)
-                            .retryOnConnectionFailure(true)
-                            .build();
+            try {
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(false)
+                        .build();
 
-                    Request request = new Request.Builder()
-                            .url(API)
-                            .addHeader("Content-Type", "application/json")
-                            .addHeader("Accept", "application/json")
-                            .build();
+                Request request = new Request.Builder()
+                        .url(API)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Accept", "application/json")
+                        .build();
 
-                    Response response = client.newCall(request).execute();
-                    if(response.isSuccessful()){
-                        ResponseBody responseBody = response.body();
-                        if(responseBody != null){
-                            try {
-                                JSONObject p = new JSONObject(responseBody.string()).getJSONObject("data");
+                Response response = client.newCall(request).execute();
+                if(response.isSuccessful()){
+                    ResponseBody responseBody = response.body();
+                    if(responseBody != null){
+                        try {
+                            JSONObject p = new JSONObject(responseBody.string()).getJSONObject("data");
 
-                                String pimg = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
-                                if(!p.isNull("image_versions"))
-                                    pimg = p.getJSONObject("image_versions").getString("original");
+                            String pimg = !p.isNull("image_versions")
+                                    ? p.getJSONObject("image_versions").getString("original")
+                                    : "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
 
-                                double final_price = Double.MAX_VALUE;
-                                String FINAL_NAME = "";
-                                JSONArray ASSORTMENTS = p.getJSONArray("assortments");
-                                String assortments[][] = new String[ASSORTMENTS.length()][2];
+                            double final_price = Double.MAX_VALUE;
+                            String FINAL_NAME = "";
+                            JSONArray ASSORTMENTS = p.getJSONArray("assortments");
+                            String assortments[][] = new String[ASSORTMENTS.length()][2];
 
-                                for(int j=0; j<ASSORTMENTS.length(); j++){
-                                    JSONObject item = ASSORTMENTS.getJSONObject(j);
-                                    JSONObject retailer = item.getJSONObject("retailer");
-                                    JSONObject productPivot = item.getJSONObject("product_pivot");
-                                    String name = retailer.getString("name");
-                                    if(!supermarkets.contains(name)) continue;
-                                    double current_price = productPivot.isNull("final_price")
-                                            ? productPivot.getDouble("start_price")
-                                            : productPivot.getDouble("final_price");
+                            for(int j=0; j<ASSORTMENTS.length(); j++){
+                                JSONObject item = ASSORTMENTS.getJSONObject(j);
+                                JSONObject retailer = item.getJSONObject("retailer");
+                                JSONObject productPivot = item.getJSONObject("product_pivot");
+                                if(!supermarkets.contains(retailer.getString("name"))) continue;
+                                double current_price = productPivot.isNull("final_price")
+                                        ? productPivot.getDouble("start_price")
+                                        : productPivot.getDouble("final_price");
 
-                                    if (current_price < final_price) {FINAL_NAME = name; final_price = current_price;}
-                                    assortments[j][0] = name;
-                                    assortments[j][1] = String.valueOf(current_price);
+                                if (current_price < final_price) {
+                                    FINAL_NAME = retailer.getString("name");
+                                    final_price = current_price;
                                 }
-                                if(final_price == Double.MAX_VALUE){
-                                    shopping_cart.edit().remove(p.getString("name")).apply();
-                                    return null;
+                                assortments[j][0] = retailer.getString("name");
+                                assortments[j][1] = String.valueOf(current_price);
+                            }
+                            if(final_price == Double.MAX_VALUE){
+                                shopping_cart.edit().remove(p.getString("name")).apply();
+                                return null;
+                            }
+
+                            StringBuilder b = new StringBuilder();
+                            b.append(final_price + " " + FINAL_NAME.replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "") + " " + pimg + " " + p.getString("id") + "\n");
+                            for(int j=0; j<assortments.length; j++)
+                                if(assortments[j][0] == null) continue;
+                                else{
+                                    if(j == assortments.length-1) b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim());
+                                    else                          b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim() + "\n");
                                 }
-
-                                StringBuilder b = new StringBuilder();
-                                b.append(final_price + " " + FINAL_NAME.replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "") + " " + pimg + " " + p.getString("id") + "\n");
-                                for(int j=0; j<assortments.length; j++)
-                                    if(assortments[j][0] == null) continue;
-                                    else{
-                                        if(j == assortments.length-1) b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim());
-                                        else                          b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim() + "\n");
-                                    }
-
-                                shopping_cart.edit().putString(p.getString("name") , b.toString().trim()).apply();
-                            } catch (JSONException e) {throw new RuntimeException(e);}
-                        }
+                            shopping_cart.edit().putString(p.getString("name") , b.toString().trim()).apply();
+                        } catch (JSONException e) { Log.e("SplashScreen" , e.getLocalizedMessage()); }
                     }
-                } catch (Exception e) {e.printStackTrace();}
+                }
+            } catch (Exception e) {Log.e("SplashScreen" , e.getLocalizedMessage());} finally {
+                latch.countDown();
+            }
 
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            super.onPostExecute(unused);
-            latch.countDown();
         }
     }
     class RetrivePdfStream extends AsyncTask<String, Void, InputStream> {

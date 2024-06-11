@@ -29,12 +29,12 @@
         </activity>
         <activity android:launchMode="singleTask" android:name="com.app.marketpal.Activities.MainActivity" android:screenOrientation="portrait"></activity>
         <activity android:launchMode="standard" android:name="com.app.marketpal.Activities.ProductView" android:screenOrientation="portrait"></activity>
-        <activity android:launchMode="singleTask" android:name="com.app.marketpal.Activities.Offers_activity" android:screenOrientation="portrait"></activity>
-        <activity android:launchMode="singleTask" android:name="com.app.marketpal.Activities.ShoppingCart" android:screenOrientation="portrait"></activity>
-        <activity android:launchMode="singleTask" android:name="com.app.marketpal.Activities.SearchActivity"  android:screenOrientation="portrait"></activity>
-        <activity android:launchMode="singleTask" android:name="com.app.marketpal.Activities.Profile" android:screenOrientation="portrait"></activity>
-        <activity android:launchMode="singleTask" android:name=".Activities.optimal_cart" android:screenOrientation="portrait"></activity>
-        <activity android:launchMode="singleTask" android:name=".Activities.MessagesActivity" android:screenOrientation="portrait"></activity>
+        <activity android:launchMode="standard" android:name="com.app.marketpal.Activities.Offers_activity" android:screenOrientation="portrait"></activity>
+        <activity android:launchMode="standard" android:name="com.app.marketpal.Activities.ShoppingCart" android:screenOrientation="portrait"></activity>
+        <activity android:launchMode="standard" android:name="com.app.marketpal.Activities.SearchActivity"  android:screenOrientation="portrait"></activity>
+        <activity android:launchMode="standard" android:name="com.app.marketpal.Activities.Profile" android:screenOrientation="portrait"></activity>
+        <activity android:launchMode="standard" android:name=".Activities.optimal_cart" android:screenOrientation="portrait"></activity>
+        <activity android:launchMode="standard" android:name=".Activities.MessagesActivity" android:screenOrientation="portrait"></activity>
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="@string/admob_app_id"/>
     </application>
 

@@ -239,9 +239,7 @@ public class ProductView extends AppCompatActivity {
             add_to_cart.setText("ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ");
             add_to_cart.setBackgroundColor(Color.parseColor("#559d76"));
         }
-        add_to_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        add_to_cart.setOnClickListener(v -> {
                 if(add_to_cart.getText().equals("ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ")){
                     shopping_cart.edit().putString(product_original_name , _cart_data_.toString().trim()).apply();
 
@@ -264,16 +262,12 @@ public class ProductView extends AppCompatActivity {
                     productAmount.setText(String.valueOf(size));
 
                 }
-            }
         });
-        FrameLayout cart = findViewById(R.id.cart_container);
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+        findViewById(R.id.cart_container).setOnClickListener(v -> {
                 Intent intent = new Intent(getBaseContext(), ShoppingCart.class);
                 startActivity(intent);
                 overridePendingTransition(0 , 0);
-            }
         });
         int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
         if(size == 0) productAmount.setVisibility(View.GONE);
@@ -287,23 +281,16 @@ public class ProductView extends AppCompatActivity {
         // Αγαπημενο
         //favorites_btn
         ImageView fv = findViewById(R.id.favorites_btn);
-
         if (favorites.contains(product_original_name)) fv.setImageResource(R.drawable.favorites_red);
         else fv.setImageResource(R.drawable.favorites);
-
-        fv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fv.setOnClickListener(v -> {
                 if (favorites.contains(product_original_name)) {
                     favorites.edit().remove(product_original_name).apply();
                     fv.setImageResource(R.drawable.favorites);
-
                 } else {
                     favorites.edit().putString(product_original_name, product_id).apply();
                     fv.setImageResource(R.drawable.favorites_red);
-
                 }
-            }
         });
 
 
@@ -316,9 +303,7 @@ public class ProductView extends AppCompatActivity {
                     return;
                 }
                 if(product_desc.getLineCount() >= 6)
-                    product_show_more_desc.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    product_show_more_desc.setOnClickListener(v -> {
                             if(product_desc.getMaxLines() == 6){
                                 product_desc.setMaxLines(Integer.MAX_VALUE);
                                 product_show_more_desc.setText("...Λιγότερα");
@@ -326,20 +311,12 @@ public class ProductView extends AppCompatActivity {
                                 product_desc.setMaxLines(6);
                                 product_show_more_desc.setText("Περισσότερα...");
                             }
-                        }
                     });
                 else product_show_more_desc.setVisibility(View.GONE);
-
             }
         });
         Glide.with(getBaseContext()).load(image_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate().into(product_image);
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+        findViewById(R.id.backButton).setOnClickListener(v -> { finish(); });
         new SetRecommented("https://v8api.pockee.com/api/v8/public/products?brand_ids=" + brand_id + "&page=1&per_page=10&in_stock=true" , findViewById(R.id.recommended_shimmer) , findViewById(R.id.product_recommended_recycler) , new ArrayList<>()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -542,18 +519,12 @@ public class ProductView extends AppCompatActivity {
                 Adaptery adp = new Adaptery(getBaseContext(), product_list, ActivityType.MAIN_ACTIVITY);
                 if(ShimmerContainer!=null)  RecommentedRecycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
                 RecommentedRecycler.setAdapter(adp);
-                adp.setOnClickListener(new Adaptery.OnClickListener() {
-                    @Override
-                    public void onClick(int position, ProductClass model) {
-                        Intent intent = new Intent(getBaseContext(), ProductView.class);
-                        intent.putExtra("PRODUCT_OBJ", model);
-                        startActivity(intent);
-                        overridePendingTransition(0,0);
-                        finish();
-                    }
+                adp.setOnClickListener((position, model) -> {
+                    Intent intent = new Intent(getBaseContext(), ProductView.class);
+                    intent.putExtra("PRODUCT_OBJ", model);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 });
-
-
 
             }catch (Exception e){e.printStackTrace();}
             if(ShimmerContainer!=null) {

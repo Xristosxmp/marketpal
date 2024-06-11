@@ -204,14 +204,9 @@ public class SearchActivity extends AppCompatActivity {
          else
          pp.setMargins(dpToPx(15) , 0 , dpToPx(15) , 0);
         t.setLayoutParams(pp);
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        t.setOnClickListener(v -> {
                 String URL = "https://v8api.pockee.com/api/v8/public/products?per_page=100&in_stock=true&term=" + s;
-//                new AsyncSearch(URL, rv_search)
-//                        .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 search.setQuery(s , true);
-            }
         });
         p.addView(t);
     }
@@ -219,7 +214,6 @@ public class SearchActivity extends AppCompatActivity {
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
 
     public void cbx(int id , CheckBox c1 , CheckBox c2 , CheckBox c3 , CheckBox c4) {
-
             if(id == R.id.checkBoxPreselected) {
                 FilterChoice = 0;
                 c1.setChecked(true); c2.setChecked(false);
@@ -244,36 +238,25 @@ public class SearchActivity extends AppCompatActivity {
 
     private void SearchFilters(){
         FilterChoice = 0;
-        findViewById(R.id.search_filter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.search_filter).setOnClickListener(v -> {
                 Dialog dialog = new Dialog(SearchActivity.this);
-
                 dialog.setContentView(R.layout.search_filter_layout);
                 ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-
                 InsetDrawable inset = new InsetDrawable(back, 30);
                 dialog.getWindow().setBackgroundDrawable(inset);
                 dialog.show();
                 Window window = dialog.getWindow();
                 window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(350));
-
-                ImageView exit = dialog.findViewById(R.id.search_filter_exit);
-                exit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
+                dialog.findViewById(R.id.search_filter_exit).setOnClickListener(vii -> { dialog.dismiss(); });
 
                 CheckBox c1 = dialog.findViewById(R.id.checkBoxPreselected);
                 CheckBox c2 = dialog.findViewById(R.id.checkBoxOffer);
                 CheckBox c3 = dialog.findViewById(R.id.checkBoxCashback);
                 CheckBox c4 = dialog.findViewById(R.id.checkBoxGift);
-                c1.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) {cbx(R.id.checkBoxPreselected,c1,c2,c3,c4);}});
-                c2.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) {cbx(R.id.checkBoxOffer,c1,c2,c3,c4);}});
-                c3.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) {cbx(R.id.checkBoxCashback,c1,c2,c3,c4);}});
-                c4.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) {cbx(R.id.checkBoxGift,c1,c2,c3,c4);}});
+                c1.setOnClickListener(vii -> {{cbx(R.id.checkBoxPreselected,c1,c2,c3,c4);}});
+                c2.setOnClickListener(vii -> {{cbx(R.id.checkBoxOffer,c1,c2,c3,c4);}});
+                c3.setOnClickListener(vii -> {{cbx(R.id.checkBoxCashback,c1,c2,c3,c4);}});
+                c4.setOnClickListener(vii -> {{cbx(R.id.checkBoxGift,c1,c2,c3,c4);}});
 
                 switch (FilterChoice){
                     case 0:  c1.setChecked(true); break;
@@ -284,18 +267,9 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 AppCompatButton apply = dialog.findViewById(R.id.btn_apply);
-                apply.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if(SearchHistory == null){
-                            dialog.dismiss();
-                            return;
-                        }
-                        if(SearchHistory.equals("") || SearchHistory.isEmpty()){
-                            dialog.dismiss();
-                            return;
-                        }
+                apply.setOnClickListener(vi -> {
+                        if(SearchHistory == null){  dialog.dismiss(); return; }
+                        if(SearchHistory.equals("") || SearchHistory.isEmpty()){ dialog.dismiss(); return; }
 
                         String URL;
                         switch (FilterChoice){
@@ -306,16 +280,10 @@ public class SearchActivity extends AppCompatActivity {
                             default: URL = "https://v8api.pockee.com/api/v8/public/products?per_page=100&in_stock=true&term=" + SearchHistory; break;
                         }
 
-                        new AsyncSearch(URL, rv_search)
-                                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+                        new AsyncSearch(URL, rv_search).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         dialog.dismiss();
-                    }
                 });
-
-            }
         });
-
     }
 
 

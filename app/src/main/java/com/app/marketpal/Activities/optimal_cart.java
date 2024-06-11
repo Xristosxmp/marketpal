@@ -57,34 +57,21 @@ public class optimal_cart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_optimal_cart);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-
-
         shopping_cart = getBaseContext().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE);
         shopping_cart_amount = getBaseContext().getSharedPreferences("shopping_cart_amount", Context.MODE_PRIVATE);
-
-        findViewById(R.id.cart_home).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_home).setOnClickListener(v -> {
                 Cart = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(Cart);
                 overridePendingTransition(0, 0);
-
                 finish();
-            }
         });
-        findViewById(R.id.go_to_profile).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.go_to_profile).setOnClickListener(v -> {
                 Profile = new Intent(getBaseContext() , com.app.marketpal.Activities.Profile.class);
                 startActivity(Profile);
                 overridePendingTransition(0, 0);
-
                 finish();
-            }
         });
         total_cost_optimal = findViewById(R.id.total_cost_optimal);
-
         ConfigureVariables();
         Config();
 

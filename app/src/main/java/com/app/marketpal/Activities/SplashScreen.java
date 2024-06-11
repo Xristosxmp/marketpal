@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -31,7 +33,10 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -69,6 +74,18 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        int corePoolSize = Runtime.getRuntime().availableProcessors();
+        int maximumPoolSize = corePoolSize * 2;
+        long keepAliveTime = 15L;
+        TimeUnit timeUnit = TimeUnit.MILLISECONDS;
+        BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(128 * 2);
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(
+                corePoolSize,
+                maximumPoolSize,
+                keepAliveTime,
+                timeUnit,
+                workQueue
+        ); pool.allowCoreThreadTimeOut(true);
 
         flanch = getBaseContext().getSharedPreferences("flanch", Context.MODE_PRIVATE);
         date = getBaseContext().getSharedPreferences("date", Context.MODE_PRIVATE);
@@ -97,7 +114,7 @@ public class SplashScreen extends AppCompatActivity {
             if(!current_date.equals(pref_date)) {
                 Set<String> k = shopping_cart.getAll().keySet();
                 for (String key : k)
-                    new update_shopping_cart("https://v8api.pockee.com/api/v8/public/products/" + shopping_cart.getString(key, "").split("\n")[0].split(" ")[3], latch).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    new update_shopping_cart("https://v8api.pockee.com/api/v8/public/products/" + shopping_cart.getString(key, "").split("\n")[0].split(" ")[3], latch).executeOnExecutor(pool);
             } else TASKS = 0;
             date.edit().putString("date" , G()).apply();
         }
@@ -120,23 +137,29 @@ public class SplashScreen extends AppCompatActivity {
         }else {
 
             if(TASKS == 0){
-                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+                }, 3000);
             }
             else {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                            try {latch.await();} catch (InterruptedException e) {e.printStackTrace();}
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try {latch.await();} catch (InterruptedException e) {throw new RuntimeException(e);}
-                                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                                    startActivity(intent);
-                                    overridePendingTransition(0, 0);
-                                    finish();
+                                        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                                        startActivity(intent);
+                                        overridePendingTransition(0, 0);
+                                        finish();
+
                                 }
                             });
                     }
@@ -163,9 +186,9 @@ public class SplashScreen extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             try {
                 OkHttpClient client = new OkHttpClient().newBuilder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(10, TimeUnit.SECONDS)
-                        .retryOnConnectionFailure(true)
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(false)
                         .build();
 
                 Request request = new Request.Builder()
@@ -182,8 +205,8 @@ public class SplashScreen extends AppCompatActivity {
                             JSONObject p = new JSONObject(responseBody.string()).getJSONObject("data");
 
                             String pimg = !p.isNull("image_versions")
-                                    ? "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png"
-                                    : p.getJSONObject("image_versions").getString("original");
+                                    ? p.getJSONObject("image_versions").getString("original")
+                                    : "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
 
                             double final_price = Double.MAX_VALUE;
                             String FINAL_NAME = "";
@@ -219,20 +242,15 @@ public class SplashScreen extends AppCompatActivity {
                                     if(j == assortments.length-1) b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim());
                                     else                          b.append(assortments[j][1] + " " + assortments[j][0].replace(" ΒΑΣΙΛΟΠΟΥΛΟΣ" , "").trim() + "\n");
                                 }
-
                             shopping_cart.edit().putString(p.getString("name") , b.toString().trim()).apply();
-                        } catch (JSONException e) {throw new RuntimeException(e);}
+                        } catch (JSONException e) { Log.e("SplashScreen" , e.getLocalizedMessage()); }
                     }
                 }
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {Log.e("SplashScreen" , e.getLocalizedMessage());} finally {
+                latch.countDown();
+            }
 
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            super.onPostExecute(unused);
-            latch.countDown();
         }
     }
 

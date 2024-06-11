@@ -19,6 +19,13 @@
         android:src="@drawable/marketpal_text">
     </ImageView>
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        style="@style/SpinKitView.FadingCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/black" />
+
     <TextView
         android:id="@+id/splash_error_text"
         android:layout_marginTop="50dp"

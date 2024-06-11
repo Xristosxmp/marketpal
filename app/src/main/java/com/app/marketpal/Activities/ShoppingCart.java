@@ -147,22 +147,13 @@ public class ShoppingCart extends AppCompatActivity {
         InitData();
         Navigation();
 
-        findViewById(R.id.nav_to_optimal_cart).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.nav_to_optimal_cart).setOnClickListener(nav_to_optimal_cart_v -> {
                 OptimalCartIntent = new Intent(getBaseContext() , optimal_cart.class);
                 startActivity(OptimalCartIntent);
                 overridePendingTransition(0,0);
-
-            }
         });
         ScrollView scrl = findViewById(R.id.cart_scroller);
-        findViewById(R.id.scroll_to_prices).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scrl.smoothScrollTo(0 , (int)findViewById(R.id.prices_and_products_textview).getTop());
-            }
-        });
+        findViewById(R.id.scroll_to_prices).setOnClickListener(scroll_to_prices_v -> {scrl.smoothScrollTo(0 , (int)findViewById(R.id.prices_and_products_textview).getTop());});
 
         AdBottom();
         GoHome();
@@ -235,52 +226,33 @@ public class ShoppingCart extends AppCompatActivity {
 
     private void Navigation(){
         LinearLayout ln = findViewById(R.id.shopping_cart_container);
-        findViewById(R.id.clean_cart).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.clean_cart).setOnClickListener(clean_cart_v -> {
                 Dialog dialog = new Dialog(ShoppingCart.this);
-
                 dialog.setContentView(R.layout.clean_cart_layout);
                 ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-
                 InsetDrawable inset = new InsetDrawable(back, 30);
                 dialog.getWindow().setBackgroundDrawable(inset);
                 dialog.show();
                 Window window = dialog.getWindow();
                 window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(155));
-
-
                 AppCompatButton btn_remove = dialog.findViewById(R.id.btn_delete);
-                btn_remove.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                btn_remove.setOnClickListener(btn_remove_v -> {
                         shopping_cart.edit().clear().commit();
                         shopping_cart_amount.edit().clear().commit();
                         ln.removeAllViews();
                         InitData();
                         dialog.dismiss();
                         TextView amount__p = findViewById(R.id.products_amound_header); amount__p.setText("("  + shopping_cart.getAll().size() + ")");
-
-                    }
                 });
-
                 AppCompatButton btn_cancle = dialog.findViewById(R.id.btn_cancel);
-                btn_cancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-            }
+                btn_cancle.setOnClickListener(btn_cancle_v -> {dialog.dismiss();});
+
         });
-        findViewById(R.id.go_to_profile).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.go_to_profile).setOnClickListener(go_to_profile -> {
                     ProfileIntent = new Intent(getBaseContext() , Profile.class);
                     startActivity(ProfileIntent);
                     overridePendingTransition(0,0);
                     finish();
-            }
         });
 
     }
@@ -481,15 +453,10 @@ public class ShoppingCart extends AppCompatActivity {
     }
 
     void GoHome(){
-        findViewById(R.id.CartToHome).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeIntent = new Intent(getBaseContext() , MainActivity.class);
-                startActivity(HomeIntent);
-                overridePendingTransition(0,0);
-
-                finish();
-            }
+        findViewById(R.id.CartToHome).setOnClickListener(v -> {
+            onBackPressed();
+            overridePendingTransition(0, 0);
+            finish();
         });
     }
     void MyProductsInit(){
@@ -756,9 +723,7 @@ public class ShoppingCart extends AppCompatActivity {
 
         }
 
-        btn_decrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_decrease.setOnClickListener(v -> {
 
                 int result = Integer.parseInt(product_amount_text.getText().toString()) - 1;
                 if(result <= 0){
@@ -776,36 +741,27 @@ public class ShoppingCart extends AppCompatActivity {
 
 
                     AppCompatButton btn_remove = dialog.findViewById(R.id.btn_delete);
-                    btn_remove.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    btn_remove.setOnClickListener(btn_remove_v -> {
                             parent = findViewById(R.id.shopping_cart_container);
-
                             SharedPreferences srd = getBaseContext().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = shopping_cart.edit();
                             editor.remove(p_name);
                             editor.apply();
                             parent.removeView((LinearLayout)price_and_logo.getParent().getParent());
                             ln_parent.removeAllViews();
-
                             String product_name = "";
                             String product_best_price = "";
                             String product_best_market = "";
                             String product_img = "";
                             String product_id = "";
-
                             products.clear();
                             supplierCosts.clear();
                             SUPP_PRODUCTS_COUNTER.clear();
                             supplierProducts.clear();
                             PRODUCT_LIST_IDS.clear();
-
                             shopping_cart = getBaseContext().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE);
                             Set<String> allKeys = shopping_cart.getAll().keySet();
-                            //TextView product_counter = findViewById(R.id.product_counter);
-                            //product_counter.setText(allKeys.size() + " Προιόντα");
                             TextView amount__p = findViewById(R.id.products_amound_header); amount__p.setText("("  + allKeys.size() + ")");
-
                             double total_price_from_products = 0f;
                             int index = 0;
                             for (String key : allKeys) {
@@ -820,23 +776,17 @@ public class ShoppingCart extends AppCompatActivity {
                                 PRODUCT_LIST_IDS.add(product_id);
                                 for(int i=1; i<lines.length; i++)
                                     addProductPrice(products , key , lines[i].split(" ")[1] , Double.parseDouble(lines[i].split(" ")[0]));
-
                             }
 
                             for (Map.Entry<String, Map<String, Double>> entry : products.entrySet()) {
                                 String product = entry.getKey();
                                 Map<String, Double> supplierPrices = entry.getValue();
-
                                 for (Map.Entry<String, Double> supplierEntry : supplierPrices.entrySet()) {
                                     String supplier = supplierEntry.getKey();
                                     double price = supplierEntry.getValue() * Integer.parseInt(shopping_cart_amount.getString(product , "1").toString());
-
                                     double totalCost;
-                                    if (supplierCosts.containsKey(supplier)) {
-                                        totalCost = supplierCosts.get(supplier);
-                                    } else {
-                                        totalCost = 0.0;
-                                    }
+                                    if (supplierCosts.containsKey(supplier)) totalCost = supplierCosts.get(supplier);
+                                    else totalCost = 0.0;
                                     totalCost += price;
                                     supplierCosts.put(supplier, totalCost);
                                     if (supplierProducts.containsKey(supplier)) {
@@ -847,20 +797,15 @@ public class ShoppingCart extends AppCompatActivity {
                                         productsList.add(product);
                                         supplierProducts.put(supplier, productsList);
                                         SUPP_PRODUCTS_COUNTER.put(supplier , productsList);
-
                                     }
                                 }
                             }
-
-
                             String bestSupplier = "";
                             double lowestCost = Double.MAX_VALUE;
                             int maxProductCount = 0;
                             for (List<String> productList : supplierProducts.values()) {
                                 int productCount = productList.size();
-                                if (productCount > maxProductCount) {
-                                    maxProductCount = productCount;
-                                }
+                                if (productCount > maxProductCount) maxProductCount = productCount;
                             }
 
                             for (Map.Entry<String, Double> entry : supplierCosts.entrySet()) {
@@ -873,22 +818,12 @@ public class ShoppingCart extends AppCompatActivity {
                                     }
                                 }
                             }
-
                             InitData();
-
                             dialog.dismiss();
-
-                        }
                     });
 
                     AppCompatButton btn_cancle = dialog.findViewById(R.id.btn_cancel);
-                    btn_cancle.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-
+                    btn_cancle.setOnClickListener(btn_cancle_click -> {dialog.dismiss();});
                     return;
                 }
                 String data = String.valueOf(result);
@@ -896,15 +831,9 @@ public class ShoppingCart extends AppCompatActivity {
                 SharedPreferences.Editor editor = shopping_cart_amount.edit();
                 editor.putString(p_name , data);
                 editor.apply();
-
                 InitData();
-
-            }
         });
-        btn_increase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        btn_increase.setOnClickListener(btn_increase_v -> {
                 int result = Integer.parseInt(product_amount_text.getText().toString()) + 1;
                 if(result == 100) return;
                 String data = String.valueOf(result);
@@ -912,9 +841,7 @@ public class ShoppingCart extends AppCompatActivity {
                 SharedPreferences.Editor editor = shopping_cart_amount.edit();
                 editor.putString(p_name , data);
                 editor.apply();
-
                 InitData();
-            }
         });
 
         ModifyLayout.addView(btn_decrease);

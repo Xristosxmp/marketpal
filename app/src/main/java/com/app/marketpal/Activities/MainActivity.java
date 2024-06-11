@@ -402,10 +402,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
         LayoutInflater ii = LayoutInflater.from(this);
         View cc = ii.inflate(R.layout.navigation_custom_ln, null);
         TextView v;
@@ -418,33 +414,17 @@ public class MainActivity extends AppCompatActivity {
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Κατικοίδια"); d.getMenu().findItem(R.id.pets).setActionView(cc);
     }
     private void Settings(){
-
-        findViewById(R.id.category_dropout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer((int) Gravity.LEFT);
-            }
-        });
-
-        FrameLayout cart = findViewById(R.id.cart_container);
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.category_dropout).setOnClickListener(v -> {drawer.openDrawer((int) Gravity.LEFT);});
+        findViewById(R.id.cart_container).setOnClickListener(v -> {
                 Intent intent = new Intent(getBaseContext(), ShoppingCart.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
-            }
         });
-
-        LinearLayout cart_nav = findViewById(R.id.cart_container_nav);
-        cart_nav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_container_nav).setOnClickListener(v -> {
                 Intent intent = new Intent(getBaseContext(), ShoppingCart.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
-            }
         });
     }
     private void setBorderOnScroll() {
@@ -461,89 +441,57 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void Messages(){
-        findViewById(R.id.messages_icon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.messages_icon).setOnClickListener(v -> {
                 MessagesIntent = new Intent(getBaseContext() , MessagesActivity.class);
                 startActivity(MessagesIntent);
                 overridePendingTransition(0, 0);
-            }
         });
     }
     private void ProfileNavigation(){
-        LinearLayout ln = findViewById(R.id.account_nav);
-        ln.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.account_nav).setOnClickListener(v -> {
                 ProfileIntent = new Intent(getBaseContext() , Profile.class);
                 startActivity(ProfileIntent);
                 overridePendingTransition(0, 0);
-            }
         });
     }
     private void NavigateSearch(){
-        findViewById(R.id.focussearchbar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.focussearchbar).setOnClickListener(v -> {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
                 overridePendingTransition(0, 0);
-            }
         });
-        findViewById(R.id.sr_v1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.sr_v1).setOnClickListener(v ->  {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
                 overridePendingTransition(0, 0);
-            }
         });
-        findViewById(R.id.sr_v2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.sr_v2).setOnClickListener(v ->  {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
                 overridePendingTransition(0, 0);
-            }
         });
 
     }
     private void HomeNavigation() {
-        findViewById(R.id.homenav).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                 ((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(0,0);
-            }
-        });
+        findViewById(R.id.homenav).setOnClickListener(v ->  {((LinearLayoutManager)parent_recycler_view.getLayoutManager()).scrollToPositionWithOffset(0,0);});
     }
     private void OffersNavigation(){
-        findViewById(R.id.today_offers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.today_offers).setOnClickListener(v ->  {
                 OffersIntent = new Intent(getBaseContext() , Offers_activity.class);
                 startActivity(OffersIntent);
                 overridePendingTransition(0, 0);
-
-            }
         });
     }
     private void NavigateCart(){
-        findViewById(R.id.cart_container_nav).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_container_nav).setOnClickListener(v ->  {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
-
-            }
         });
-        findViewById(R.id.cart_container).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_container).setOnClickListener(v ->  {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
-
-            }
         });
     }
     private boolean isNetworkConnected() {
@@ -646,12 +594,7 @@ public class MainActivity extends AppCompatActivity {
                         l.addView(h);
                         categoryContainer.addView(l);
                         int p = pos;
-                        l.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p , 0));
-                            }
-                        });
+                        l.setOnClickListener(v ->  {parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p , 0));});
                     }
                 }
 
@@ -664,47 +607,35 @@ public class MainActivity extends AppCompatActivity {
                                 if(clas.type == clas.DEFAULT_TYPE){
                                     if(item.getTitle().equals(clas.getCategory_title())){
                                         int p = pos;
-                                        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                                            @Override
-                                            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                        item.setOnMenuItemClickListener(item_v -> {
                                                 drawer.closeDrawer(Gravity.LEFT);
                                                 parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p, 0));
                                                 return false;
-                                            }
                                         });
                                     }
                                 }else if(clas.type == clas.NO_TITLE_TYPE) {
                                     switch (item.getTitle().toString()) {
                                         case "Σκύλος":
-                                            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                                                @Override
-                                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                            item.setOnMenuItemClickListener(item_v -> {
                                                     drawer.closeDrawer(Gravity.LEFT);
                                                     parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(category_list.size() - 3, 0));
                                                     return false;
-                                                }
                                             });
                                             break;
                                         case "Γάτα":
-                                            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                                                @Override
-                                                public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                            item.setOnMenuItemClickListener(item_v -> {
                                                     drawer.closeDrawer(Gravity.LEFT);
                                                     parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(category_list.size() - 1, 0));
                                                     return false;
-                                                }
                                             });
                                             break;
                                         default:
                                             if(item.getTitle().equals(clas.getCategory_brand())){
                                                 int p = pos;
-                                                item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                                                    @Override
-                                                    public boolean onMenuItemClick(@NonNull MenuItem item) {
+                                                item.setOnMenuItemClickListener(item_v -> {
                                                         drawer.closeDrawer(Gravity.LEFT);
                                                         parent_recycler_view.post(() -> RecyclerViewManager.scrollToPositionWithOffset(p, 0));
                                                         return false;
-                                                    }
                                                 });
                                             }
                                             break;

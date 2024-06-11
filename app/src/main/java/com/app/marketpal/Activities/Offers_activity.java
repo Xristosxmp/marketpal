@@ -149,47 +149,26 @@ public class Offers_activity extends AppCompatActivity {
             if(cat.getChildAt(i) instanceof TextView){
                 TextView t = (TextView) cat.getChildAt(i);
                 String tag = t.getTag().toString();
-                t.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                t.setOnClickListener(v -> {
                         if(tag.equals("all"))
                             new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&page=1&per_page=90&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         else
                             new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=" + tag + "&page=1&per_page=90&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
                 });
             }
         }
 
-        findViewById(R.id.filter_offer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer((int) Gravity.LEFT);
-            }
-        });
-        findViewById(R.id.close_act).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        findViewById(R.id.sr_v1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.filter_offer).setOnClickListener(v -> {drawer.openDrawer((int) Gravity.LEFT);});
+        findViewById(R.id.close_act).setOnClickListener(v -> { finish(); });
+        findViewById(R.id.sr_v1).setOnClickListener(v -> {
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
                 overridePendingTransition(0, 0);
-
-            }
         });
-        findViewById(R.id.sr_v2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.sr_v2).setOnClickListener(v ->{
                 SearchIntent = new Intent(getBaseContext() , SearchActivity.class);
                 startActivity(SearchIntent);
                 overridePendingTransition(0, 0);
-
-            }
         });
 
         LayoutInflater ii = LayoutInflater.from(this);
@@ -538,15 +517,10 @@ public class Offers_activity extends AppCompatActivity {
 
 
     private void NavigateCart(){
-
-        findViewById(R.id.cart_container).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.cart_container).setOnClickListener(v -> {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
-
-            }
         });
     }
 
