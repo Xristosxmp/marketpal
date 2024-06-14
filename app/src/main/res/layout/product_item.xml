@@ -29,8 +29,8 @@
         android:textColor="#070606"
         android:gravity="center"
         android:ellipsize="end"
-        android:maxLines="2"
-        android:minLines="2"
+        android:maxLines="3"
+        android:minLines="3"
         android:textSize="12dp"/>
 
     <TextView

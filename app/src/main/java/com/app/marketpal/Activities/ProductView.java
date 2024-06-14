@@ -156,10 +156,9 @@ public class ProductView extends AppCompatActivity {
         String c2 = PRODUCT_OBJECT.getValue_discount();
         if(c1 != null && c2 != null)
         if(!c1.equals("null") && !c2.equals("null")) {
-            System.out.println(c1 + " ---HERE " + c2);
             coupon_value.setText(c1.replace("." , ",") + "€");
             coupon_value_discount.setText(c2.replace("." , ",") + "€");
-        }else  coupon_container.setVisibility(View.GONE);
+        }else coupon_container.setVisibility(View.GONE);
         else coupon_container.setVisibility(View.GONE);
 
         // Prices
@@ -315,7 +314,7 @@ public class ProductView extends AppCompatActivity {
                 else product_show_more_desc.setVisibility(View.GONE);
             }
         });
-        Glide.with(getBaseContext()).load(image_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate().into(product_image);
+        Glide.with(getBaseContext()).load(image_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(product_image);
         findViewById(R.id.backButton).setOnClickListener(v -> { finish(); });
         new SetRecommented("https://v8api.pockee.com/api/v8/public/products?brand_ids=" + brand_id + "&page=1&per_page=10&in_stock=true" , findViewById(R.id.recommended_shimmer) , findViewById(R.id.product_recommended_recycler) , new ArrayList<>()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

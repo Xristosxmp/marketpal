@@ -651,7 +651,6 @@ public class ShoppingCart extends AppCompatActivity {
         ModifyLayout.setLayoutParams(ModifyLayoutParams);
         ModifyLayout.setBackgroundResource(R.drawable.round_border_for_modify_product_cart);
         ModifyLayout.setGravity(Gravity.RIGHT);
-
         ModifyLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         ImageButton btn_decrease = new ImageButton(ModifyLayout.getContext());
@@ -692,20 +691,21 @@ public class ShoppingCart extends AppCompatActivity {
         btn_decrease.setBackgroundResource(0);
         btn_increase.setBackgroundResource(0);
 
-        Glide.with(this).load(R.drawable.decrease_icon24)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .dontAnimate()
-                .error(R.drawable.product_not_found)
-                .priority(Priority.HIGH)
-                .into(btn_decrease);
+
+        Glide.with(this)
+                    .load(Integer.parseInt(product_amount_text.getText().toString()) == 1
+                            ? R.drawable.bin_shopping_cart
+                            : R.drawable.decrease_icon24)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .error(R.drawable.product_not_found)
+                    .priority(Priority.HIGH)
+                    .into(btn_decrease);
         Glide.with(this).load(R.drawable.increase_icon24)
-                .transition(DrawableTransitionOptions.withCrossFade())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .dontAnimate()
-                .error(R.drawable.product_not_found)
                 .priority(Priority.HIGH)
                 .into(btn_increase);
 
@@ -715,30 +715,40 @@ public class ShoppingCart extends AppCompatActivity {
             TypedValue outValue = new TypedValue();
             this.getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
             btn_decrease.setBackgroundResource(outValue.resourceId);
-
-
             outValue = new TypedValue();
             this.getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
             btn_increase.setBackgroundResource(outValue.resourceId);
-
         }
 
         btn_decrease.setOnClickListener(v -> {
 
                 int result = Integer.parseInt(product_amount_text.getText().toString()) - 1;
+                if(result == 1)
+                    Glide.with(this).load(R.drawable.bin_shopping_cart)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .dontAnimate()
+                            .priority(Priority.HIGH)
+                            .into(btn_decrease);
+                else if(result == 2)
+                    Glide.with(this).load(R.drawable.decrease_icon24)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .dontAnimate()
+                            .priority(Priority.HIGH)
+                            .into(btn_decrease);
+
+
                 if(result <= 0){
 
                     Dialog dialog = new Dialog(ShoppingCart.this);
-
                     dialog.setContentView(R.layout.delete_layout);
                     ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-
                     InsetDrawable inset = new InsetDrawable(back, 30);
                     dialog.getWindow().setBackgroundDrawable(inset);
                     dialog.show();
                     Window window = dialog.getWindow();
                     window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(155));
-
 
                     AppCompatButton btn_remove = dialog.findViewById(R.id.btn_delete);
                     btn_remove.setOnClickListener(btn_remove_v -> {
@@ -835,7 +845,22 @@ public class ShoppingCart extends AppCompatActivity {
         });
         btn_increase.setOnClickListener(btn_increase_v -> {
                 int result = Integer.parseInt(product_amount_text.getText().toString()) + 1;
-                if(result == 100) return;
+                if(result == 1)
+                    Glide.with(this).load(R.drawable.bin_shopping_cart)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .dontAnimate()
+                            .priority(Priority.HIGH)
+                            .into(btn_decrease);
+                else if(result == 2)
+                    Glide.with(this).load(R.drawable.decrease_icon24)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .dontAnimate()
+                            .priority(Priority.HIGH)
+                            .into(btn_decrease);
+
+            if(result == 100) return;
                 String data = String.valueOf(result);
                 product_amount_text.setText(data);
                 SharedPreferences.Editor editor = shopping_cart_amount.edit();
