@@ -13,7 +13,7 @@
 <LinearLayout android:layout_height="match_parent" android:background="@color/white" android:orientation="vertical" android:layout_width="match_parent" android:backgroundTint="@color/white">
 
 
-    <LinearLayout android:background="@android:color/white" android:id="@+id/Header" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:elevation="8dp" android:outlineProvider="bounds">
+    <LinearLayout android:background="@android:color/white" android:id="@+id/Header" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:elevation="8dp" android:outlineProvider="bounds">
         <!-- Ρυθμίσεις Super & Καλάθι -->
         <LinearLayout android:gravity="center_vertical"  android:visibility="visible" android:id="@+id/TopNAV" android:layout_width="match_parent" android:layout_height="48dp" android:layout_gravity="center" android:orientation="horizontal">
             <ImageView  android:id="@+id/messages_icon" android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/messages_icon" android:layout_marginLeft="10dp" android:layout_gravity="center" android:background="?selectableItemBackgroundBorderless"></ImageView>

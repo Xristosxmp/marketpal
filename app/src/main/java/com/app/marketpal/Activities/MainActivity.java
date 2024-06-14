@@ -483,13 +483,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void NavigateCart(){
+
         findViewById(R.id.cart_container_nav).setOnClickListener(v ->  {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
+                CartIntent.putExtra("activity" , "main");
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
         });
         findViewById(R.id.cart_container).setOnClickListener(v ->  {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
+                CartIntent.putExtra("activity" , "main");
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
         });

@@ -149,7 +149,8 @@ public class Profile extends AppCompatActivity {
         dialog_loading.setCancelable(false);
         Window window = dialog_loading.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(155));
-    }
+
+   }
     @Override protected void onResume() {
         super.onResume();
         TextView headercart = findViewById(R.id.product_amount_profile);
@@ -342,11 +343,13 @@ public class Profile extends AppCompatActivity {
     private void NavigateCart(){
         findViewById(R.id.cart_container_nav).setOnClickListener(v ->{
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
+                CartIntent.putExtra("activity" , "profile");
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
         });
         findViewById(R.id.cart_container_profile).setOnClickListener(v -> {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
+                CartIntent.putExtra("activity" , "profile");
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
         });

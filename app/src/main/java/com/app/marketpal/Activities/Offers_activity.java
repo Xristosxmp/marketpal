@@ -519,6 +519,7 @@ public class Offers_activity extends AppCompatActivity {
     private void NavigateCart(){
         findViewById(R.id.cart_container).setOnClickListener(v -> {
                 CartIntent = new Intent(getBaseContext() , ShoppingCart.class);
+                CartIntent.putExtra("activity" , "offers");
                 startActivity(CartIntent);
                 overridePendingTransition(0, 0);
         });

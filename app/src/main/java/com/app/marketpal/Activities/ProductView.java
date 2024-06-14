@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -70,7 +71,6 @@ import okhttp3.ResponseBody;
 
 public class ProductView extends AppCompatActivity {
 
-    private ImageView product_image;
     private AppCompatTextView product_name;
     private TextView product_desc;
     private TextView product_show_more_desc;
@@ -105,19 +105,13 @@ public class ProductView extends AppCompatActivity {
         setContentView(R.layout.activity_product);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-
-        setBorderOnScroll();
         InitAdsMain();
-
-
 
         supermarkets = getBaseContext().getSharedPreferences("supermarkets", Context.MODE_PRIVATE);
         recently_viewed = getBaseContext().getSharedPreferences("recently_viewed", Context.MODE_PRIVATE);
         shopping_cart = getBaseContext().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE);
         Shopping_cart_amount = getBaseContext().getSharedPreferences("shopping_cart_amount", Context.MODE_PRIVATE);
         favorites = getBaseContext().getSharedPreferences("favorites", Context.MODE_PRIVATE);
-
-
         ProductClass PRODUCT_OBJECT = (ProductClass) getIntent().getSerializableExtra("PRODUCT_OBJ");
 
         product_name_txt = PRODUCT_OBJECT.getName();
@@ -126,8 +120,6 @@ public class ProductView extends AppCompatActivity {
         product_original_name = PRODUCT_OBJECT.getOrigianlName();
         brand_id = PRODUCT_OBJECT.getBrand_id();
 
-
-        product_image = findViewById(R.id.Product_Image);
         product_desc = findViewById(R.id.product_desc);
         product_desc.setText(PRODUCT_OBJECT.getDesc());
         product_show_more_desc =  findViewById(R.id.show_more_desc);
@@ -278,7 +270,6 @@ public class ProductView extends AppCompatActivity {
         }
 
         // Αγαπημενο
-        //favorites_btn
         ImageView fv = findViewById(R.id.favorites_btn);
         if (favorites.contains(product_original_name)) fv.setImageResource(R.drawable.favorites_red);
         else fv.setImageResource(R.drawable.favorites);
@@ -314,7 +305,7 @@ public class ProductView extends AppCompatActivity {
                 else product_show_more_desc.setVisibility(View.GONE);
             }
         });
-        Glide.with(getBaseContext()).load(image_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(product_image);
+        Glide.with(getBaseContext()).load(image_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into((ImageView) findViewById(R.id.Product_Image));
         findViewById(R.id.backButton).setOnClickListener(v -> { finish(); });
         new SetRecommented("https://v8api.pockee.com/api/v8/public/products?brand_ids=" + brand_id + "&page=1&per_page=10&in_stock=true" , findViewById(R.id.recommended_shimmer) , findViewById(R.id.product_recommended_recycler) , new ArrayList<>()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -325,42 +316,10 @@ public class ProductView extends AppCompatActivity {
         overridePendingTransition(0,0);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (shopping_cart.contains(product_name_txt)){
-            add_to_cart.setText("ΑΦΑΙΡΕΣΗ ΑΠΟ ΤΟ ΚΑΛΑΘΙ");
-            add_to_cart.setBackgroundColor(Color.parseColor("#ff6666"));
-        }else{
-            add_to_cart.setText("ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ");
-            add_to_cart.setBackgroundColor(Color.parseColor("#559d76"));
-        }
-        int size = getSharedPreferences("shopping_cart", Context.MODE_PRIVATE).getAll().size();
-        if(size == 0) {
-            productAmount.setVisibility(View.GONE);
-        }
-        else {
-            productAmount.setVisibility(View.VISIBLE);
-            productAmount.setText(String.valueOf(size));
 
-        }
-
-
-    }
 
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
 
-    private void setBorderOnScroll() {
-        ScrollView scrl = findViewById(R.id.product_scroller);
-        LinearLayout ln = findViewById(R.id.TopNAV);
-        scrl.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                if (scrl.getScrollY() > 0)ln.setBackgroundResource(R.drawable.shadow_border_bottom);
-                else ln.setBackground(null);
-            }
-        });
-    }
 
     private void InitAdsMain(){
         MobileAds.initialize(ProductView.this, new OnInitializationCompleteListener() {

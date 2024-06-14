@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
@@ -29,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -69,64 +71,42 @@ public class ShoppingCart extends AppCompatActivity {
 
     private SharedPreferences shopping_cart;
     private SharedPreferences shopping_cart_amount;
-
     private LinearLayout parent;
-
     private Map<String, Map<String, Double>> products = new HashMap<>();
     private Map<String, Double> supplierCosts = new HashMap<>();
-
     ImageView BEST_MARKET_IMAGE;
-
     private LinearLayout ln_parent;
     private TextView ShowAllProducts;
-
     private Map<String, List<String>> SUPP_PRODUCTS_COUNTER;
-
     private Map<String, List<String>> supplierProducts = new HashMap<>();
-
     private List<ProductClass> MY_MARKET_LIST;
     private List<ProductClass> SKLAVENITIS_LIST;
     private List<ProductClass> AB_LIST;
     private List<ProductClass> GALAXIAS_LIST;
     private List<ProductClass> MASOUTHS_LIST;
-
     private Adaptery MY_MARKET_ADAPTERY;
     private Adaptery SKLAVENITIS_ADAPTERY;
     private Adaptery AB_ADAPTERY;
     private Adaptery GALAXIAS_ADAPTERY;
     private Adaptery MASOUTHS_ADAPTERY;
-
     private RecyclerView MY_MARKET_RECYCLER;
     private RecyclerView SKLAVENITIS_RECYCLER;
     private RecyclerView AB_RECYCLER;
     private RecyclerView GALAXIAS_RECYCLER;
     private RecyclerView MASOUTHS_RECYCLER;
-
     double MY_MARKET_SUM = 0;
     double SKLAVENITIS_SUM = 0;
     double AB_SUM = 0;
     double GALAXIAS_SUM = 0;
     double MASOUTHS_SUM = 0;
-
     private Intent ProfileIntent;
     private Intent OptimalCartIntent;
     private Intent HomeIntent;
-
     private ArrayList<String> PRODUCT_LIST_IDS;
-//        db.addListItem(productList);
-//        Cursor cursor = db.getAllListItems();
-//        if (cursor != null && cursor.moveToFirst()) {
-//            do {
-//                String ln = cursor.getString(cursor.getColumnIndexOrThrow(KEY_LIST_NAME));
-//                String lit = cursor.getString(cursor.getColumnIndexOrThrow(KEY_LIST_ITEM));
-//                System.out.println("LIST == " + ln + " -> " + lit);
-//            } while (cursor.moveToNext());
-//            cursor.close();
-//        }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(@Nullable Bundle s) {
+        super.onCreate(s);
         setContentView(R.layout.activity_shoppingcart);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -399,24 +379,16 @@ public class ShoppingCart extends AppCompatActivity {
             String supplier_02 = entry.getKey();
             double cost = entry.getValue();
             if(supplier.equals(supplier_02)){
-
                 supplier = supplier + " • ";
-
                 SpannableString supplier_01 = new SpannableString(supplier);
                 supplier_01.setSpan(new ForegroundColorSpan(Color.parseColor("#151515")), 0, supplier.length(), 0);
                 supplier_01.setSpan(new AbsoluteSizeSpan(20, true), 0, supplier.length(), 0);
-
-
                 SpannableString supplier_03 = new SpannableString(new DecimalFormat("#0.00").format(cost).replace("." , ",") + " €");
                 supplier_03.setSpan(new ForegroundColorSpan(Color.parseColor("#1564a2")), 0, supplier_03.length(), 0);
                 supplier_03.setSpan(new AbsoluteSizeSpan(20, true), 0, supplier_03.length(), 0);
-
-
                 builder.append(supplier_01);
                 builder.append(supplier_03);
                 builder.append(supplier_02_t);
-
-
                 MARKET.setText(builder, TextView.BufferType.SPANNABLE);;
             }
         }
@@ -454,27 +426,27 @@ public class ShoppingCart extends AppCompatActivity {
 
     void GoHome(){
         findViewById(R.id.CartToHome).setOnClickListener(v -> {
-            onBackPressed();
+            if(getIntent().getStringExtra("activity") != null)
+            switch (getIntent().getStringExtra("activity")){
+                case "main": startActivity(new Intent(this , MainActivity.class)); break;
+                case "profile": startActivity(new Intent(this , Profile.class)); break;
+                case "offers": startActivity(new Intent(this , Offers_activity.class)); break;
+                default: onBackPressed(); break;
+            } else startActivity(new Intent(this , MainActivity.class));
             overridePendingTransition(0, 0);
             finish();
         });
     }
     void MyProductsInit(){
         parent = findViewById(R.id.shopping_cart_container);
-
-
-
         String product_name = "";
         String product_best_price = "";
         String product_best_market = "";
         String product_img = "";
         String product_id = "";
-
-
         shopping_cart = getBaseContext().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE);
         Set<String> allKeys = shopping_cart.getAll().keySet();
         TextView amount__p = findViewById(R.id.products_amound_header); amount__p.setText("("  + allKeys.size() + ")");
-
 
         double total_price_from_products = 0f;
 
