@@ -559,7 +559,7 @@ public class Profile extends AppCompatActivity {
                             else model.setValue_discount("null");
                         }
 
-                        if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                        if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("thumb"));
                         else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
 
 
@@ -698,7 +698,7 @@ public class Profile extends AppCompatActivity {
                     String FINAL_NAME = "";
                     String product_img = null;
                     if(!JSON_OBJECT[i].getJSONObject("data").isNull("image_versions"))
-                        product_img = JSON_OBJECT[i].getJSONObject("data").getJSONObject("image_versions").getString("original");
+                        product_img = JSON_OBJECT[i].getJSONObject("data").getJSONObject("image_versions").getString("thumb");
                     else product_img = "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
 
 
@@ -845,7 +845,7 @@ public class Profile extends AppCompatActivity {
                         else model.setValue_discount("null");
                     }
 
-                    if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                    if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("thumb"));
                     else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
 
 
@@ -936,7 +936,7 @@ public class Profile extends AppCompatActivity {
                             JSONObject p = new JSONObject(responseBody.string()).getJSONObject("data");
 
                             String pimg = !p.isNull("image_versions")
-                                    ? p.getJSONObject("image_versions").getString("original")
+                                    ? p.getJSONObject("image_versions").getString("thumb")
                                     : "https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png";
 
                             double final_price = Double.MAX_VALUE;

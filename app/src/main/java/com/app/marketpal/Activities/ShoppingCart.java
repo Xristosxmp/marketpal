@@ -613,7 +613,7 @@ public class ShoppingCart extends AppCompatActivity {
         return ln;
     }
     void ImageLoader(String img_url , ImageView v){
-        Glide.with(getBaseContext()).load(img_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate().into(v);
+        Glide.with(getBaseContext()).load(img_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).dontAnimate().placeholder(R.drawable.product_placeholder).into(v);
     }
     void SetModifierForAmount(LinearLayout price_and_logo , String p_name){
 

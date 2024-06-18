@@ -526,7 +526,7 @@ public class Offers_activity extends AppCompatActivity {
                             else model.setValue_discount("null");
                         }
 
-                        if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                        if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("thumb"));
                         else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
 
                         for (int j = 0; j < assortments.length(); j++) {

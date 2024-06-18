@@ -195,14 +195,9 @@ public class SearchActivity extends AppCompatActivity {
         t.setTypeface(null, Typeface.BOLD);
         t.setTextColor(Color.parseColor("#696969"));
         t.setTextSize(14);
-        LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-         if(i < terms_freq.length - 1)
-         pp.setMargins(dpToPx(15) , 0 , 0 , 0);
-         else
-         pp.setMargins(dpToPx(15) , 0 , dpToPx(15) , 0);
+        LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        if(i < (terms_freq.length - 1)) pp.setMargins(dpToPx(15) , 0 , 0 , 0);
+        else pp.setMargins(dpToPx(15) , 0 , dpToPx(15) , 0);
         t.setLayoutParams(pp);
         t.setOnClickListener(v -> {
                 String URL = "https://v8api.pockee.com/api/v8/public/products?per_page=100&in_stock=true&term=" + s;

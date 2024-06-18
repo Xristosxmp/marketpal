@@ -80,10 +80,7 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     public void setOnClickListener(OnClickListener onClickListener) { this.onClickListener = onClickListener; }
     public interface OnClickListener { void onClick(int position, ProductClass model); }
     @Override public int getItemCount() { return mData == null ? 0 : mData.size(); }
-
-    @Override public long getItemId(int position) {
-        return position;
-    }
+    @Override public long getItemId(int position) { return position; }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
