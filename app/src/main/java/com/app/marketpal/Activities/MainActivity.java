@@ -497,16 +497,7 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
         });
     }
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-    public boolean isInternetAvailable() {
-        try {
-            InetAddress ipAddr = InetAddress.getByName("google.gr");
-            return !ipAddr.equals("");
-        } catch (Exception e) {return false;}
-    }
+
     private int dpToPx(int dp) {return (int) (dp * Resources.getSystem().getDisplayMetrics().density);}
     private class CollectData extends AsyncTask<String,String,List<ProductClass>> {
 
@@ -692,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
                                 else model.setValue_discount("null");
                             }
 
-                            if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                            if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("thumb"));
                             else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
 
 

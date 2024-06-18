@@ -101,7 +101,7 @@ public class SearchActivity extends AppCompatActivity {
         adp.setHasStableIds(true);
         rv_search = findViewById(R.id.search_recycler);
         rv_search.setItemAnimator(null);
-        rv_search.setLayoutManager(new GridLayoutManager(this,3));
+        rv_search.setLayoutManager(new GridLayoutManager(this,4));
         rv_search.setAdapter(adp);
         rv_search.setHasFixedSize(true);
         rv_search.setItemViewCacheSize(10);
@@ -352,7 +352,7 @@ public class SearchActivity extends AppCompatActivity {
                                 else model.setValue_discount("null");
                             }
 
-                            if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("original"));
+                            if (!product.isNull("image_versions")) model.setUrl(product.getJSONObject("image_versions").getString("thumb"));
                             else model.setUrl("https://d3kdwhwrhuoqcv.cloudfront.net/uploads/products/product-image-404.png");
 
 

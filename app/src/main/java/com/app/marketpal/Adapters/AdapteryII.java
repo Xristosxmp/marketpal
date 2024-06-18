@@ -78,6 +78,8 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.category_holder.setHasFixedSize(true);
         holder.category_holder.setNestedScrollingEnabled(false);
         holder.category_holder.setItemViewCacheSize(15);
+        holder.category_holder.setDrawingCacheEnabled(true);
+        holder.category_holder.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
 
     }
@@ -118,6 +120,8 @@ public class AdapteryII extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.category_holder.setHasFixedSize(true);
         holder.category_holder.setNestedScrollingEnabled(false);
         holder.category_holder.setItemViewCacheSize(15);
+        holder.category_holder.setDrawingCacheEnabled(true);
+        holder.category_holder.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         holder.no_products.setVisibility(object.getCategory_holder() == null ? View.VISIBLE : View.GONE);
     }
 

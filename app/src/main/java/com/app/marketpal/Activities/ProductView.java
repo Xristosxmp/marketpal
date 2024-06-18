@@ -405,6 +405,7 @@ public class ProductView extends AppCompatActivity {
                 JSONArray data = JSON_OBJECT.getJSONArray("data");
                 for(int i=0; i<data.length(); i++){
                     JSONObject product = data.getJSONObject(i);
+                    if(product.getString("name").equals(product_name_txt)) continue;
                     String productImg;
                     String couponValue = "null";
                     String couponValueDiscount = "null";

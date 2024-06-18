@@ -75,28 +75,13 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
             case "NULL": holder.img_01.setVisibility(View.GONE); break;
             default:  break;
         }
-
-        holder.itemView.setOnClickListener(v -> {
-            if (onClickListener != null) {
-                onClickListener.onClick(position, mData.get(position));
-            }
-        });
-
+        holder.itemView.setOnClickListener(v -> { if (onClickListener != null)  onClickListener.onClick(position, mData.get(position)); });
     }
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-    public interface OnClickListener {
-        void onClick(int position, ProductClass model);
-    }
+    public void setOnClickListener(OnClickListener onClickListener) { this.onClickListener = onClickListener; }
+    public interface OnClickListener { void onClick(int position, ProductClass model); }
+    @Override public int getItemCount() { return mData == null ? 0 : mData.size(); }
 
-    @Override
-    public int getItemCount() {
-        return mData == null ? 0 : mData.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
+    @Override public long getItemId(int position) {
         return position;
     }
 

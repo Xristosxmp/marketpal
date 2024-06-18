@@ -181,293 +181,186 @@ public class Offers_activity extends AppCompatActivity {
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Οικιακή Φροντίδα"); d.getMenu().findItem(R.id.house_care).setActionView(cc);
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Παιδικά & Βρεφικά"); d.getMenu().findItem(R.id.kids).setActionView(cc);
         cc = ii.inflate(R.layout.navigation_custom_ln, null); v = cc.findViewById(R.id.cat_txt); v.setText("Κατικοίδια"); d.getMenu().findItem(R.id.pets).setActionView(cc);
-        d.getMenu().findItem(R.id.nav_to_rec).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_rec).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&type=TYPE_RECOMMENDED&page=1&per_page=90&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_grocery).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_grocery).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=41&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_galata_rafiou).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_galata_rafiou).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=365&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_freska_galata).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_freska_galata).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=187&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_turia).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_turia).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=383&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_giaourtia).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_giaourtia).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=188&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_kremes_galaktos).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_kremes_galaktos).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=189&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_pagwta).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_pagwta).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=437&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_mpures).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_mpures).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=32&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_xumous).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_xumous).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=31&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_snacks).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_snacks).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=43&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_cafe).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_cafe).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=44&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_veges_fruits).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_veges_fruits).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=607&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_meat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_meat).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=42&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
+
         });
-        d.getMenu().findItem(R.id.nav_to_fishes).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_fishes).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=781&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_bread).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_bread).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=37&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_pasta).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_pasta).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=38&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_dough).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_dough).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=53&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_women).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_women).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=174&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_men).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_men).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=175&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_self_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_self_care).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=407&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_hair_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_hair_care).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=176&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_mouth_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_mouth_care).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=177&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_dressing_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_dressing_care).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=178&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_general_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_general_care).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=305&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_kitchen_bathe).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_kitchen_bathe).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=171&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_house_clean).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_house_clean).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=172&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_clothes).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_clothes).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=173&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_equipment).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_equipment).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=300&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_baby_care).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_baby_care).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=179&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_baby_food).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_baby_food).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=180&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_diapers).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_diapers).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=181&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_baby_clean).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_baby_clean).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=182&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_dog).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_dog).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=184&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_cat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_cat).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=185&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
-        d.getMenu().findItem(R.id.nav_to_accessories).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem item) {
+        d.getMenu().findItem(R.id.nav_to_accessories).setOnMenuItemClickListener(t -> {
                 new AsyncProducts("https://v8api.pockee.com/api/v8/public/products?filters[]=FILTER_OFFERS_ONLY&category_id=186&page=1&per_page=128&in_stock=true").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 drawer.closeDrawer((int) Gravity.LEFT);
                 return false;
-            }
         });
     }
 
