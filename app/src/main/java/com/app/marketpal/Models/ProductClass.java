@@ -79,7 +79,6 @@ public class ProductClass implements Serializable {
     public String getOrigianlName() {return original_name;}
 
     ProductClass(String coupon_value , String value_discount , String brand_id ,String market , String url , String price , String name , String id , String ASSORTEMTNS_DATA[][] , String desc , String original_name){
-
         this.market = market;
         this.url = url;
         this.price = price;

@@ -28,14 +28,11 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     private Adaptery.OnClickListener onClickListener;
     private ActivityType activityType;
 
-
     public Adaptery(Context mContext , List<ProductClass> mData, ActivityType activityType){
         this.mContext = mContext;
         this.mData = mData;
         this.activityType = activityType;
     }
-
-
 
 
     @NonNull
@@ -67,9 +64,7 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         switch (mData.get(position).getMarket()) {
             case "MYMARKET": holder.img_01.setImageResource(R.drawable.mymarket);  break;
             case "ΜΑΣΟΥΤΗΣ": holder.img_01.setImageResource(R.drawable.masouths); break;
-            case "E-FRESH.GR": holder.img_01.setImageResource(R.drawable.efresh);  break;
             case "ΓΑΛΑΞΙΑΣ":  holder.img_01.setImageResource(R.drawable.galaxias); break;
-            case "MARKET IN": holder.img_01.setImageResource(R.drawable.market_in); break;
             case "ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ": holder.img_01.setImageResource(R.drawable.ab); break;
             case "ΣΚΛΑΒΕΝΙΤΗΣ": holder.img_01.setImageResource(R.drawable.sklavenitis_logo); break;
             case "NULL": holder.img_01.setVisibility(View.GONE); break;
@@ -83,12 +78,10 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     @Override public long getItemId(int position) { return position; }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-
         ImageView img_01;
         TextView txt_01;
         ImageView img_02;
         TextView txt_02;
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
              img_01 = itemView.findViewById(R.id.market_product_txt);
@@ -96,7 +89,5 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
              img_02 = itemView.findViewById(R.id.prouduct_txt);
              txt_02 = itemView.findViewById(R.id.product_price_txt);
         }
-
     }
-
 }

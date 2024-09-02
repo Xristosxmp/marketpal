@@ -207,8 +207,9 @@ public class Profile extends AppCompatActivity {
                     PDFView v = dialog.findViewById(R.id.pdfView);
                     dialog.findViewById(R.id.exit).setOnClickListener(vii -> { dialog.dismiss(); });
                     ProgressBar b = dialog.findViewById(R.id.loading);
-                    v.setPageFling(true);
-                    v.setPageSnap(true);
+
+//                    v.setPageFling(true);
+//                    v.setPageSnap(true);
                     new RetrivePdfStream(v,b).execute(URL);
                     dialog.show();
             }); i++;
