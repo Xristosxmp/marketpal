@@ -41,9 +41,9 @@ import com.app.marketpal.Models.ProductClass;
 import com.app.marketpal.R;
 import com.app.marketpal.RecentlyViewerDatabase;
 import com.app.marketpal.enumActivities.ActivityType;
-import com.github.barteksc.pdfviewer.PDFView;
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.google.android.material.navigation.NavigationView;
+import com.rajat.pdfviewer.PdfViewerActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,7 +119,7 @@ public class Profile extends AppCompatActivity {
         NavigateCart();
         NavigateSearch();
         Services();
-        SetBrochures();
+
 
         FavoritesList   = new ArrayList<>();
         recommendedList = new ArrayList<>();
@@ -173,50 +173,7 @@ public class Profile extends AppCompatActivity {
         SetFavoritesProducts(false);
     }
 
-    private void SetBrochures(){
-        String[] URLS = new String[]{
-                "https://warply.s3.eu-west-1.amazonaws.com/applications/ed840ad545884deeb6c6b699176797ed/basket-retailers/galaxias_catalog.pdf",
-                "https://warply.s3.eu-west-1.amazonaws.com/applications/ed840ad545884deeb6c6b699176797ed/basket-retailers/kritikos_catalog.pdf",
-                "https://warply.s3.eu-west-1.amazonaws.com/applications/ed840ad545884deeb6c6b699176797ed/basket-retailers/lidl_catalog.pdf",
-                "https://warply.s3.eu-west-1.amazonaws.com/applications/ed840ad545884deeb6c6b699176797ed/basket-retailers/marketin_catalog.pdf",
-                "https://warply.s3.eu-west-1.amazonaws.com/applications/ed840ad545884deeb6c6b699176797ed/basket-retailers/masoutis_catalog.pdf",
-                "https://warply.s3.eu-west-1.amazonaws.com/applications/ed840ad545884deeb6c6b699176797ed/basket-retailers/synka_catalog.pdf"
-        };
-        LinearLayout[] p = new LinearLayout[]{
-                findViewById(R.id.brochure_galaxias),
-                findViewById(R.id.brochure_krhthkos),
-                findViewById(R.id.brochure_lidl),
-                findViewById(R.id.brochure_marketin),
-                findViewById(R.id.brochure_masouths),
-                findViewById(R.id.brochure_synka)
 
-        };
-
-        int i = 0;
-        for(LinearLayout l : p){
-            int finalI = i;
-            l.setOnClickListener(vi -> {
-                    Dialog dialog = new Dialog(Profile.this);
-                    dialog.setContentView(R.layout.webview_dialog);
-                    ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-                    InsetDrawable inset = new InsetDrawable(back, 0);
-                    dialog.getWindow().setBackgroundDrawable(inset);
-                    Window window = dialog.getWindow();
-                    window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    String URL = URLS[finalI];
-                    PDFView v = dialog.findViewById(R.id.pdfView);
-                    dialog.findViewById(R.id.exit).setOnClickListener(vii -> { dialog.dismiss(); });
-                    ProgressBar b = dialog.findViewById(R.id.loading);
-
-//                    v.setPageFling(true);
-//                    v.setPageSnap(true);
-                    new RetrivePdfStream(v,b).execute(URL);
-                    dialog.show();
-            }); i++;
-        }
-
-
-    }
     private boolean h(){
         if (!c1.isChecked() && !c2.isChecked() && !c3.isChecked()
                 && !c4.isChecked() && !c5.isChecked()) {
@@ -983,41 +940,6 @@ public class Profile extends AppCompatActivity {
             }
 
             return null;
-        }
-    }
-    class RetrivePdfStream extends AsyncTask<String, Void, InputStream> {
-
-        PDFView pdfView;
-        ProgressBar loading;
-        RetrivePdfStream(PDFView pdfView,ProgressBar loading){
-            this.pdfView = pdfView;
-            this.loading = loading;
-        }
-
-        @Override
-        protected InputStream doInBackground(String... strings) {
-            InputStream inputStream = null;
-            try {
-                URL uri = new URL(strings[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
-                if (urlConnection.getResponseCode() == 200) {
-                    inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                }
-            } catch (IOException e) {
-                return null;
-            }
-            return inputStream;
-        }
-
-        @Override
-        protected void onPostExecute(InputStream inputStream) {
-            super.onPostExecute(inputStream);
-            pdfView.fromStream(inputStream).onLoad(new OnLoadCompleteListener() {
-                @Override
-                public void loadComplete(int nbPages) {
-                    loading.setVisibility(View.GONE);
-                }
-            }).load();
         }
     }
 }

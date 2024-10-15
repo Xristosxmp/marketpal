@@ -70,49 +70,6 @@
             </LinearLayout>
             <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
 
-            <LinearLayout android:layout_marginTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"  android:layout_marginBottom="5dp">
-                <TextView  android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="3dp" android:layout_marginLeft="10dp" android:textStyle="bold" android:text="Φυλλάδια Προσφορών"></TextView>
-
-                <HorizontalScrollView android:scrollbars="none"  android:layout_width="match_parent" android:layout_height="wrap_content">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"  android:layout_marginBottom="3dp">
-
-
-                        <LinearLayout android:id="@+id/brochure_galaxias" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:orientation="vertical" android:gravity="center_horizontal">
-                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/galaxias"></ImageView>
-                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Γαλαξίας"></TextView>
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/brochure_krhthkos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="22dp" android:orientation="vertical" android:gravity="center_horizontal">
-                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/krhtikos" ></ImageView>
-                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Κρητικός"></TextView>
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/brochure_lidl" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="22dp" android:gravity="center_horizontal" android:orientation="vertical">
-                            <ImageView android:layout_width="52dp" android:layout_height="52dp" android:layout_marginTop="10dp" android:background="?selectableItemBackgroundBorderless" android:src="@drawable/lidl"></ImageView>
-                            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"></View>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Lidl" android:textColor="@color/black" android:textSize="11dp"></TextView>
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/brochure_marketin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="22dp" android:orientation="vertical" android:gravity="center_horizontal">
-                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/market_in"></ImageView>
-                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Market In"></TextView>
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/brochure_masouths" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="22dp" android:orientation="vertical" android:gravity="center_horizontal">
-                            <ImageView android:background="?selectableItemBackgroundBorderless" android:layout_marginTop="10dp" android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/masouths"></ImageView>
-                            <TextView android:layout_marginTop="6dp" android:textColor="@color/black" android:textSize="11dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Μασούτης"></TextView>
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/brochure_synka" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="22dp" android:layout_marginRight="16dp" android:gravity="center_horizontal" android:orientation="vertical">
-                            <ImageView android:layout_width="52dp" android:layout_height="52dp" android:layout_marginTop="10dp" android:background="?selectableItemBackgroundBorderless" android:src="@drawable/synka"></ImageView>
-                            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"></View>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Σύνκα" android:textColor="@color/black" android:textSize="11dp"></TextView>
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-
             <View android:layout_width="match_parent" android:layout_height="10dp" android:background="@color/f5f5f5" android:backgroundTint="@color/f5f5f5"></View>
 
 
