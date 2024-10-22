@@ -1,4 +1,4 @@
-package com.example.greeksupermarketapp;
+package com.app.marketpal;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.greeksupermarketapp", appContext.getPackageName());
+        assertEquals("com.app.marketpal", appContext.getPackageName());
     }
 }

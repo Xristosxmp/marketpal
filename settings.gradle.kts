@@ -1,11 +1,14 @@
 pluginManagement {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
-        maven { url = uri("https://maven.google.com") }
-        maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://jcenter.bintray.com") }
     }
 }
 dependencyResolutionManagement {
@@ -19,5 +22,6 @@ dependencyResolutionManagement {
         maven { url = uri("https://jcenter.bintray.com") }
     }
 }
-rootProject.name = "MARKERPAL"
-include ':app'
+
+rootProject.name = "Marketpal"
+include(":app")
