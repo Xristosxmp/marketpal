@@ -307,6 +307,7 @@ public class ProductView extends AppCompatActivity {
         });
         Glide.with(getBaseContext()).load(image_url).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into((ImageView) findViewById(R.id.Product_Image));
         findViewById(R.id.backButton).setOnClickListener(v -> { finish(); });
+        //https://v8api.pockee.com/api/v8/public/products?brand_ids=2719&page=1&per_page=10&in_stock=true
         new SetRecommented("https://v8api.pockee.com/api/v8/public/products?brand_ids=" + brand_id + "&page=1&per_page=10&in_stock=true" , findViewById(R.id.recommended_shimmer) , findViewById(R.id.product_recommended_recycler) , new ArrayList<>()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 

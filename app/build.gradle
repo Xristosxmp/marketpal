@@ -11,12 +11,13 @@ android {
         resources.excludes.add("mozilla/*")
     }
 
+
     defaultConfig {
         applicationId "com.app.marketpal"
         minSdk 23
         targetSdk 35
-        versionCode 16
-        versionName "1.4"
+        versionCode 17
+        versionName "1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,13 +42,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
 
-    implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
 
-    implementation("com.google.android.gms:play-services-ads:23.3.0")
+    implementation('com.google.android.gms:play-services-ads:23.5.0')
     implementation("androidx.concurrent:concurrent-futures:1.2.0")
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
-    implementation("com.android.billingclient:billing:7.0.0")
+    implementation('com.android.billingclient:billing:7.1.1')
     implementation("com.romainpiel.shimmer:library:1.4.0@aar")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 

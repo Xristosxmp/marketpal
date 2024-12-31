@@ -524,8 +524,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        @Override
-        protected void onPreExecute() {
+        @Override protected void onPreExecute() {
             super.onPreExecute();
 
             c = new CategoryClass();
@@ -625,8 +624,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         List<ProductClass> productList = new ArrayList<>();
-        @Override
-        protected List<ProductClass> doInBackground(String... strings) {
+        @Override protected List<ProductClass> doInBackground(String... strings) {
             try {
                 OkHttpClient client = new OkHttpClient.Builder()
                         .connectTimeout(15, TimeUnit.SECONDS)
@@ -701,14 +699,12 @@ public class MainActivity extends AppCompatActivity {
             return productList;
         }
 
-        @Override
-        protected void onPostExecute(List<ProductClass> productList) {
+        @Override protected void onPostExecute(List<ProductClass> productList) {
             super.onPostExecute(productList);
             try {
                 if(!productList.isEmpty()){
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) productList.sort(Comparator.comparingDouble(product -> Double.parseDouble(product.getPrice().replace(" €", ""))));
-                    else {
-                        Collections.sort(productList, new Comparator<ProductClass>() {
+                    else Collections.sort(productList, new Comparator<ProductClass>() {
                             @Override
                             public int compare(ProductClass p1, ProductClass p2) {
                                 double price1 = Double.parseDouble(p1.getPrice().replace(" €", ""));
@@ -716,7 +712,7 @@ public class MainActivity extends AppCompatActivity {
                                 return Double.compare(price1, price2);
                             }
                         });
-                    }
+
                     adp = new Adaptery(getBaseContext(), productList, ActivityType.MAIN_ACTIVITY);
                     adp.setHasStableIds(true);
                     adp.setOnClickListener((position, model) -> {
@@ -729,7 +725,7 @@ public class MainActivity extends AppCompatActivity {
                     NotifyAdapter(c);
                 } else c.setCategory_holder(null);
             } catch (Exception e) {
-                Log.e("MAIN_ACTIVITY" , e.getLocalizedMessage());
+                //
             }
         }
 
